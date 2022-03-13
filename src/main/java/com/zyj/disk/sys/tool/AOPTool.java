@@ -1,0 +1,24 @@
+package com.zyj.disk.sys.tool;
+
+import com.zyj.disk.sys.exception.GlobalException;
+import com.zyj.disk.sys.exception.Server;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
+
+@Component
+public final class AOPTool{
+    public Method getMethod(ProceedingJoinPoint joinPoint){
+        return ((MethodSignature)joinPoint.getSignature()).getMethod();
+    }
+
+    public HttpServletRequest getRequest(){
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if(attributes == null) throw new GlobalException(Server.REQUEST_PARAM_LOOS);
+        return attributes.getRequest();
+    }
+}
