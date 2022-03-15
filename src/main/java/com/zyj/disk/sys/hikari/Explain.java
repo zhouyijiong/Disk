@@ -23,8 +23,13 @@ public final class Explain{
         BaseEntity[] entities = getEntityArray(args[0]);
         StringBuilder sql = new StringBuilder("insert into ").append(classTool.getRealName(entities[0].getClass()));
         String[] target = insert.target();
-        if(target.length > 0) sql.append("(").append(String.join(",",target)).append(")");
-        sql.append(" values(").append(classTool.getAllFieldByEntities(entities,target));
+        if(target.length> 0){
+            sql.append("(").append(String.join(",",target)).append(")");
+        }else{
+            //默认值不写
+        }
+        sql.append(" values(");
+        sql.append(classTool.getAllFieldByEntities(entities,target));
         System.out.println(sql);
         return sql.toString();
     }
