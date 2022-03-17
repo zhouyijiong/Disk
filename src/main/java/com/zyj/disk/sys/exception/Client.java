@@ -1,6 +1,6 @@
 package com.zyj.disk.sys.exception;
 
-/** code : [4000,4999] */
+/** client caused : [4000,4999] */
 public enum Client{
     VERIFY_ERROR(4001,"verify error"),
     USER_EXIST(4002,"user exist"),

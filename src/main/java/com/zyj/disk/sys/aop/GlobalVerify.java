@@ -10,8 +10,7 @@ import com.zyj.disk.sys.annotation.verify.Token;
 import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.Client;
 import com.zyj.disk.sys.exception.GlobalException;
-import com.zyj.disk.sys.exception.Server;
-import com.zyj.disk.sys.exception.Use;
+import com.zyj.disk.sys.exception.User;
 import com.zyj.disk.sys.tool.AOPTool;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -56,7 +55,7 @@ public final class GlobalVerify{
 			String value = request.getParameter(key);
 			if(!item.isAnnotationPresent(annotationClazz)) continue;
 			RequestParam annotation = item.getAnnotation(annotationClazz);
-			if(annotation.required() && value == null) throw new GlobalException(Use.REQ_PARAM_REQUIRED,method.getName(),key);
+			if(annotation.required() && value == null) throw new GlobalException(User.REQ_PARAM_REQUIRED,method.getName(),key);
 			if(annotation.regex() != Rules.NULL && !annotation.regex().rules.matcher(value).matches())
 				throw new GlobalException(Client.REQ_PARAM_REGEX_ERROR);
 			int length = annotation.length();

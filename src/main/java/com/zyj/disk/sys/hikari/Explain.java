@@ -7,9 +7,11 @@ import com.zyj.disk.sys.annotation.mapper.Select;
 import com.zyj.disk.sys.annotation.mapper.Update;
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.exception.GlobalException;
-import com.zyj.disk.sys.exception.Use;
+import com.zyj.disk.sys.exception.User;
+import com.zyj.disk.sys.tool.AOPTool;
 import com.zyj.disk.sys.tool.ClassTool;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
@@ -19,10 +21,11 @@ import java.lang.reflect.Parameter;
 @RequiredArgsConstructor
 public final class Explain{
     private final ClassTool classTool;
+    private final AOPTool aopTool;
 
     public String getInsertSql(Insert insert,Object[] args)
             throws IllegalAccessException{
-        if(args.length > 1) throw new GlobalException(Use.SQL_PARAM_REDUNDANT);
+        if(args.length > 1) throw new GlobalException(User.SQL_PARAM_REDUNDANT);
         BaseEntity[] entities = getEntityArray(args[0]);
         BaseEntity entity = entities[0];
         Class<? extends BaseEntity> clazz = entity.getClass();
@@ -32,16 +35,42 @@ public final class Explain{
         boolean key = target.length > 0;
         if(key) sql.append("(").append(String.join(",",target)).append(")");
         sql.append(" values(");
-        sql.append(key
-                ? classTool.getFieldByName(entity,fields,target)
+        sql.append(key ? classTool.getFieldByName(entity,fields,target)
                 : classTool.getFieldByAnnotation(entity,fields,Mark.class));
         sql.delete(sql.length() - 1,sql.length()).append(")");
         System.out.println(sql);
         return sql.toString();
     }
 
-    public String getDeleteSql(Delete delete,Object[] args){
-        return "null";
+    public String getDeleteSql(Delete delete,ProceedingJoinPoint joinPoint)throws IllegalAccessException{
+        Object[] args = joinPoint.getArgs();
+        String where = delete.where();
+        Class<? extends BaseEntity> clazz = delete.operate();
+        StringBuilder sql = new StringBuilder("delete from ");
+        sql.append(classTool.getRealName(clazz));
+        switch(args.length){
+            case 0: break;
+            case 1:
+                sql.append(" where 1=1");
+                BaseEntity entity = (BaseEntity)args[0];
+                Field[] fields = clazz.getDeclaredFields();
+                for(Field field : fields){
+                    Object val = classTool.getFieldValue(field,entity);
+                    if(val == null) continue;
+                    sql.append(" AND ").append(field.getName()).append("=").append(val);
+                }
+                break;
+            default:
+                Parameter[] parameters = aopTool.getMethod(joinPoint).getParameters();
+                for(int i=0;i<args.length;i++){
+                    String key = parameters[i].getName();
+                    Object val = args[i];
+                    if(val != null) where = replace(where,key,val);
+                }
+                sql.append(" where ").append(where);
+        }
+        if(delete.print()) System.out.println(sql);
+        return sql.toString();
     }
 
     public String getUpdateSql(Update update,Object[] args){
@@ -59,7 +88,7 @@ public final class Explain{
             Object val = args[i];
             if(val != null){
                 ++count;
-                where = replace(where,key,val);
+                replace(where,key,val);
             }
         }
         if(count == 0) return null;
@@ -69,29 +98,13 @@ public final class Explain{
         return sb.toString();
     }
 
-    private String replace(String str,String key,Object val){
-        int start = 0,end = 0,tag = '#';
-        for(int i=0,len=str.length();i<len;i++){
-            if(str.charAt(i) == tag){
-                if(start == 0) start = i;
-                else end = i;
-                tag = '}';
-                if(end > start){
-                    if(key.equals(str.substring(start + 2,end))){
-                        tag = 0;
-                        break;
-                    }
-                    start = 0; end = 0; tag = '#';
-                }
-            }
-        }
-        if(tag != 0) return str;
+    public static String replace(String str,String key,Object val){
+        key = "#{" + key;
+        int keyIndex = str.indexOf(key);
+        if(keyIndex == -1) throw new GlobalException(User.SQL_PARAM_NOT_EXIST);
+        StringBuilder sb = new StringBuilder(str);
         String value = (val instanceof String) ? "'" + val + "'" : val.toString();
-        return new StringBuilder(str).replace(start,end + 1,value).toString();
-    }
-
-    public static void main(String[] args) {
-        String str = "select * from user;";
+        return sb.replace(keyIndex,keyIndex + key.length() + 1,value).toString();
     }
 
     private BaseEntity[] getEntityArray(Object obj){

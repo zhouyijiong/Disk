@@ -25,7 +25,7 @@ public final class GlobalException extends RuntimeException{
         this.msg  = server.msg;
     }
 
-    public GlobalException(Use use,String...infos){
+    public GlobalException(User use, String...infos){
         this.code = use.code;
         this.msg  = use.msg + String.join("; ",infos);
     }
