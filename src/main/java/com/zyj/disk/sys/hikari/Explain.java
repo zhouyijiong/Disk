@@ -42,7 +42,7 @@ public final class Explain{
         return sql.toString();
     }
 
-    public String getDeleteSql(Delete delete,ProceedingJoinPoint joinPoint)throws IllegalAccessException{
+    public String getDeleteSql(ProceedingJoinPoint joinPoint,Delete delete)throws IllegalAccessException{
         Object[] args = joinPoint.getArgs();
         String where = delete.where();
         Class<? extends BaseEntity> clazz = delete.operate();
@@ -73,8 +73,42 @@ public final class Explain{
         return sql.toString();
     }
 
-    public String getUpdateSql(Update update,Object[] args){
-        return "null";
+    public String getUpdateSql(ProceedingJoinPoint joinPoint,Update update)throws IllegalAccessException{
+        String str = update.set();
+        if("".equals(str)) throw new GlobalException(User.SQL_PARAM_NOT_EXIST);
+        int paramSize = sqlProbe(str);
+        Parameter[] parameters = aopTool.getMethod(joinPoint).getParameters();
+        if(paramSize > parameters.length) throw new GlobalException(User.SQL_PARAM_REDUNDANT);
+        Object[] args = joinPoint.getArgs();
+        for(int i=0;i<paramSize;i++) str = replace(str,parameters[i].getName(),args[i]);
+        Class<? extends BaseEntity> clazz = update.operate();
+        StringBuilder sql = new StringBuilder("update ");
+        sql.append(classTool.getRealName(clazz)).append(" set ").append(str);
+        str = update.where();
+        if(!"".equals(str)){
+            switch(args.length - paramSize){
+                case 0:throw new GlobalException(User.SQL_PARAM_NOT_EXIST);
+                case 1:
+                    BaseEntity entity = (BaseEntity)args[paramSize];
+                    Field[] fields = clazz.getDeclaredFields();
+                    for(Field field : fields){
+                        Object val = classTool.getFieldValue(field,entity);
+                        if(val == null) continue;
+                        //TODO
+                    }
+                    sql.append(" where ").append(str);
+                    break;
+                default:
+                    for(int i=paramSize;i<args.length;i++){
+                        String key = parameters[i].getName();
+                        Object val = args[i];
+                        if(val != null) str = replace(str,key,val);
+                    }
+                    sql.append(" where ").append(str);
+            }
+        }
+        if(update.print()) System.out.println(sql);
+        return sql.toString();
     }
 
     public String getSelectSql(Select select,Object[] args,Parameter[] parameters){
@@ -96,6 +130,13 @@ public final class Explain{
         if(!"".equals(select.limit())) sb.append(" limit ").append(select.limit());
         if(select.print()) System.out.println(sb);
         return sb.toString();
+    }
+
+    private int sqlProbe(String sql){
+        int count = 0;
+        char[] chars = sql.toCharArray();
+        for(char c : chars) if(c == '#') count++;
+        return count;
     }
 
     public static String replace(String str,String key,Object val){

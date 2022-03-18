@@ -33,7 +33,7 @@ public final class AnnotationProcessor{
 
     public int delete(ProceedingJoinPoint joinPoint,Delete delete){
         try{
-            String sql = explain.getDeleteSql(delete,joinPoint);
+            String sql = explain.getDeleteSql(joinPoint,delete);
             return actuator.delete(sql);
         }catch(IllegalAccessException e){
             e.printStackTrace();
@@ -42,8 +42,13 @@ public final class AnnotationProcessor{
     }
 
     public int update(ProceedingJoinPoint joinPoint,Update update){
-        String sql = explain.getUpdateSql(update,joinPoint.getArgs());
-        return actuator.update(sql);
+        try{
+            String sql = explain.getUpdateSql(joinPoint,update);
+            return actuator.update(sql);
+        }catch(IllegalAccessException e){
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public Object select(ProceedingJoinPoint joinPoint,Select select){
