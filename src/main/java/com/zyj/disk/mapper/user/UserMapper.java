@@ -16,11 +16,14 @@ public interface UserMapper{
     @Insert
     int insert(UserEntity[] users);
 
-    @Delete(operate = UserEntity.class,print = true)
+    @Delete
     int delete(UserEntity user);
 
-    @Delete(where = "id = #{id} and username = #{username}",operate = UserEntity.class,print = true)
-    int delete(Integer id,String username);
+    @Delete
+    int delete(UserEntity[] users);
+
+    @Delete
+    int delete(int id);
 
     @Select(where = "username=#{name}",result = UserEntity.class)
     UserEntity queryByName(String name);
