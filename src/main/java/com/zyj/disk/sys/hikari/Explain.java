@@ -23,8 +23,7 @@ public final class Explain{
     private final ClassTool classTool;
     private final AOPTool aopTool;
 
-    public String getInsertSql(Insert insert,Object[] args)
-            throws IllegalAccessException{
+    public String getInsertSql(Insert insert,Object[] args)throws IllegalAccessException{
         if(args.length > 1) throw new GlobalException(User.SQL_PARAM_REDUNDANT);
         BaseEntity[] entities = getEntityArray(args[0]);
         BaseEntity entity = entities[0];
