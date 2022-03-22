@@ -6,6 +6,7 @@ import com.zyj.disk.sys.annotation.mapper.Select;
 import com.zyj.disk.sys.annotation.mapper.Update;
 import com.zyj.disk.sys.hikari.Actuator;
 import com.zyj.disk.sys.hikari.Explain;
+import com.zyj.disk.sys.hikari.mapper.DeleteMapper;
 import com.zyj.disk.sys.tool.AOPTool;
 import com.zyj.disk.sys.tool.ClassTool;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public final class AnnotationProcessor{
+    private final DeleteMapper deleteMapper;
     private final Explain explain;
     private final AOPTool aopTool;
     private final Actuator actuator;
@@ -24,7 +26,7 @@ public final class AnnotationProcessor{
     public int insert(ProceedingJoinPoint joinPoint,Insert insert){
         try{
             String sql = explain.getInsertSql(insert,joinPoint.getArgs());
-            return actuator.insert(sql);
+            return sql == null ? 0 : actuator.insert(sql);
         }catch(Exception e){
             record.error(e);
         }
@@ -32,19 +34,14 @@ public final class AnnotationProcessor{
     }
 
     public int delete(ProceedingJoinPoint joinPoint,Delete delete){
-        try{
-            String sql = explain.getDeleteSql(joinPoint,delete);
-            return actuator.delete(sql);
-        }catch(IllegalAccessException e){
-            e.printStackTrace();
-        }
-        return 0;
+        String sql = deleteMapper.explain(joinPoint,delete);
+        return sql == null ? 0 : actuator.delete(sql);
     }
 
     public int update(ProceedingJoinPoint joinPoint,Update update){
         try{
             String sql = explain.getUpdateSql(joinPoint,update);
-            return actuator.update(sql);
+            return sql == null ? 0 : actuator.update(sql);
         }catch(IllegalAccessException e){
             e.printStackTrace();
         }

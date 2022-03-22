@@ -1,6 +1,5 @@
 package com.zyj.disk.sys.hikari;
 
-import com.zyj.disk.sys.annotation.mapper.Delete;
 import com.zyj.disk.sys.annotation.mapper.Insert;
 import com.zyj.disk.sys.annotation.mapper.Mark;
 import com.zyj.disk.sys.annotation.mapper.Select;
@@ -8,6 +7,7 @@ import com.zyj.disk.sys.annotation.mapper.Update;
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;
+import com.zyj.disk.sys.hikari.mapper.DeleteMapper;
 import com.zyj.disk.sys.tool.AOPTool;
 import com.zyj.disk.sys.tool.ClassTool;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,7 @@ import java.lang.reflect.Parameter;
 @Component
 @RequiredArgsConstructor
 public final class Explain{
+    private final DeleteMapper deleteMapper;
     private final ClassTool classTool;
     private final AOPTool aopTool;
 
@@ -38,37 +39,6 @@ public final class Explain{
                 : classTool.getFieldByAnnotation(entity,fields,Mark.class));
         sql.delete(sql.length() - 1,sql.length()).append(")");
         System.out.println(sql);
-        return sql.toString();
-    }
-
-    public String getDeleteSql(ProceedingJoinPoint joinPoint,Delete delete)throws IllegalAccessException{
-        Object[] args = joinPoint.getArgs();
-        String where = delete.where();
-        Class<? extends BaseEntity> clazz = delete.operate();
-        StringBuilder sql = new StringBuilder("delete from ");
-        sql.append(classTool.getRealName(clazz));
-        switch(args.length){
-            case 0: break;
-            case 1:
-                sql.append(" where 1=1");
-                BaseEntity entity = (BaseEntity)args[0];
-                Field[] fields = clazz.getDeclaredFields();
-                for(Field field : fields){
-                    Object val = classTool.getFieldValue(field,entity);
-                    if(val == null) continue;
-                    sql.append(" AND ").append(field.getName()).append("=").append(val);
-                }
-                break;
-            default:
-                Parameter[] parameters = aopTool.getMethod(joinPoint).getParameters();
-                for(int i=0;i<args.length;i++){
-                    String key = parameters[i].getName();
-                    Object val = args[i];
-                    if(val != null) where = replace(where,key,val);
-                }
-                sql.append(" where ").append(where);
-        }
-        if(delete.print()) System.out.println(sql);
         return sql.toString();
     }
 
