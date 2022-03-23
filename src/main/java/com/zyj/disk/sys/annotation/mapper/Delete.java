@@ -2,6 +2,8 @@ package com.zyj.disk.sys.annotation.mapper;
 
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.entity.MapperMatch;
+import com.zyj.disk.sys.hikari.mapper.MapperMatchSuper;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

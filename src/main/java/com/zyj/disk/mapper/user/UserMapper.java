@@ -23,7 +23,7 @@ public interface UserMapper{
 /*    @Delete(where = "id=${id}")
     int delete(UserEntity user);
 
-    @Delete(mapperMatch = MapperMatch.ENTITY_MATCH)
+    @Delete(mapperMatch = MapperMatchInteface.ENTITY_MATCH)
     int delete(UserEntity user);*/
 
     @Select(where = "username=#{name}",result = UserEntity.class)

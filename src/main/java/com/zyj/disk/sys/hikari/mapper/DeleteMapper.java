@@ -1,6 +1,7 @@
 package com.zyj.disk.sys.hikari.mapper;
 
 import com.zyj.disk.sys.annotation.mapper.Delete;
+import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;
 import com.zyj.disk.sys.tool.AOPTool;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 import java.lang.annotation.Annotation;
+import java.util.List;
 
 /**
  * @Author: ZYJ
@@ -26,25 +28,33 @@ public final class DeleteMapper implements Mapper{
     public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
         if(!(annotation instanceof Delete)) return true;
         delete = (Delete) annotation;
-        switch(delete.mapperMatch()){
-            case PARAM:
-                return "".equals(delete.where());
-            case ENTITY:
-                return !"".equals(delete.where());
-            case ARRAY_ENTITY:
-                Object[] params = joinPoint.getArgs();
-                return !(params.length == 1);
-            default: return true;
-        }
+        return delete.mapperMatch().MATCH.check(joinPoint,delete);
     }
 
     @Override
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
         if(check(joinPoint,annotation)) throw new GlobalException(User.MAPPER_CONFIG_ERROR);
+        Class<? extends BaseEntity> clazz = delete.operate();
+        StringBuilder sql = new StringBuilder();
+        sql.append("delete from ").append(classTool.getRealName(clazz));
         switch(delete.mapperMatch()){
+            case NO: return sql.toString();
+            case PARAM:
+                Object[] args = joinPoint.getArgs();
+                List<Integer> probeResult = probe(delete.where());
 
+                for(int num : probeResult){
+                    switch(num){
+                        case '#':
+
+                            break;
+                        case '$':
+
+                            break;
+                    }
+                }
+                break;
         }
-
 
 //        Object[] args = joinPoint.getArgs();
 //        String where = delete.where();
@@ -74,7 +84,6 @@ public final class DeleteMapper implements Mapper{
 //        }
 //        if(delete.print()) System.out.println(sql);
 //        return sql.toString();
-
 
         return null;
     }

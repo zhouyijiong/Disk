@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
  * 添加匹配模式 => { 1:参数匹配, 2:实体匹配 }
  *      1:通过 #{} 对提交的普通参数进行匹配 或 通过 ${} 对 Entity 参数匹配
  *      2:无参数,直接遍历 Entity 参数,取 ！=null 的参数 == 判断
+ *      3:无参数,直接遍历 Entity Array 参数,取 !=null 的参数 == 判断,返回一组sql
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
