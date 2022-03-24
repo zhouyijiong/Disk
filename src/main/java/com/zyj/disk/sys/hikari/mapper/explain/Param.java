@@ -19,10 +19,19 @@ import java.lang.annotation.Annotation;
  * @Date: 2022/3/23 17:50
  * @Remark: { 有参数; 通过'#{}'对普通参数进行匹配 或 通过 ${*.*} 对 'Entity' 参数匹配; 返回一条SQL; }
  */
-@RequiredArgsConstructor
+
 public final class Param implements Mapper{
     private final AOPTool aopTool;
     public static final Param MATCH = new Param();
+
+    public Param(){
+        aopTool = null;
+    }
+
+    public Param(AOPTool aopTool){
+        this.aopTool = aopTool;
+    }
+
 
 //    @Override
 //    boolean check(ProceedingJoinPoint joinPoint, Integer integer){
@@ -50,7 +59,7 @@ public final class Param implements Mapper{
 
         }
         aopTool.getMethod(joinPoint).isAnnotationPresent(annotation.getClass());
-        return "".equals(delete.where());
+        return "".equals("");//delete.where()
     }
 
     @Override

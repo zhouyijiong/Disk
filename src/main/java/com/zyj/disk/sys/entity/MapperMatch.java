@@ -1,5 +1,6 @@
 package com.zyj.disk.sys.entity;
 
+import com.zyj.disk.sys.hikari.mapper.Mapper;
 import com.zyj.disk.sys.hikari.mapper.explain.ArrayEntity;
 import com.zyj.disk.sys.hikari.mapper.explain.Entity;
 import com.zyj.disk.sys.hikari.mapper.MapperMatchSuper;
@@ -31,17 +32,17 @@ public enum MapperMatch{
      * 遍历'Entity'参数,取' !=null 的参数 == 判断'
      * 返回一条SQL
      */
-    ENTITY(Entity.MATCH),
+    ENTITY(null),//Entity.MATCH
 
     /**
      * 无参数
      * 遍历'Entity Array'数组,循环获取每项中' !=null 的参数 == 判断'
      * 返回一组SQL
      */
-    ARRAY_ENTITY(ArrayEntity.MATCH)
+    ARRAY_ENTITY(null)//ArrayEntity.MATCH
     ;
 
-    public final MapperMatchSuper MATCH;
+    public final Mapper MATCH;
 
-    MapperMatch(MapperMatchSuper MATCH){this.MATCH = MATCH;}
+    MapperMatch(Mapper MATCH){this.MATCH = MATCH;}
 }
