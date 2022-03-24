@@ -1,10 +1,10 @@
 package com.zyj.disk.sys.entity;
 
-import com.zyj.disk.sys.hikari.mapper.ArrayEntity;
-import com.zyj.disk.sys.hikari.mapper.Entity;
+import com.zyj.disk.sys.hikari.mapper.explain.ArrayEntity;
+import com.zyj.disk.sys.hikari.mapper.explain.Entity;
 import com.zyj.disk.sys.hikari.mapper.MapperMatchSuper;
-import com.zyj.disk.sys.hikari.mapper.No;
-import com.zyj.disk.sys.hikari.mapper.Param;
+import com.zyj.disk.sys.hikari.mapper.explain.No;
+import com.zyj.disk.sys.hikari.mapper.explain.Param;
 
 /**
  * @Author: ZYJ
