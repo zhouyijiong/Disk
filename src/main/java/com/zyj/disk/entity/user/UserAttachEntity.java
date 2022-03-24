@@ -3,10 +3,8 @@ package com.zyj.disk.entity.user;
 import com.zyj.disk.sys.entity.BaseEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 public final class UserAttachEntity extends BaseEntity{
 	private Integer id;
