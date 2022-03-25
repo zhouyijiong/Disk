@@ -1,6 +1,8 @@
 package com.zyj.disk.sys.annotation.mapper;
 
 import com.zyj.disk.sys.entity.BaseEntity;
+import com.zyj.disk.sys.entity.MapperMatch;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -23,4 +25,7 @@ public @interface Select{
 
 	/** 为 true 就打印 sql 语句,默认不打印 */
 	boolean print() default false;
+
+	/** 参数匹配模式: { MapperProxy.class } */
+	MapperMatch mapperMatch() default MapperMatch.PARAM;
 }

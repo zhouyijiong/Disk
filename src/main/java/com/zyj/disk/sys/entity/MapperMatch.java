@@ -1,11 +1,10 @@
 package com.zyj.disk.sys.entity;
 
-import com.zyj.disk.sys.hikari.mapper.Mapper;
-import com.zyj.disk.sys.hikari.mapper.explain.ArrayEntity;
-import com.zyj.disk.sys.hikari.mapper.explain.Entity;
-import com.zyj.disk.sys.hikari.mapper.MapperMatchSuper;
-import com.zyj.disk.sys.hikari.mapper.explain.No;
-import com.zyj.disk.sys.hikari.mapper.explain.Param;
+import com.zyj.disk.sys.hikari.mapper.match.ArrayEntity;
+import com.zyj.disk.sys.hikari.mapper.match.Entity;
+import com.zyj.disk.sys.hikari.mapper.match.Match;
+import com.zyj.disk.sys.hikari.mapper.match.No;
+import com.zyj.disk.sys.hikari.mapper.match.Param;
 
 /**
  * @Author: ZYJ
@@ -32,17 +31,17 @@ public enum MapperMatch{
      * 遍历'Entity'参数,取' !=null 的参数 == 判断'
      * 返回一条SQL
      */
-    ENTITY(null),//Entity.MATCH
+    ENTITY(Entity.MATCH),
 
     /**
      * 无参数
      * 遍历'Entity Array'数组,循环获取每项中' !=null 的参数 == 判断'
      * 返回一组SQL
      */
-    ARRAY_ENTITY(null)//ArrayEntity.MATCH
+    ARRAY_ENTITY(ArrayEntity.MATCH)
     ;
 
-    public final Mapper MATCH;
+    public final Match MATCH;
 
-    MapperMatch(Mapper MATCH){this.MATCH = MATCH;}
+    MapperMatch(Match MATCH){this.MATCH = MATCH;}
 }

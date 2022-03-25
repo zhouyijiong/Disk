@@ -7,7 +7,7 @@ import com.zyj.disk.sys.annotation.mapper.Update;
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;
-import com.zyj.disk.sys.hikari.mapper.DeleteMapper;
+import com.zyj.disk.sys.hikari.mapper.explain.DeleteMapper;
 import com.zyj.disk.sys.tool.AOPTool;
 import com.zyj.disk.sys.tool.ClassTool;
 import lombok.RequiredArgsConstructor;
