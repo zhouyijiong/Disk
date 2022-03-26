@@ -1,6 +1,7 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
 import com.zyj.disk.sys.annotation.mapper.Insert;
+import com.zyj.disk.sys.hikari.Actuator;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 import java.lang.annotation.Annotation;
@@ -11,12 +12,15 @@ import java.lang.annotation.Annotation;
  * @Remark: insert mapper
  */
 @Component
-public class InsertMapper implements Mapper{
+public class InsertMapper extends Mapper{
     private Insert insert;
+
+    public InsertMapper(Actuator actuator){
+        super(actuator);
+    }
 
     @Override
     public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
-        if(!(annotation instanceof Insert)) return true;
         insert = (Insert) annotation;
         return insert.mapperMatch().MATCH.check(joinPoint,insert);
     }
@@ -24,5 +28,10 @@ public class InsertMapper implements Mapper{
     @Override
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
         return check(joinPoint,annotation) ? insert.mapperMatch().MATCH.explain(joinPoint,insert) : null;
+    }
+
+    @Override
+    public Object handle(ProceedingJoinPoint joinPoint,Annotation annotation){
+        return actuator.insert(explain(joinPoint,annotation));
     }
 }
