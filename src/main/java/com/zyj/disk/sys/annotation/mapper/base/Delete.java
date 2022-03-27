@@ -10,11 +10,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Delete{
-    /**
-     * 为空则 all delete,非空则根据条件删除
-     * param1:{BaseEntity}
-     * param2:{arg0,arg1,arg2...}
-     */
     String where() default "";
 
     Class<? extends BaseEntity> operate() default BaseEntity.class;

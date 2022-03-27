@@ -23,6 +23,8 @@ public final class Param extends Match{
 
     @Override
     public boolean deleteCheck(ProceedingJoinPoint joinPoint,Delete delete){
+        Object[] args = joinPoint.getArgs();
+
         return false;
     }
 

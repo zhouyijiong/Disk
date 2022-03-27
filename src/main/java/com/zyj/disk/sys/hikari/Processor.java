@@ -14,8 +14,15 @@ import java.sql.SQLException;
 @RequiredArgsConstructor
 public final class Processor{
     private final ClassTool classTool;
+    public static String projectPath;
 
-    public BaseEntity[] select(ResultSet result,BaseEntity entity)throws SQLException,NoSuchFieldException,IllegalAccessException{
+    static{
+        String className = Processor.class.getName();
+        Processor.projectPath = className.substring(0,className.lastIndexOf(".sys.") + 1);
+    }
+
+    public BaseEntity[] select(ResultSet result,BaseEntity entity)
+            throws SQLException,NoSuchFieldException,IllegalAccessException{
         Class<? extends BaseEntity> clazz = entity.getClass();
         BaseEntity[] data = new BaseEntity[getRows(result)];
         while(result.next()){

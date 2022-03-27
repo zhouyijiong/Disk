@@ -2,6 +2,7 @@ package com.zyj.disk.sys.hikari;
 
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.entity.Record;
+import com.zyj.disk.sys.tool.ClassTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
@@ -11,6 +12,7 @@ import java.sql.Connection;
 @Component
 @RequiredArgsConstructor
 public final class Actuator{
+    private final ClassTool classTool;
     private final DataSource dataSource;
     private final Processor processor;
     private final Record record = Record.initialize(this.getClass());
@@ -42,9 +44,17 @@ public final class Actuator{
         return 0;
     }
 
-    public BaseEntity[] select(BaseEntity entity,String sql){
+    public Object select(String sql){
         try(Connection connection = dataSource.getConnection()){
-            return processor.select(connection.prepareStatement(sql).executeQuery(),entity);
+            BaseEntity[] result= processor.select(
+                    connection.prepareStatement(sql).executeQuery(),
+                    classTool.getEntityBySelect(sql)
+            );
+            switch(result.length){
+                case 0 : return null;
+                case 1 : return result[0];
+                default: return result;
+            }
         }catch(Exception e){
             record.error(e);
         }
