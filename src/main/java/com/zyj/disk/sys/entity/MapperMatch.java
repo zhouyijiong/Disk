@@ -1,10 +1,10 @@
 package com.zyj.disk.sys.entity;
 
-import com.zyj.disk.sys.hikari.mapper.ArrayEntity;
-import com.zyj.disk.sys.hikari.mapper.Entity;
-import com.zyj.disk.sys.hikari.mapper.MapperMatchSuper;
-import com.zyj.disk.sys.hikari.mapper.No;
-import com.zyj.disk.sys.hikari.mapper.Param;
+import com.zyj.disk.sys.hikari.mapper.match.ArrayEntity;
+import com.zyj.disk.sys.hikari.mapper.match.Entity;
+import com.zyj.disk.sys.hikari.mapper.match.Match;
+import com.zyj.disk.sys.hikari.mapper.match.No;
+import com.zyj.disk.sys.hikari.mapper.match.Param;
 
 /**
  * @Author: ZYJ
@@ -41,7 +41,7 @@ public enum MapperMatch{
     ARRAY_ENTITY(ArrayEntity.MATCH)
     ;
 
-    public final MapperMatchSuper MATCH;
+    public final Match MATCH;
 
-    MapperMatch(MapperMatchSuper MATCH){this.MATCH = MATCH;}
+    MapperMatch(Match MATCH){this.MATCH = MATCH;}
 }

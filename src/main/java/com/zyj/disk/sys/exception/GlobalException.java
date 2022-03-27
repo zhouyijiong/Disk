@@ -2,7 +2,6 @@ package com.zyj.disk.sys.exception;
 
 import lombok.Getter;
 
-/** 业务异常 */
 @Getter
 public final class GlobalException extends RuntimeException{
     private final int code;

@@ -1,60 +1,56 @@
-package com.zyj.disk.sys.hikari.mapper;
+package com.zyj.disk.sys.hikari.mapper.explain;
 
 import com.zyj.disk.sys.annotation.mapper.Delete;
-import com.zyj.disk.sys.entity.BaseEntity;
-import com.zyj.disk.sys.exception.GlobalException;
-import com.zyj.disk.sys.exception.User;
-import com.zyj.disk.sys.tool.AOPTool;
-import com.zyj.disk.sys.tool.ClassTool;
-import lombok.RequiredArgsConstructor;
+import com.zyj.disk.sys.hikari.Actuator;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 import java.lang.annotation.Annotation;
-import java.util.List;
 
 /**
  * @Author: ZYJ
  * @Date: 2022/3/22 9:41
- * @Remark: deleteMapper
+ * @Remark: delete mapper
  */
 @Component
-@RequiredArgsConstructor
-public final class DeleteMapper implements Mapper{
-    private final ClassTool classTool;
-    private final AOPTool aopTool;
+public final class DeleteMapper extends Mapper{
     private Delete delete;
+
+    public DeleteMapper(Actuator actuator){
+        super(actuator);
+    }
 
     @Override
     public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
-        if(!(annotation instanceof Delete)) return true;
         delete = (Delete) annotation;
         return delete.mapperMatch().MATCH.check(joinPoint,delete);
     }
 
     @Override
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        if(check(joinPoint,annotation)) throw new GlobalException(User.MAPPER_CONFIG_ERROR);
-        Class<? extends BaseEntity> clazz = delete.operate();
-        StringBuilder sql = new StringBuilder();
-        sql.append("delete from ").append(classTool.getRealName(clazz));
-        switch(delete.mapperMatch()){
-            case NO: return sql.toString();
-            case PARAM:
-                Object[] args = joinPoint.getArgs();
-                List<Integer> probeResult = probe(delete.where());
+        return check(joinPoint,annotation) ? delete.mapperMatch().MATCH.explain(joinPoint,delete) : null;
 
-                for(int num : probeResult){
-                    switch(num){
-                        case '#':
-
-                            break;
-                        case '$':
-
-                            break;
-                    }
-                }
-                break;
-        }
+//        if(check(joinPoint,annotation)) throw new GlobalException(User.MAPPER_CONFIG_ERROR);
+//        Class<? extends BaseEntity> clazz = delete.operate();
+//        StringBuilder sql = new StringBuilder();
+//        sql.append("delete from ").append(classTool.getRealName(clazz));
+//        switch(delete.mapperMatch()){
+//            case NO: return sql.toString();
+//            case PARAM:
+//                Object[] args = joinPoint.getArgs();
+//                List<Integer> probeResult = probe(delete.where());
+//
+//                for(int num : probeResult){
+//                    switch(num){
+//                        case '#':
+//
+//                            break;
+//                        case '$':
+//
+//                            break;
+//                    }
+//                }
+//                break;
+//        }
 
 //        Object[] args = joinPoint.getArgs();
 //        String where = delete.where();
@@ -84,7 +80,10 @@ public final class DeleteMapper implements Mapper{
 //        }
 //        if(delete.print()) System.out.println(sql);
 //        return sql.toString();
+    }
 
-        return null;
+    @Override
+    public Object handle(ProceedingJoinPoint joinPoint,Annotation annotation){
+        return actuator.delete(explain(joinPoint,annotation));
     }
 }
