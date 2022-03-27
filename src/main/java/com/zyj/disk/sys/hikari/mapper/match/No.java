@@ -1,9 +1,6 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
-import com.zyj.disk.sys.annotation.mapper.Delete;
-import com.zyj.disk.sys.annotation.mapper.Insert;
-import com.zyj.disk.sys.annotation.mapper.Select;
-import com.zyj.disk.sys.annotation.mapper.Update;
+import com.zyj.disk.sys.annotation.mapper.base.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
@@ -11,7 +8,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @Date: 2022/3/23 11:20
  * @Remark: { 无参数; 不匹配; 不能传参; 返回一条SQL; }
  */
-public final class No implements Match{
+public final class No extends Match{
     public static final No MATCH = new No();
 
     @Override

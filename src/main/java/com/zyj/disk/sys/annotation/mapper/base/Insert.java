@@ -1,4 +1,4 @@
-package com.zyj.disk.sys.annotation.mapper;
+package com.zyj.disk.sys.annotation.mapper.base;
 
 import com.zyj.disk.sys.entity.MapperMatch;
 import java.lang.annotation.ElementType;
@@ -12,6 +12,7 @@ public @interface Insert{
     /** 为空默认全部插入,非空必须和数据库属性名对应 */
     String[] target() default {};
 
-    /** 参数匹配模式: { MapperProxy.class } */
+    boolean print() default false;
+
     MapperMatch mapperMatch() default MapperMatch.PARAM;
 }

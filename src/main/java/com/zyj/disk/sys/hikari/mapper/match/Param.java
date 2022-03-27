@@ -1,9 +1,6 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
-import com.zyj.disk.sys.annotation.mapper.Delete;
-import com.zyj.disk.sys.annotation.mapper.Insert;
-import com.zyj.disk.sys.annotation.mapper.Select;
-import com.zyj.disk.sys.annotation.mapper.Update;
+import com.zyj.disk.sys.annotation.mapper.base.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
@@ -11,7 +8,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @Date: 2022/3/23 17:50
  * @Remark: { 有参数; 通过'#{}'对普通参数进行匹配 或 通过 ${*.*} 对 'Entity' 参数匹配; 返回一条SQL; }
  */
-public final class Param implements Match{
+public final class Param extends Match{
     public static final Param MATCH = new Param();
 
     @Override

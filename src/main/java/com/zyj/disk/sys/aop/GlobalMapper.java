@@ -1,10 +1,10 @@
 package com.zyj.disk.sys.aop;
 
-import com.zyj.disk.sys.annotation.mapper.Delete;
-import com.zyj.disk.sys.annotation.mapper.Insert;
-import com.zyj.disk.sys.annotation.mapper.Select;
-import com.zyj.disk.sys.annotation.mapper.Update;
-import com.zyj.disk.sys.hikari.mapper.explain.Mapper;
+import com.zyj.disk.sys.annotation.mapper.base.Delete;
+import com.zyj.disk.sys.annotation.mapper.base.Insert;
+import com.zyj.disk.sys.annotation.mapper.base.Select;
+import com.zyj.disk.sys.annotation.mapper.base.Update;
+import com.zyj.disk.sys.hikari.mapper.explain.*;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,26 +15,29 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public final class GlobalMapper{
-    private final Mapper mapper;
+    private final InsertMapper insertMapper;
+    private final DeleteMapper deleteMapper;
+    private final UpdateMapper updateMapper;
+    private final SelectMapper selectMapper;
 
     @Around("@annotation(insert)")
     public int insert(ProceedingJoinPoint joinPoint,Insert insert){
-        return toInt(mapper.handle(joinPoint,insert));
+        return toInt(insertMapper.handle(joinPoint,insert));
     }
 
     @Around("@annotation(delete)")
     public int delete(ProceedingJoinPoint joinPoint,Delete delete){
-        return toInt(mapper.handle(joinPoint,delete));
+        return toInt(deleteMapper.handle(joinPoint,delete));
     }
 
     @Around("@annotation(update)")
     public int update(ProceedingJoinPoint joinPoint,Update update){
-        return toInt(mapper.handle(joinPoint,update));
+        return toInt(updateMapper.handle(joinPoint,update));
     }
 
     @Around("@annotation(select)")
     public Object select(ProceedingJoinPoint joinPoint,Select select){
-        return mapper.handle(joinPoint,select);
+        return selectMapper.handle(joinPoint,select);
     }
 
     private int toInt(Object val){

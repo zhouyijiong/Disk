@@ -21,9 +21,8 @@ public final class UserService{
         if(mapper.queryByName(username) != null) throw new GlobalException(Client.USER_EXIST);
         String pwd = encryption.md5(password);
         String path = encryption.md5(username);
-        UserEntity user = UserEntity.defaultArgs().username(username).password(pwd).path(path);
-        int rows = mapper.insert(user);
-        if(rows == 0) throw new GlobalException(Server.DATABASE_RESULT_ERROR);
+        int rows = mapper.insert(UserEntity.defaultArgs().username(username).password(pwd).path(path));
+        if(rows == 0) throw new GlobalException(Server.SQL_RESULT_ERROR);
         return Result.init().put("access",username);
     }
 

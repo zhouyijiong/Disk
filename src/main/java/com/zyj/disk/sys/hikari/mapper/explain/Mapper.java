@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @Author: ZYJ
  * @Date: 2022/3/26 11:05
- * @Remark:
+ * @Remark: 注解映射处理
  */
 @Component
 @RequiredArgsConstructor

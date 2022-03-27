@@ -1,6 +1,6 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
-import com.zyj.disk.sys.annotation.mapper.Insert;
+import com.zyj.disk.sys.annotation.mapper.base.Insert;
 import com.zyj.disk.sys.hikari.Actuator;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,10 @@ public class InsertMapper extends Mapper{
 
     @Override
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        return check(joinPoint,annotation) ? insert.mapperMatch().MATCH.explain(joinPoint,insert) : null;
+        if(check(joinPoint,annotation)) return null;
+        String sql = insert.mapperMatch().MATCH.explain(joinPoint,insert);
+        if(insert.print()) System.out.println(sql);
+        return sql;
     }
 
     @Override

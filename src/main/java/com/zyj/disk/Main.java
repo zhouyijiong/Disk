@@ -5,8 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class Main{
-	//为什么不推荐使用 static 方法 https://www.zhihu.com/question/36615154
-
 	/**
 	 * 1.整合 Redis, 并大改 cache
 	 * 2.sql 大改

@@ -1,9 +1,6 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
-import com.zyj.disk.sys.annotation.mapper.Delete;
-import com.zyj.disk.sys.annotation.mapper.Insert;
-import com.zyj.disk.sys.annotation.mapper.Select;
-import com.zyj.disk.sys.annotation.mapper.Update;
+import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.entity.BaseEntity;
 import org.aspectj.lang.ProceedingJoinPoint;
 
@@ -12,7 +9,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @Date: 2022/3/23 17:56
  * @Remark: { 无参数; 遍历'Entity'参数,取' !=null 的参数 == 判断'; 返回一条SQL; }
  */
-public final class Entity implements Match{
+public final class Entity extends Match{
     public static final Entity MATCH = new Entity();
 
     @Override

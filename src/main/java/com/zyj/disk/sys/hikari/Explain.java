@@ -1,9 +1,9 @@
 package com.zyj.disk.sys.hikari;
 
-import com.zyj.disk.sys.annotation.mapper.Insert;
+import com.zyj.disk.sys.annotation.mapper.base.Insert;
 import com.zyj.disk.sys.annotation.mapper.Mark;
-import com.zyj.disk.sys.annotation.mapper.Select;
-import com.zyj.disk.sys.annotation.mapper.Update;
+import com.zyj.disk.sys.annotation.mapper.base.Select;
+import com.zyj.disk.sys.annotation.mapper.base.Update;
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;

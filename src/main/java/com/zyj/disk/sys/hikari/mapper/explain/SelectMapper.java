@@ -1,6 +1,6 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
-import com.zyj.disk.sys.annotation.mapper.Select;
+import com.zyj.disk.sys.annotation.mapper.base.Select;
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.entity.Record;
 import com.zyj.disk.sys.hikari.Actuator;
@@ -33,7 +33,10 @@ public final class SelectMapper extends Mapper{
 
     @Override
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        return check(joinPoint,annotation) ? select.mapperMatch().MATCH.explain(joinPoint,select) : null;
+        if(check(joinPoint,annotation)) return null;
+        String sql = select.mapperMatch().MATCH.explain(joinPoint,select);
+        if(select.print()) System.out.println(sql);
+        return sql;
     }
 
     @Override
