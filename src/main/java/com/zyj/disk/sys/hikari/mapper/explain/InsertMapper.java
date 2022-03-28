@@ -1,9 +1,9 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
 import com.zyj.disk.sys.annotation.mapper.base.Insert;
-import com.zyj.disk.sys.hikari.Actuator;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
+import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 
 /**
@@ -15,8 +15,8 @@ import java.lang.annotation.Annotation;
 public class InsertMapper extends Mapper{
     private Insert insert;
 
-    public InsertMapper(Actuator actuator){
-        super(actuator);
+    public InsertMapper(DataSource dataSource){
+        super(dataSource,InsertMapper.class);
     }
 
     @Override
@@ -31,10 +31,5 @@ public class InsertMapper extends Mapper{
         String sql = insert.mapperMatch().MATCH.explain(joinPoint,insert);
         if(insert.print()) System.out.println(sql);
         return sql;
-    }
-
-    @Override
-    public Object handle(ProceedingJoinPoint joinPoint,Annotation annotation){
-        return actuator.insert(explain(joinPoint,annotation));
     }
 }

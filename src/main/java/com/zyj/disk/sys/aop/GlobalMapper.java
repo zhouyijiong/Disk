@@ -22,22 +22,22 @@ public final class GlobalMapper{
 
     @Around("@annotation(insert)")
     public int insert(ProceedingJoinPoint joinPoint,Insert insert){
-        return toInt(insertMapper.handle(joinPoint,insert));
+        return toInt(insertMapper.actuator(joinPoint,insert));
     }
 
     @Around("@annotation(delete)")
     public int delete(ProceedingJoinPoint joinPoint,Delete delete){
-        return toInt(deleteMapper.handle(joinPoint,delete));
+        return toInt(deleteMapper.actuator(joinPoint,delete));
     }
 
     @Around("@annotation(update)")
     public int update(ProceedingJoinPoint joinPoint,Update update){
-        return toInt(updateMapper.handle(joinPoint,update));
+        return toInt(updateMapper.actuator(joinPoint,update));
     }
 
     @Around("@annotation(select)")
     public Object select(ProceedingJoinPoint joinPoint,Select select){
-        return selectMapper.handle(joinPoint,select);
+        return selectMapper.actuator(joinPoint,select);
     }
 
     private int toInt(Object val){

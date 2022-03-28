@@ -1,12 +1,14 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
 import com.zyj.disk.sys.annotation.mapper.base.Select;
-import com.zyj.disk.sys.entity.Record;
-import com.zyj.disk.sys.hikari.Actuator;
+import com.zyj.disk.sys.entity.BaseEntity;
+import com.zyj.disk.sys.hikari.Processor;
 import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
+import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
+import java.sql.Connection;
 
 /**
  * @Author: ZYJ
@@ -17,11 +19,12 @@ import java.lang.annotation.Annotation;
 public final class SelectMapper extends Mapper{
     private Select select;
     private final ClassTool classTool;
-    private final Record record = Record.initialize(this.getClass());
+    private final Processor processor;
 
-    public SelectMapper(Actuator actuator,ClassTool classTool){
-        super(actuator);
+    public SelectMapper(DataSource dataSource,ClassTool classTool,Processor processor){
+        super(dataSource,SelectMapper.class);
         this.classTool = classTool;
+        this.processor = processor;
     }
 
     @Override
@@ -39,7 +42,21 @@ public final class SelectMapper extends Mapper{
     }
 
     @Override
-    public Object handle(ProceedingJoinPoint joinPoint,Annotation annotation){
-        return actuator.select(explain(joinPoint,annotation));
+    public Object actuator(ProceedingJoinPoint joinPoint,Annotation annotation){
+        String sql = explain(joinPoint,annotation);
+        try(Connection connection = dataSource.getConnection()){
+            BaseEntity[] result= processor.select(
+                    connection.prepareStatement(sql).executeQuery(),
+                    classTool.getEntityBySelect(sql)
+            );
+            switch(result.length){
+                case 0 : return null;
+                case 1 : return result[0];
+                default: return result;
+            }
+        }catch(Exception e){
+            record.error(e);
+        }
+        return null;
     }
 }
