@@ -1,4 +1,4 @@
-package com.zyj.disk.sys.annotation;
+package com.zyj.disk.sys.annotation.verify;
 
 import com.zyj.disk.sys.entity.Rules;
 import java.lang.annotation.ElementType;

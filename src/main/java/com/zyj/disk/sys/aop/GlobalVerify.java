@@ -5,7 +5,7 @@ import java.lang.reflect.Parameter;
 import java.util.concurrent.ThreadLocalRandom;
 import cn.dev33.satoken.stp.StpUtil;
 import com.zyj.disk.sys.annotation.verify.Access;
-import com.zyj.disk.sys.annotation.RequestParam;
+import com.zyj.disk.sys.annotation.verify.RequestParam;
 import com.zyj.disk.sys.annotation.verify.Token;
 import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.Client;

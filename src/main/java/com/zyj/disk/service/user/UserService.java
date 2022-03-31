@@ -11,12 +11,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.Map;
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/4/1
+ * @Remark: 用户业务类
+ */
 @Service
 @RequiredArgsConstructor
 public final class UserService{
     private final UserMapper mapper;
     private final Encryption encryption;
 
+    /**
+     * @Author: ZYJ
+     * @Date: 2022/4/1
+     * @Remark: 注册账户
+     * @return java.util.Map
+     */
     public Map<String,Object> registered(String username,String password){
         if(mapper.queryByName(username) != null) throw new GlobalException(Client.USER_EXIST);
         String pwd = encryption.md5(password);
@@ -26,6 +37,12 @@ public final class UserService{
         return Result.init().put("access",username);
     }
 
+    /**
+     * @Author: ZYJ
+     * @Date: 2022/4/1
+     * @Remark: 登陆账户
+     * @return java.util.Map
+     */
     public Map<String,Object> login(String username,String password){
         UserEntity user = mapper.queryByName(username);
         if(user == null) throw new GlobalException(Client.USER_NOT_EXIST);

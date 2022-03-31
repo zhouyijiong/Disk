@@ -1,6 +1,7 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
+import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
@@ -11,6 +12,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
 public final class ArrayEntity extends Match{
     public static final ArrayEntity MATCH = new ArrayEntity();
 
+    private ArrayEntity(){
+        super(new ClassTool());
+    }
+
     @Override
     boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
         return false;
@@ -18,7 +23,6 @@ public final class ArrayEntity extends Match{
 
     @Override
     public String insertExplain(ProceedingJoinPoint joinPoint,Insert insert){
-        if(insertCheck(joinPoint,insert)) return null;
         return null;
     }
 
@@ -29,7 +33,6 @@ public final class ArrayEntity extends Match{
 
     @Override
     public String deleteExplain(ProceedingJoinPoint joinPoint,Delete delete){
-        if(deleteCheck(joinPoint,delete)) return null;
         return null;
     }
 
@@ -40,7 +43,6 @@ public final class ArrayEntity extends Match{
 
     @Override
     public String updateExplain(ProceedingJoinPoint joinPoint,Update update){
-        if(updateCheck(joinPoint,update)) return null;
         return null;
     }
 
@@ -51,7 +53,6 @@ public final class ArrayEntity extends Match{
 
     @Override
     public String selectExplain(ProceedingJoinPoint joinPoint,Select select){
-        if(selectCheck(joinPoint,select)) return null;
         return null;
     }
 }

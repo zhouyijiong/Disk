@@ -17,7 +17,6 @@ public class GlobalHandler{
 
     public static final class Result extends SaResult{
         private static final long serialVersionUID = -4408646213088219736L;
-
         public Result(GlobalException e){
             super(e.getCode(),e.getMsg(),null);
         }

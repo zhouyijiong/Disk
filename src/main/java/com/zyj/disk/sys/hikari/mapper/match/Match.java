@@ -1,22 +1,29 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
+import com.zyj.disk.sys.tool.ClassTool;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.stereotype.Component;
 import java.lang.annotation.Annotation;
 
+@Component
+@RequiredArgsConstructor
 public abstract class Match{
-//    public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
-//        if(annotation instanceof Insert){
-//            return insertCheck(joinPoint,(Insert) annotation);
-//        }else if(annotation instanceof Delete){
-//            return deleteCheck(joinPoint,(Delete) annotation);
-//        }else if(annotation instanceof Update){
-//            return updateCheck(joinPoint,(Update) annotation);
-//        }else if(annotation instanceof Select){
-//            return selectCheck(joinPoint,(Select) annotation);
-//        }
-//        return false;
-//    }
+    protected final ClassTool classTool;
+
+    public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
+        if(annotation instanceof Insert){
+            return insertCheck(joinPoint,(Insert) annotation);
+        }else if(annotation instanceof Delete){
+            return deleteCheck(joinPoint,(Delete) annotation);
+        }else if(annotation instanceof Update){
+            return updateCheck(joinPoint,(Update) annotation);
+        }else if(annotation instanceof Select){
+            return selectCheck(joinPoint,(Select) annotation);
+        }
+        return false;
+    }
 
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
         if(annotation instanceof Insert){

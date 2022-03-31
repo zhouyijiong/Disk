@@ -1,6 +1,7 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
+import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
@@ -10,6 +11,10 @@ import org.aspectj.lang.ProceedingJoinPoint;
  */
 public final class Param extends Match{
     public static final Param MATCH = new Param();
+
+    public Param(){
+        super(new ClassTool());
+    }
 
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){

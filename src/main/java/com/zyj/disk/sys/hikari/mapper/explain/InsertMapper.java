@@ -12,7 +12,7 @@ import java.lang.annotation.Annotation;
  * @Remark: insert mapper
  */
 @Component
-public class InsertMapper extends Mapper{
+public final class InsertMapper extends Mapper{
     public InsertMapper(DataSource dataSource){
         super(dataSource,InsertMapper.class);
     }

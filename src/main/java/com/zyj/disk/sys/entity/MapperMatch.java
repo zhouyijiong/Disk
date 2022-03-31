@@ -34,8 +34,7 @@ public enum MapperMatch{
      * 遍历'Entity Array'数组,循环获取每项中' !=null 的参数 == 判断'
      * 返回一组SQL
      */
-    ARRAY_ENTITY(ArrayEntity.MATCH)
-    ;
+    ARRAY_ENTITY(ArrayEntity.MATCH);
 
     public final Match match;
 

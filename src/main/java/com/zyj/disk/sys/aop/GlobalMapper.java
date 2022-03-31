@@ -1,9 +1,6 @@
 package com.zyj.disk.sys.aop;
 
-import com.zyj.disk.sys.annotation.mapper.base.Delete;
-import com.zyj.disk.sys.annotation.mapper.base.Insert;
-import com.zyj.disk.sys.annotation.mapper.base.Select;
-import com.zyj.disk.sys.annotation.mapper.base.Update;
+import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.hikari.mapper.explain.*;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
