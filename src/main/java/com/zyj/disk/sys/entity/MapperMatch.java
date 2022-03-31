@@ -37,7 +37,7 @@ public enum MapperMatch{
     ARRAY_ENTITY(ArrayEntity.MATCH)
     ;
 
-    public final Match MATCH;
+    public final Match match;
 
-    MapperMatch(Match MATCH){this.MATCH = MATCH;}
+    MapperMatch(Match match){this.match = match;}
 }

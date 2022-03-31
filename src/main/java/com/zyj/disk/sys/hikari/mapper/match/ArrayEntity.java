@@ -12,42 +12,46 @@ public final class ArrayEntity extends Match{
     public static final ArrayEntity MATCH = new ArrayEntity();
 
     @Override
-    public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
+    boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
         return false;
     }
 
     @Override
     public String insertExplain(ProceedingJoinPoint joinPoint,Insert insert){
+        if(insertCheck(joinPoint,insert)) return null;
         return null;
     }
 
     @Override
-    public boolean deleteCheck(ProceedingJoinPoint joinPoint,Delete delete){
+    boolean deleteCheck(ProceedingJoinPoint joinPoint,Delete delete){
         return !(joinPoint.getArgs().length == 1);
     }
 
     @Override
     public String deleteExplain(ProceedingJoinPoint joinPoint,Delete delete){
+        if(deleteCheck(joinPoint,delete)) return null;
         return null;
     }
 
     @Override
-    public boolean updateCheck(ProceedingJoinPoint joinPoint,Update update){
+    boolean updateCheck(ProceedingJoinPoint joinPoint,Update update){
         return false;
     }
 
     @Override
     public String updateExplain(ProceedingJoinPoint joinPoint,Update update){
+        if(updateCheck(joinPoint,update)) return null;
         return null;
     }
 
     @Override
-    public boolean selectCheck(ProceedingJoinPoint joinPoint,Select select){
+    boolean selectCheck(ProceedingJoinPoint joinPoint,Select select){
         return false;
     }
 
     @Override
     public String selectExplain(ProceedingJoinPoint joinPoint,Select select){
+        if(selectCheck(joinPoint,select)) return null;
         return null;
     }
 }

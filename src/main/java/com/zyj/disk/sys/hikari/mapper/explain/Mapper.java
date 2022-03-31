@@ -1,7 +1,7 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
 import com.zyj.disk.sys.entity.Record;
-import lombok.RequiredArgsConstructor;
+import com.zyj.disk.sys.hikari.mapper.match.Match;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
@@ -16,23 +16,38 @@ import java.util.List;
  * @Remark: 注解映射处理
  */
 @Component
-@RequiredArgsConstructor
 public abstract class Mapper{
-    protected final DataSource dataSource;
+    protected Match match;
     protected final Record record;
+    protected final DataSource dataSource;
 
-    public Mapper(DataSource dataSource,Class<?> clazz){
+    GeneralMapper generalMapper = new GeneralMapper();
+
+    public Mapper(DataSource dataSource,Class<? extends Mapper> clazz){
         this.dataSource = dataSource;
         this.record = Record.initialize(clazz);
     }
 
-    public abstract boolean check(ProceedingJoinPoint joinPoint, Annotation annotation);
+    abstract Match init(Annotation annotation);
 
-    public abstract String explain(ProceedingJoinPoint joinPoint,Annotation annotation);
+//    boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
+//        init(annotation);
+//        return match.check(joinPoint,annotation);
+//
+//    }
+//
+//    String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
+//        if(check(joinPoint,annotation)) return null;
+//        return match.explain(joinPoint,annotation);
+//    }
 
     public Object actuator(ProceedingJoinPoint joinPoint,Annotation annotation){
+        init(annotation);
         try(Connection connection = dataSource.getConnection()){
-            return connection.prepareStatement(explain(joinPoint,annotation)).executeUpdate();
+
+            generalMapper.explain(joinPoint,annotation,match);
+//explain(joinPoint,annotation)
+            return connection.prepareStatement(null).executeUpdate();
         }catch(Exception e){
             record.error(e);
         }

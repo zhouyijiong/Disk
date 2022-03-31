@@ -3,6 +3,7 @@ package com.zyj.disk.sys.hikari.mapper.explain;
 import com.zyj.disk.sys.annotation.mapper.base.Select;
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.hikari.Processor;
+import com.zyj.disk.sys.hikari.mapper.match.Match;
 import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,6 @@ import java.sql.Connection;
  */
 @Component
 public final class SelectMapper extends Mapper{
-    private Select select;
     private final ClassTool classTool;
     private final Processor processor;
 
@@ -28,22 +28,14 @@ public final class SelectMapper extends Mapper{
     }
 
     @Override
-    public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
-        select = (Select) annotation;
-        return select.mapperMatch().MATCH.check(joinPoint,select);
-    }
-
-    @Override
-    public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        if(check(joinPoint,annotation)) return null;
-        String sql = select.mapperMatch().MATCH.explain(joinPoint,select);
-        if(select.print()) System.out.println(sql);
-        return sql;
+    Match init(Annotation annotation){
+        return ((Select) annotation).mapperMatch().match;
     }
 
     @Override
     public Object actuator(ProceedingJoinPoint joinPoint,Annotation annotation){
-        String sql = explain(joinPoint,annotation);
+        //String sql = explain(joinPoint,annotation);
+        String sql = null;
         try(Connection connection = dataSource.getConnection()){
             BaseEntity[] result= processor.select(
                     connection.prepareStatement(sql).executeQuery(),

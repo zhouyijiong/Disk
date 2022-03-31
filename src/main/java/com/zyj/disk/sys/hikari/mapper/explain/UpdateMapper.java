@@ -1,7 +1,7 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
 import com.zyj.disk.sys.annotation.mapper.base.Update;
-import org.aspectj.lang.ProceedingJoinPoint;
+import com.zyj.disk.sys.hikari.mapper.match.Match;
 import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
@@ -13,23 +13,12 @@ import java.lang.annotation.Annotation;
  */
 @Component
 public final class UpdateMapper extends Mapper{
-    private Update update;
-
     public UpdateMapper(DataSource dataSource){
         super(dataSource,UpdateMapper.class);
     }
 
     @Override
-    public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
-        update = (Update) annotation;
-        return update.mapperMatch().MATCH.check(joinPoint,update);
-    }
-
-    @Override
-    public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        if(check(joinPoint,annotation)) return null;
-        String sql = update.mapperMatch().MATCH.explain(joinPoint,update);
-        if(update.print()) System.out.println(sql);
-        return sql;
+    Match init(Annotation annotation){
+        return ((Update) annotation).mapperMatch().match;
     }
 }
