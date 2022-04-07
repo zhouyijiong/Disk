@@ -19,6 +19,6 @@ public final class InsertMapper extends Mapper{
 
     @Override
     Match init(Annotation annotation){
-        return ((Insert) annotation).mapperMatch().match;
+        return ( (Insert)annotation ).mapperMatch().match;
     }
 }

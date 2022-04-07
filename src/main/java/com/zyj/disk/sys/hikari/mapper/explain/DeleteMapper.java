@@ -19,6 +19,6 @@ public final class DeleteMapper extends Mapper{
 
     @Override
     Match init(Annotation annotation){
-        return ((Delete) annotation).mapperMatch().match;
+        return ( (Delete)annotation ).mapperMatch().match;
     }
 }

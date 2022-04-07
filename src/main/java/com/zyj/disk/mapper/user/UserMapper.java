@@ -3,6 +3,7 @@ package com.zyj.disk.mapper.user;
 import com.zyj.disk.entity.user.UserEntity;
 import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.annotation.mapper.MapperProxy;
+import com.zyj.disk.sys.entity.MapperMatch;
 
 @MapperProxy
 public interface UserMapper{
@@ -23,4 +24,7 @@ public interface UserMapper{
 
     @Select(where = "username=#{name}",result = UserEntity.class)
     UserEntity queryByName(String name);
+
+    @Select(result = UserEntity.class,mapperMatch = MapperMatch.NO)
+    UserEntity[] queryUser();
 }

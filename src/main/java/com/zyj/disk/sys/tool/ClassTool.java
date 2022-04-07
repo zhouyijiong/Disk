@@ -17,6 +17,11 @@ public final class ClassTool{
         ).newInstance();
     }
 
+    public BaseEntity instance(Class<? extends BaseEntity> clazz)
+            throws InstantiationException,IllegalAccessException{
+        return clazz.newInstance();
+    }
+
     public String getRealName(Class<? extends BaseEntity> clazz){
         String simpleName = clazz.getSimpleName();
         return simpleName.substring(0,simpleName.lastIndexOf('E')).toLowerCase();

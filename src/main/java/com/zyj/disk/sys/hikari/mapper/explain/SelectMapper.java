@@ -35,12 +35,11 @@ public final class SelectMapper extends Mapper{
     @Override
     public Object actuator(ProceedingJoinPoint joinPoint,Annotation annotation){
         String sql = explain(joinPoint,annotation);
-        System.out.println(sql);
+        if(sql == null) return null;
         try(Connection connection = dataSource.getConnection()){
             BaseEntity[] result = processor.select(
                     connection.prepareStatement(sql).executeQuery(),
-                    classTool.instance(((Select)annotation).result())
-            );
+                    classTool.instance(((Select)annotation).result()));
             switch(result.length){
                 case 0 : return null;
                 case 1 : return result[0];

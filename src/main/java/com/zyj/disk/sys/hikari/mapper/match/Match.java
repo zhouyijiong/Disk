@@ -26,16 +26,21 @@ public abstract class Match{
     }
 
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
+        String sql = null;
         if(annotation instanceof Insert){
-            return insertExplain(joinPoint,(Insert) annotation);
+            sql = insertExplain(joinPoint,(Insert)annotation);
+            if( ((Insert)annotation).print() ) System.out.println(sql);
         }else if(annotation instanceof Delete){
-            return deleteExplain(joinPoint,(Delete) annotation);
+            sql = deleteExplain(joinPoint,(Delete)annotation);
+            if( ((Delete)annotation).print() ) System.out.println(sql);
         }else if(annotation instanceof Update){
-            return updateExplain(joinPoint,(Update) annotation);
+            sql = updateExplain(joinPoint,(Update)annotation);
+            if( ((Update)annotation).print() ) System.out.println(sql);
         }else if(annotation instanceof Select){
-            return selectExplain(joinPoint,(Select) annotation);
+            sql = selectExplain(joinPoint,(Select)annotation);
+            if( ((Select)annotation).print() ) System.out.println(sql);
         }
-        return null;
+        return sql;
     }
 
     abstract boolean insertCheck(ProceedingJoinPoint joinPoint, Insert insert);
