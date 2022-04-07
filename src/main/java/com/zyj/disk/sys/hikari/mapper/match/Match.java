@@ -3,14 +3,16 @@ package com.zyj.disk.sys.hikari.mapper.match;
 import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.springframework.stereotype.Component;
-import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-@Component
 public abstract class Match{
-    @Resource
-    protected ClassTool classTool;
+    protected ClassTool classTool = new ClassTool();
+
+    //升级单独的类，能够进行简单的时间管理
+    private static final Map<String,String> container = new LinkedHashMap<>();
 
     public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
         if(annotation instanceof Insert){
@@ -26,7 +28,9 @@ public abstract class Match{
     }
 
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        String sql = null;
+        String sql;
+        String key = Arrays.toString(joinPoint.getArgs()) + annotation.toString();
+        if((sql = container.get(key)) != null) return sql;
         if(annotation instanceof Insert){
             sql = insertExplain(joinPoint,(Insert)annotation);
             if( ((Insert)annotation).print() ) System.out.println(sql);
@@ -40,6 +44,7 @@ public abstract class Match{
             sql = selectExplain(joinPoint,(Select)annotation);
             if( ((Select)annotation).print() ) System.out.println(sql);
         }
+        if(sql != null) container.put(key,sql);
         return sql;
     }
 

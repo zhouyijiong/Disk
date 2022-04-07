@@ -3,7 +3,6 @@ package com.zyj.disk.sys.hikari.mapper.explain;
 import com.zyj.disk.sys.entity.Record;
 import com.zyj.disk.sys.hikari.mapper.match.Match;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
@@ -28,16 +27,15 @@ public abstract class Mapper{
     abstract Match init(Annotation annotation);
 
     private boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
+        match = init(annotation);
         return match.check(joinPoint,annotation);
     }
 
     String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        if(check(joinPoint,annotation)) return null;
-        return match.explain(joinPoint,annotation);
+        return check(joinPoint,annotation) ? null : match.explain(joinPoint,annotation);
     }
 
     public Object actuator(ProceedingJoinPoint joinPoint,Annotation annotation){
-        match = init(annotation);
         try(Connection connection = dataSource.getConnection()){
             return connection.prepareStatement(explain(joinPoint,annotation)).executeUpdate();
         }catch(Exception e){

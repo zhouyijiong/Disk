@@ -45,9 +45,11 @@ public final class UserService{
      */
     public Map<String,Object> login(String username,String password){
         userMapper.queryUser();
-        UserEntity user = userMapper.queryByName(username);
-        if(user == null) throw new GlobalException(Client.USER_NOT_EXIST);
-        if(!user.getPassword().equals(encryption.md5(password))) throw new GlobalException(Client.VERIFY_ERROR);
-        return Result.init().put("access",username);
+//        System.out.println("<<<<<<< asd");
+//        UserEntity user = userMapper.queryByName(username);
+//        if(user == null) throw new GlobalException(Client.USER_NOT_EXIST);
+//        if(!user.getPassword().equals(encryption.md5(password))) throw new GlobalException(Client.VERIFY_ERROR);
+//        return Result.init().put("access",username);
+    return null;
     }
 }

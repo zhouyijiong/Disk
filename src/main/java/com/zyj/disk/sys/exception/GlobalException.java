@@ -9,9 +9,9 @@ public final class GlobalException extends RuntimeException{
     private static final long serialVersionUID = 631924228114738472L;
 
     public GlobalException(Throwable throwable){
-        GlobalException temp = (GlobalException)throwable;
-        this.code = temp.code;
-        this.msg = temp.msg;
+        //GlobalException temp = (GlobalException)throwable;
+        this.code = throwable instanceof Exception ? 5000 : -1;
+        this.msg = throwable.toString();
     }
 
     public GlobalException(Client client){
@@ -24,7 +24,7 @@ public final class GlobalException extends RuntimeException{
         this.msg  = server.msg;
     }
 
-    public GlobalException(User use, String...infos){
+    public GlobalException(User use,String...infos){
         this.code = use.code;
         this.msg  = use.msg + String.join("; ",infos);
     }
