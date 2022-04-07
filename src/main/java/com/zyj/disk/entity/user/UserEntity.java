@@ -47,7 +47,8 @@ public final class UserEntity extends BaseEntity{
 		password = val;
 		return this;
 	}
-	public UserEntity path(String val){path = val;
+	public UserEntity path(String val){
+		path = val;
 		return this;
 	}
 	public UserEntity capacity(Long val){

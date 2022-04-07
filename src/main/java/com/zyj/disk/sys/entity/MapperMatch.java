@@ -38,5 +38,5 @@ public enum MapperMatch{
 
     public final Match match;
 
-    MapperMatch(Match match){this.match = match;}
+    MapperMatch(Match match){ this.match = match; }
 }

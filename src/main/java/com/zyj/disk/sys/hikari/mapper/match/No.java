@@ -53,8 +53,8 @@ public final class No extends Match{
 
     @Override
     public String selectExplain(ProceedingJoinPoint joinPoint,Select select){
-        return "select " + select.query() + " from " +
-                classTool.getRealName(select.result()) +
-                " where " + select.where() + select.limit();
+        return "select " + select.query()
+                + " from " + classTool.getRealName(select.result())
+                + select.where() + select.limit();
     }
 }
