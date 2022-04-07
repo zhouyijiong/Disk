@@ -1,6 +1,7 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
+import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
@@ -48,6 +49,8 @@ public final class No extends Match{
 
     @Override
     public String selectExplain(ProceedingJoinPoint joinPoint,Select select){
-        return "select " + select.query() + " from " + classTool.getRealName(select.result()) + select.limit();
+        return "select " + select.query()
+                + " from " + classTool.getRealName(select.result())
+                + select.where() + select.limit();
     }
 }
