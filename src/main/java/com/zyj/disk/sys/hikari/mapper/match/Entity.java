@@ -2,7 +2,6 @@ package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.entity.BaseEntity;
-import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
@@ -11,11 +10,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @Remark: { 无参数; 遍历'Entity'参数,取' !=null 的参数 == 判断'; 返回一条SQL; }
  */
 public final class Entity extends Match{
-    public static final Entity MATCH = new Entity();
-
-    public Entity(){
-        super(new ClassTool());
-    }
+    public static final Match MATCH = new Entity();
 
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){

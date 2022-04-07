@@ -2,15 +2,15 @@ package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.tool.ClassTool;
-import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
+import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 
 @Component
-@RequiredArgsConstructor
 public abstract class Match{
-    protected final ClassTool classTool;
+    @Resource
+    protected ClassTool classTool;
 
     public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
         if(annotation instanceof Insert){

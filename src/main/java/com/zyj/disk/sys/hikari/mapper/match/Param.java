@@ -1,7 +1,6 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
-import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
@@ -10,11 +9,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @Remark: { 有参数; 通过'#{}'对普通参数进行匹配 或 通过 ${*.*} 对 'Entity' 参数匹配; 返回一条SQL; }
  */
 public final class Param extends Match{
-    public static final Param MATCH = new Param();
-
-    public Param(){
-        super(new ClassTool());
-    }
+    public static final Match MATCH = new Param();
 
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
