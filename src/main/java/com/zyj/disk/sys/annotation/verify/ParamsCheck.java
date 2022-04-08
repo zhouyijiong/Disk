@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 /**
  * @Author: ZYJ
  * @Date: 2022/4/8 13:13
- * @Remark:
+ * @Remark: 参数校验注解
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
