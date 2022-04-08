@@ -66,16 +66,14 @@ public final class GlobalVerify{
 		for(Parameter parameter : method.getParameters()){
 			HttpServletRequest request = aopTool.getRequest();
 			Param param = methodParamsCheck.get(parameter.getName());
-			if(param != null){
-				String value = request.getParameter(key);
-				if(param.required() && value == null)
-					throw new GlobalException(User.REQ_PARAM_REQUIRED,method.getName(),key);
-				if(param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
-					throw new GlobalException(Client.REQ_PARAM_REGEX_ERROR);
-				int length = param.length();
-				if(length != -1 && value.trim().length() != length)
-					throw new GlobalException(Client.REQ_PARAM_LEN_ERROR);
-			}
+			if(param == null) continue;
+			String value = request.getParameter(key);
+			if(param.required() && value == null)
+				throw new GlobalException(User.REQ_PARAM_REQUIRED,method.getName(),key);
+			if(param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
+				throw new GlobalException(Client.REQ_PARAM_REGEX_ERROR);
+			int length = param.length();
+			if(length != -1 && value.trim().length() != length) throw new GlobalException(Client.REQ_PARAM_LEN_ERROR);
 		}
 		try{
 			return joinPoint.proceed();
