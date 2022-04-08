@@ -32,7 +32,9 @@ public abstract class Mapper{
     }
 
     String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        return check(joinPoint,annotation) ? null : match.explain(joinPoint,annotation);
+        String sql = match.explain(joinPoint,annotation);
+        System.out.println(sql);
+        return check(joinPoint,annotation) ? null : sql;
     }
 
     public Object actuator(ProceedingJoinPoint joinPoint,Annotation annotation){

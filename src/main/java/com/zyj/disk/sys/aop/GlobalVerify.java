@@ -46,7 +46,7 @@ public final class GlobalVerify{
 	}
 
 	@Around("within(com.zyj.*.controller.business..*)")
-	public Object global(ProceedingJoinPoint joinPoint)throws Throwable{
+	public Object global(ProceedingJoinPoint joinPoint){
 		Method method = aopTool.getMethod(joinPoint);
 		HttpServletRequest request = aopTool.getRequest();
 		Class<RequestParam> annotationClazz = RequestParam.class;
@@ -61,6 +61,10 @@ public final class GlobalVerify{
 			int length = annotation.length();
 			if(length != -1 && value.trim().length() != length) throw new GlobalException(Client.REQ_PARAM_LEN_ERROR);
 		}
-		return joinPoint.proceed();
+		try{
+			return joinPoint.proceed();
+		}catch(Throwable e){
+			throw new GlobalException(e);
+		}
 	}
 }

@@ -16,7 +16,7 @@ public final class GlobalException extends RuntimeException{
 
     public GlobalException(Client client){
         this.code = client.code;
-        this.msg = client.msg;
+        this.msg  = client.msg;
     }
 
     public GlobalException(Server server){
