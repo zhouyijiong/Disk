@@ -21,10 +21,14 @@ public final class Record{
     }
 
     public void error(GlobalException e){
-        logger.error("错误编码:{},错误信息:{}",e.getCode(),e.getMsg());
+        logger.error("method:{},错误编码:{},错误信息:{}",getMethodName(),e.getCode(),e.getMsg());
     }
 
     public void error(Exception e){
-        logger.error("method:{},error:{}",Thread.currentThread().getStackTrace()[2].getMethodName(),e.toString());
+        logger.error("method:{},error:{}",getMethodName(),e.toString());
+    }
+
+    private String getMethodName(){
+        return Thread.currentThread().getStackTrace()[2].getMethodName();
     }
 }

@@ -3,7 +3,6 @@ package com.zyj.disk.sys.hikari.mapper.explain;
 import com.zyj.disk.sys.entity.Record;
 import com.zyj.disk.sys.hikari.mapper.match.Match;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 import java.sql.Connection;
@@ -13,7 +12,6 @@ import java.sql.Connection;
  * @Date: 2022/3/26 11:05
  * @Remark: 注解映射处理
  */
-@Component
 public abstract class Mapper{
     protected Match match;
     protected final Record record;
