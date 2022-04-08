@@ -1,22 +1,12 @@
 package com.zyj.disk.sys.tool;
 
 import com.zyj.disk.sys.entity.BaseEntity;
-import com.zyj.disk.sys.hikari.Processor;
 import org.springframework.stereotype.Component;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 @Component
 public final class ClassTool{
-    public BaseEntity getEntityBySelect(String sql)
-            throws ClassNotFoundException,InstantiationException,IllegalAccessException{
-        int start = sql.indexOf(" from ") + 6;
-        String realName = sql.substring(start,sql.indexOf(' ',start));
-        return (BaseEntity) Class.forName(
-                Processor.projectPath + realName.toLowerCase() + "." + realName + "Entity"
-        ).newInstance();
-    }
-
     public BaseEntity instance(Class<? extends BaseEntity> clazz)
             throws InstantiationException,IllegalAccessException{
         return clazz.newInstance();

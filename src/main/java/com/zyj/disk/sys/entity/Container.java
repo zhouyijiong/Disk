@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * @Author: ZYJ
  * @Date: 2022/4/8 9:25
- * @Remark: 内部响应定时容器
+ * @Remark: 内部响应式定时容器
  */
 public final class Container<K,V>{
     private final int size;
@@ -32,10 +32,6 @@ public final class Container<K,V>{
             this.val = val;
             this.expirationTime = expirationTime;
         }
-
-        public boolean isExpiration(int currentTime){
-            return currentTime > expirationTime;
-        }
     }
 
     private int currentTime(){
@@ -50,7 +46,7 @@ public final class Container<K,V>{
         TimeVal<V> timeVal = container.get(key);
         if(timeVal == null) return null;
         int currentTime = currentTime();
-        if(timeVal.isExpiration(currentTime)){
+        if(currentTime > timeVal.expirationTime){
             container.remove(key);
             return null;
         }
@@ -59,7 +55,7 @@ public final class Container<K,V>{
             new Thread(() -> {
                 final List<K> storage = new LinkedList<>();
                 container.forEach((k,v) -> {
-                    if(v.isExpiration(currentTime)) storage.add(k);
+                    if(currentTime > v.expirationTime) storage.add(k);
                 });
                 storage.forEach(container::remove);
             }).start();

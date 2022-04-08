@@ -7,10 +7,15 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/4/8
+ * @Remark: 映射匹配调度类
+ */
 public abstract class Match{
     protected ClassTool classTool = new ClassTool();
 
-    private static final Container<String,String> sqlCache = new Container<>(3491,60);
+    private static final Container<String,String> sqlCache = new Container<>(3000,60);
 
     public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
         if(annotation instanceof Insert){
@@ -38,7 +43,7 @@ public abstract class Match{
         }else if(annotation instanceof Select){
             sql = selectExplain(joinPoint,(Select)annotation);
         }
-        if(sql != null) sqlCache.put(key,sql,43);
+        if(sql != null) sqlCache.put(key,sql,90);
         return sql;
     }
 
