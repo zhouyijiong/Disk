@@ -9,7 +9,6 @@ public final class GlobalException extends RuntimeException{
     private static final long serialVersionUID = 631924228114738472L;
 
     public GlobalException(Throwable throwable){
-        //GlobalException temp = (GlobalException)throwable;
         this.code = throwable instanceof Exception ? 5000 : -1;
         this.msg = throwable.toString();
     }

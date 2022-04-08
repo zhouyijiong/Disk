@@ -1,4 +1,4 @@
-package com.zyj.disk.sys.entity;
+package com.zyj.disk.sys.tool;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -8,16 +8,16 @@ import java.util.Map;
 /**
  * @Author: ZYJ
  * @Date: 2022/4/8 9:25
- * @Remark: 内部响应式定时容器
+ * @Remark: 内部响应式缓存
  */
-public final class Container<K,V>{
+public final class ResponsiveCache<K,V>{
     private final int size;
     private final int timing;
     private int targetTime;
 
     private final Map<K,TimeVal<V>> container;
 
-    public Container(int size,int timing){
+    public ResponsiveCache(int size, int timing){
         this.size = size;
         this.timing = timing;
         this.targetTime = timing + currentTime();

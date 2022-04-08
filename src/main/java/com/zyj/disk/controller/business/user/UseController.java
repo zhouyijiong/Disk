@@ -1,9 +1,9 @@
 package com.zyj.disk.controller.business.user;
 
 import com.zyj.disk.service.user.UserService;
-import com.zyj.disk.sys.annotation.verify.RequestParam;
+import com.zyj.disk.sys.annotation.verify.ParamsCheck;
+import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.annotation.verify.Token;
-import com.zyj.disk.sys.entity.Rules;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,9 +29,11 @@ public class UseController{
 	 */
 	@Token
 	@PostMapping("/registered")
-	public Map<String,Object> registered(
-			@RequestParam(regex = Rules.NUM_CHAR_LOW) String username,
-			@RequestParam(regex = Rules.NUM_CHAR_LOW_32) String password){
+	@ParamsCheck({
+		@Param(name = "username",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW),
+		@Param(name = "password",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW)
+	})
+	public Map<String,Object> registered(String username,String password){
 		return userService.registered(username,password);
 	}
 
@@ -43,9 +45,11 @@ public class UseController{
 	 */
 	@Token
 	@PostMapping("/login")
-	public Map<String,Object> login(
-			@RequestParam(regex = Rules.NUM_CHAR_LOW) String username,
-			@RequestParam(regex = Rules.NUM_CHAR_LOW_32) String password){
+	@ParamsCheck({
+		@Param(name = "username",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW),
+		@Param(name = "password",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW)
+	})
+	public Map<String,Object> login(String username,String password){
 		return userService.login(username,password);
 	}
 }

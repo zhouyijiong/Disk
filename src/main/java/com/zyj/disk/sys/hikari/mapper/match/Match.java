@@ -1,8 +1,8 @@
 package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
-import com.zyj.disk.sys.entity.Container;
 import com.zyj.disk.sys.tool.ClassTool;
+import com.zyj.disk.sys.tool.ResponsiveCache;
 import org.aspectj.lang.ProceedingJoinPoint;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 public abstract class Match{
     protected ClassTool classTool = new ClassTool();
 
-    private static final Container<String,String> sqlCache = new Container<>(3000,60);
+    private static final ResponsiveCache<String,String> sqlCache = new ResponsiveCache<>(3000,60);
 
     public boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
         if(annotation instanceof Insert){
@@ -31,7 +31,7 @@ public abstract class Match{
     }
 
     public String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        String key = Arrays.toString(joinPoint.getArgs()) + annotation.toString();
+        String key = Arrays.toString(joinPoint.getArgs()) + annotation;
         String sql;
         if((sql = sqlCache.get(key)) != null) return sql;
         if(annotation instanceof Insert){

@@ -24,16 +24,10 @@ public abstract class Mapper{
 
     abstract Match init(Annotation annotation);
 
-    private boolean check(ProceedingJoinPoint joinPoint,Annotation annotation){
-        match = init(annotation);
-        return match.check(joinPoint,annotation);
-    }
-
     String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
-        if(check(joinPoint,annotation)) return null;
-        String sql = match.explain(joinPoint,annotation);
-        System.out.println(sql);
-        return sql;
+        match = init(annotation);
+        if(match.check(joinPoint,annotation)) return null;
+        return match.explain(joinPoint,annotation);
     }
 
     public Object actuator(ProceedingJoinPoint joinPoint,Annotation annotation){
