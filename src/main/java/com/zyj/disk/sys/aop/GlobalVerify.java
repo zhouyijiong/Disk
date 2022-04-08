@@ -11,7 +11,6 @@ import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.annotation.verify.Access;
 import com.zyj.disk.sys.annotation.verify.Token;
 import com.zyj.disk.sys.entity.Rules;
-import com.zyj.disk.sys.exception.Client;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;
 import com.zyj.disk.sys.tool.AOPTool;
@@ -64,16 +63,18 @@ public final class GlobalVerify{
 			paramCache.put(key,methodParamsCheck,129600);
 		}
 		for(Parameter parameter : method.getParameters()){
+			String name = parameter.getName();
 			HttpServletRequest request = aopTool.getRequest();
-			Param param = methodParamsCheck.get(parameter.getName());
+			Param param = methodParamsCheck.get(name);
 			if(param == null) continue;
-			String value = request.getParameter(key);
+			String value = request.getParameter(name);
 			if(param.required() && value == null)
-				throw new GlobalException(User.REQ_PARAM_REQUIRED,method.getName(),key);
+				throw new GlobalException(User.REQ_PARAM_REQUIRED,name,name);
 			if(param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
-				throw new GlobalException(Client.REQ_PARAM_REGEX_ERROR);
+				throw new GlobalException(User.REQ_PARAM_REGEX_ERROR,name,value);
 			int length = param.length();
-			if(length != -1 && value.trim().length() != length) throw new GlobalException(Client.REQ_PARAM_LEN_ERROR);
+			if(length != -1 && value.trim().length() != length)
+				throw new GlobalException(User.REQ_PARAM_LEN_ERROR,name,value);
 		}
 		try{
 			return joinPoint.proceed();

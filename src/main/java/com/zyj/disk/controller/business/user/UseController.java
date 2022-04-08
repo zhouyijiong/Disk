@@ -30,7 +30,7 @@ public class UseController{
 	@PostMapping("/registered")
 	@ParamsCheck({
 			@Param(name = "username",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW),
-			@Param(name = "password",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW)
+			@Param(name = "password",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW_32)
 	})
 	public Map<String,Object> registered(String username,String password){
 		return userService.registered(username,password);
@@ -41,11 +41,11 @@ public class UseController{
 	 * @Date: 2022/4/1
 	 * @Remark: 登录 API
 	 */
-	@Token
+	//@Token
 	@PostMapping("/login")
 	@ParamsCheck({
-			@Param(name = "username",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW),
-			@Param(name = "password",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW)
+			@Param(name = "username",regex = com.zyj.disk.sys.entity.Rules.NUM),
+			@Param(name = "password",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW_32)
 	})
 	public Map<String,Object> login(String username,String password){
 		return userService.login(username,password);
