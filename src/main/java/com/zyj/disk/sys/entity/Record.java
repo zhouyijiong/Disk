@@ -21,7 +21,7 @@ public final class Record{
     }
 
     public void error(GlobalException e){
-        logger.error("错误编码:{},错误信息:{}",e.getCode(),e.getMsg());
+        logger.error("错误编码:{},错误信息:{}",e.getCode(),e.getMessage());
     }
 
     public void error(Exception e){

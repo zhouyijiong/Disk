@@ -28,5 +28,7 @@ public @interface ParamsCheck{
         boolean required() default true;
     }
 
-    Param[] value();
+    Param[] params();
+
+    boolean cookie() default false;
 }

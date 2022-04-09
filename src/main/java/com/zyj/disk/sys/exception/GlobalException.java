@@ -5,26 +5,25 @@ import lombok.Getter;
 @Getter
 public final class GlobalException extends RuntimeException{
     private final int code;
-    private final String msg;
     private static final long serialVersionUID = 631924228114738472L;
 
     public GlobalException(Throwable throwable){
+        super(throwable);
         this.code = throwable instanceof Exception ? 5000 : -1;
-        this.msg = throwable.toString();
     }
 
     public GlobalException(Client client){
+        super(client.msg);
         this.code = client.code;
-        this.msg  = client.msg;
     }
 
     public GlobalException(Server server){
+        super(server.msg);
         this.code = server.code;
-        this.msg  = server.msg;
     }
 
     public GlobalException(User use,String...infos){
+        super(use.msg + String.join(" ",infos));
         this.code = use.code;
-        this.msg  = use.msg + String.join(" ",infos);
     }
 }

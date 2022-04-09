@@ -9,7 +9,6 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.annotation.verify.Access;
-import com.zyj.disk.sys.annotation.verify.Token;
 import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;
@@ -31,17 +30,6 @@ public final class GlobalVerify{
 	private static final ResponsiveCache<String,Map<String,Param>> paramCache =
 			new ResponsiveCache<>(2048,86400);
 
-	@Around("@annotation(token)")
-	public Object global(ProceedingJoinPoint joinPoint,Token token){
-		try{
-			Object result = joinPoint.proceed();
-			StpUtil.login(ThreadLocalRandom.current().nextInt());
-			return result;
-		}catch(Throwable throwable){
-			throw new GlobalException(throwable);
-		}
-	}
-
 	@Around("@annotation(access)")
 	public Object global(ProceedingJoinPoint joinPoint,Access access){
 		try{
@@ -58,7 +46,7 @@ public final class GlobalVerify{
 		Map<String,Param> methodParamsCheck = paramCache.get(key);
 		if(methodParamsCheck == null){
 			methodParamsCheck = new LinkedHashMap<>();
-			Param[] params = paramsCheck.value();
+			Param[] params = paramsCheck.params();
 			for(Param param : params) methodParamsCheck.put(param.name(),param);
 			paramCache.put(key,methodParamsCheck,129600);
 		}
@@ -77,9 +65,11 @@ public final class GlobalVerify{
 				throw new GlobalException(User.REQ_PARAM_LEN_ERROR,name,value);
 		}
 		try{
-			return joinPoint.proceed();
-		}catch(Throwable e){
-			throw new GlobalException(e);
+			Object result = joinPoint.proceed();
+			if(paramsCheck.cookie()) StpUtil.login(ThreadLocalRandom.current().nextInt());
+			return result;
+		}catch(Throwable throwable){
+			throw new GlobalException(throwable);
 		}
 	}
 }
