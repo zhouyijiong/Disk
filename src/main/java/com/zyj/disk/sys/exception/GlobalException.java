@@ -2,6 +2,11 @@ package com.zyj.disk.sys.exception;
 
 import lombok.Getter;
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/04/09
+ * @Remark: 全局异常
+ */
 @Getter
 public final class GlobalException extends RuntimeException{
     private final int code;

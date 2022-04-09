@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @Author: ZYJ
- * @Date: 2022/4/1
+ * @Date: 2022/04/01
  * @Remark: 用户控制器
  */
 @RestController
@@ -22,7 +22,7 @@ public class UseController{
 
 	/**
 	 * @Author: ZYJ
-	 * @Date: 2022/4/1
+	 * @Date: 2022/04/01
 	 * @Remark: 注册 API
 	 */
 	@PostMapping("/registered")
@@ -38,7 +38,7 @@ public class UseController{
 
 	/**
 	 * @Author: ZYJ
-	 * @Date: 2022/4/1
+	 * @Date: 2022/04/01
 	 * @Remark: 登录 API
 	 */
 	@PostMapping("/login")

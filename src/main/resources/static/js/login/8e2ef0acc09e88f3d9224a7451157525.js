@@ -42,6 +42,7 @@ function judgment(){
 		dataType:"json",
 		data:{"username":usm.value,"password":pwd.value},
 		success:function(data){
+
 			if(data.code === 500){
 				alert(data.msg);
 				usm.value="";

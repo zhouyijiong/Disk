@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @Author: ZYJ
- * @Date: 2022/3/27 23:15
+ * @Date: 2022/03/27 23:15
  * @Remark: 日志
  */
 public final class Record{
