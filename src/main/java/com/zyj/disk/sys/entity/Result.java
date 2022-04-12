@@ -25,6 +25,8 @@ public final class Result{
     }
 
     public Map<String,Object> result(GlobalException e){
+        result.put("code",e.getCode());
+        result.put("msg",e.getMessage());
         return result;
     }
 }
