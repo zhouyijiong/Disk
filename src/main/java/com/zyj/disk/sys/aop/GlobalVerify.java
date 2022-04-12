@@ -2,7 +2,7 @@ package com.zyj.disk.sys.aop;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import cn.dev33.satoken.stp.StpUtil;
@@ -45,7 +45,7 @@ public final class GlobalVerify{
 		String key = joinPoint.getThis() + method.getName() + paramsCheck;
 		Map<String,Param> methodParamsCheck = paramCache.get(key);
 		if(methodParamsCheck == null){
-			methodParamsCheck = new LinkedHashMap<>();
+			methodParamsCheck = new HashMap<>();
 			Param[] params = paramsCheck.params();
 			for(Param param : params) methodParamsCheck.put(param.name(),param);
 			paramCache.put(key,methodParamsCheck,129600);

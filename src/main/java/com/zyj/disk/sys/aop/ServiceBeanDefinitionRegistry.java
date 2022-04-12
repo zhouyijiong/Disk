@@ -16,7 +16,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import java.io.File;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Component
@@ -49,7 +48,7 @@ public final class ServiceBeanDefinitionRegistry implements BeanDefinitionRegist
     private Set<Class<?>> getFilterClass(String className)throws ClassNotFoundException{
         String rootPath = "src/main/java/";
         String projectPath = className.substring(0,className.indexOf("sys") - 1).replace(".","/");
-        Set<Class<?>> set = new LinkedHashSet<>();
+        Set<Class<?>> set = new HashSet<>();
         getAllFile(new File(rootPath + projectPath),set);
         Set<Class<?>> filterSet = new HashSet<>();
         for(Class<?> clazz : set) if(clazz.isAnnotationPresent(MapperProxy.class)) filterSet.add(clazz);
