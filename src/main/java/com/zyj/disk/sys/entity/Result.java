@@ -4,6 +4,11 @@ import com.zyj.disk.sys.exception.GlobalException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/04/12
+ * @Remark: 修改成轻量级返回,每次创建 Map 代价太大
+ */
 public final class Result{
     private final Map<String,Object> result;
 

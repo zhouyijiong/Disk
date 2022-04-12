@@ -9,8 +9,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @Remark: { 有参数; 通过'#{}'对普通参数进行匹配 或 通过 ${*.*} 对 'Entity' 参数匹配; 返回一条SQL; }
  */
 public final class Param extends Match{
-    public static final Match MATCH = new Param();
-
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
         return false;

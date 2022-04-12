@@ -13,28 +13,28 @@ public enum MapperMatch{
      * 不匹配,不能传参
      * 返回一条SQL
      */
-    NO(No.MATCH),
+    NO(new No()),
 
     /**
      * 有参数
      * 通过'#{}'对普通参数进行匹配 或 通过 ${*.*} 对 'Entity' 参数匹配
      * 返回一条SQL
      */
-    PARAM(Param.MATCH),
+    PARAM(new Param()),
 
     /**
      * 无参数
      * 遍历'Entity'参数,取' !=null 的参数 == 判断'
      * 返回一条SQL
      */
-    ENTITY(Entity.MATCH),
+    ENTITY(new Entity()),
 
     /**
      * 无参数
      * 遍历'Entity Array'数组,循环获取每项中' !=null 的参数 == 判断'
      * 返回一组SQL
      */
-    ARRAY_ENTITY(ArrayEntity.MATCH);
+    ARRAY_ENTITY(new ArrayEntity());
 
     public final Match match;
 

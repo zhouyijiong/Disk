@@ -35,13 +35,13 @@ public abstract class Match{
         String sql;
         if((sql = sqlCache.get(key)) != null) return sql;
         if(annotation instanceof Insert){
-            sql = insertExplain(joinPoint,(Insert)annotation);
+            sql = insertExplain(joinPoint,(Insert) annotation);
         }else if(annotation instanceof Delete){
-            sql = deleteExplain(joinPoint,(Delete)annotation);
+            sql = deleteExplain(joinPoint,(Delete) annotation);
         }else if(annotation instanceof Update){
-            sql = updateExplain(joinPoint,(Update)annotation);
+            sql = updateExplain(joinPoint,(Update) annotation);
         }else if(annotation instanceof Select){
-            sql = selectExplain(joinPoint,(Select)annotation);
+            sql = selectExplain(joinPoint,(Select) annotation);
         }
         if(sql != null) sqlCache.put(key,sql,90);
         return sql;

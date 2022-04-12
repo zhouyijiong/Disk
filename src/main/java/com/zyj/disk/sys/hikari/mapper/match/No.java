@@ -9,8 +9,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @Remark: { 无参数; 不匹配; 返回一条SQL; }
  */
 public final class No extends Match{
-    public static final Match MATCH = new No();
-
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
         return true;

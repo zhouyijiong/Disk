@@ -10,8 +10,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
  * @Remark: { 无参数; 遍历'Entity'参数,取' !=null 的参数 == 判断'; 返回一条SQL; }
  */
 public final class Entity extends Match{
-    public static final Match MATCH = new Entity();
-
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
         return false;
