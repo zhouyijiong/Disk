@@ -19,6 +19,6 @@ public final class UpdateMapper extends Mapper{
 
     @Override
     Match init(Annotation annotation){
-        return ( (Update)annotation ).mapperMatch().match;
+        return ((Update) annotation).mapperMatch().match;
     }
 }
