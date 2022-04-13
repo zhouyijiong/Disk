@@ -15,6 +15,7 @@ public final class SQL extends FileType{
         table = new StringBuilder(fieldInfos.size() << 3);
     }
 
+    @Override
     protected BufferedOutputStream createFile(String path)throws IOException{
         return createDirectoryAndFile("./src/main/resources/sql/" + sourceName.toLowerCase());
     }

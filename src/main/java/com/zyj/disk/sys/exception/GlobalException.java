@@ -13,7 +13,7 @@ public final class GlobalException extends RuntimeException{
     private static final long serialVersionUID = 631924228114738472L;
 
     public GlobalException(Throwable throwable){
-        super(throwable);
+        super(throwable.getLocalizedMessage());
         this.code = throwable instanceof Exception ? 5000 : -1;
     }
 

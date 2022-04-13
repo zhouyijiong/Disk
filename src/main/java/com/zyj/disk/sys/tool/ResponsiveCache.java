@@ -43,13 +43,7 @@ public final class ResponsiveCache<K,V>{
     }
 
     public V get(K key){
-        TimeVal<V> timeVal = container.get(key);
-        if(timeVal == null) return null;
         int currentTime = currentTime();
-        if(currentTime > timeVal.expirationTime){
-            container.remove(key);
-            return null;
-        }
         if(currentTime > targetTime){
             this.targetTime = timing + currentTime;
             new Thread(() -> {
@@ -60,6 +54,9 @@ public final class ResponsiveCache<K,V>{
                 storage.forEach(container::remove);
             }).start();
         }
+        TimeVal<V> timeVal = container.get(key);
+        if(timeVal == null) return null;
+        if(currentTime > timeVal.expirationTime) container.remove(key);
         return timeVal.val;
     }
 }

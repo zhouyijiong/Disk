@@ -2,22 +2,34 @@ package com.zyj.disk.sys.generate;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.zyj.disk.sys.annotation.GenerateParam;
-import com.zyj.disk.sys.generate.file.Entity;
-import com.zyj.disk.sys.generate.file.Mapper;
-import com.zyj.disk.sys.generate.file.SQL;
-import com.zyj.disk.sys.generate.file.Service;
+import com.zyj.disk.sys.generate.file.*;
 
 public final class Generate{
 	private static final List<FieldInfo> fieldInfos = new ArrayList<>();
 
-	public static void start(Class<?> clazz,String name)throws InstantiationException,IllegalAccessException{
+	public static void start(Class<?> clazz,String name,FileTypes...fileTypes)
+			throws InstantiationException,IllegalAccessException{
 		String path = init(clazz);
-		new Entity(name,fieldInfos).create(path);
-		new Mapper(name,fieldInfos).create(path);
-		new Service(name,fieldInfos).create(path);
-		new SQL(name,fieldInfos).create(path);
+		Arrays.stream(fileTypes).forEach(fileType -> {
+			switch(fileType){
+				case ENTITY:
+					new Entity(name,fieldInfos).create(path);
+					break;
+				case Mapper:
+					new Mapper(name,fieldInfos).create(path);
+					break;
+				case Service:
+					new Service(name,fieldInfos).create(path);
+					break;
+				case Controller:
+					new Controller(name,fieldInfos).create(path);
+					break;
+				case SQL:new SQL(name,fieldInfos).create(path);
+			}
+		});
 	}
 
 	private static String init(Class<?> clazz)throws InstantiationException,IllegalAccessException{

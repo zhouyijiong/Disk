@@ -27,7 +27,8 @@ import javax.servlet.http.HttpServletRequest;
 public final class GlobalVerify{
 	private final AOPTool aopTool;
 
-	private static final ResponsiveCache<String,Map<String,Param>> paramCache =
+	private static final
+	ResponsiveCache<String,Map<String,Param>> paramCache =
 			new ResponsiveCache<>(2048,86400);
 
 	@Around("@annotation(access)")

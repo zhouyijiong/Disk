@@ -1,12 +1,14 @@
 package com.zyj.disk.sys.entity;
 
 import com.zyj.disk.sys.hikari.mapper.match.*;
+import lombok.AllArgsConstructor;
 
 /**
  * @Author: ZYJ
  * @Date: 2022/3/22 9:29
  * @Remark: 映射匹配
  */
+@AllArgsConstructor
 public enum MapperMatch{
     /**
      * 无参数
@@ -37,6 +39,4 @@ public enum MapperMatch{
     ARRAY_ENTITY(new ArrayEntity());
 
     public final Match match;
-
-    MapperMatch(Match match){ this.match = match; }
 }

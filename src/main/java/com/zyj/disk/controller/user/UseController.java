@@ -1,12 +1,13 @@
-package com.zyj.disk.controller.business.user;
+package com.zyj.disk.controller.user;
 
 import com.zyj.disk.service.user.UserService;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
+import com.zyj.disk.sys.entity.Rules;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.RequiredArgsConstructor;
 import java.util.Map;
 
 /**
@@ -29,8 +30,8 @@ public class UseController{
 	@ParamsCheck(
 			cookie = true,
 			params = {
-					@Param(name = "username",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW),
-					@Param(name = "password",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW_32)
+					@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
+					@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
 			})
 	public Map<String,Object> registered(String username,String password){
 		return userService.registered(username,password);
@@ -45,8 +46,8 @@ public class UseController{
 	@ParamsCheck(
 			cookie = true,
 			params = {
-					@Param(name = "username",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW),
-					@Param(name = "password",regex = com.zyj.disk.sys.entity.Rules.NUM_CHAR_LOW_32)
+					@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
+					@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
 			})
 	public Map<String,Object> login(String username,String password){
 		return userService.login(username,password);
