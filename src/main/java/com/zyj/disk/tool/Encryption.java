@@ -34,18 +34,4 @@ public final class Encryption{
     public String md5(String ...info){
         return md5(String.join("",info));
     }
-
-    /** XOR */
-    public String xor(String str){
-        StringBuilder sb = new StringBuilder(str.length() << 1);
-        for(char c : str.toCharArray()) sb.append(Integer.toHexString(~c & 0xff));
-        return sb.toString();
-    }
-
-    public String deXor(String str){
-        int len = str.length();
-        StringBuilder sb = new StringBuilder(len >> 1);
-        for(int i=0;i<len;) sb.append((char)(0xff - Integer.parseInt(str.substring(i,i += 2),16)));
-        return sb.toString();
-    }
 }
