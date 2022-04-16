@@ -20,14 +20,18 @@ public final class XOR{
      * @Author: ZYJ
      * @Date: 2022/04/16
      * @Remark: 异或加密
-     * @param isChaos {true : 随机加密 | false : 固定加密} 不影响解密结果
+     * @param privateKey 私钥
+     * @param isChaos    {true : 随机加密 | false : 固定加密} 不影响解密结果
      * @param successive {true : 链状加密 | false : 整合加密} 不影响解密结果
      */
-    public String encryption(boolean isChaos,boolean successive){
+    public String encryption(boolean isChaos,boolean successive,String privateKey){
         int offset = storage.hashCode();
-        String headMsg = getHeadMsg(isChaos,offset);
+        String headMsg = privateKey == null ? getHeadMsg(isChaos,offset) : Integer.toHexString(privateKey.hashCode());
         StringBuilder result = new StringBuilder();
-        if(successive) result.append(core_encryption(headMsg,headMsg.length()));
+        if(successive){
+            result.append(core_encryption(privateKey == null ?
+                    headMsg : String.valueOf(System.nanoTime()),headMsg.length()));
+        }
         int count = storage.size();
         for(Map.Entry<String,String> item : storage.entrySet()){
             offset = headMsg.hashCode();
@@ -38,10 +42,22 @@ public final class XOR{
                 result.append(item.getKey()).append(":").append(item.getValue()).append(",");
             }
         }
+        System.out.println(privateKey + " : " + headMsg + ", offset: " + offset + ", default: " + "".hashCode());
         if(successive) return result.toString();
         result.delete(result.length()-2,result.length());
-        return core_encryption(headMsg,headMsg.length())
+        return (privateKey == null ? core_encryption(headMsg,headMsg.length()) : String.valueOf(System.nanoTime()))
                 + "-" + core_encryption(result.toString(),offset);
+    }
+
+    /**
+     * @Author: ZYJ
+     * @Date: 2022/04/16
+     * @Remark: 异或加密
+     * @param isChaos    {true : 随机加密 | false : 固定加密} 不影响解密结果
+     * @param successive {true : 链状加密 | false : 整合加密} 不影响解密结果
+     */
+    public String encryption(boolean isChaos,boolean successive){
+        return encryption(isChaos,successive,null);
     }
 
     /**
@@ -50,9 +66,9 @@ public final class XOR{
      * @Remark: 异或解密
      * @param info 密文
      */
-    public static Map<String,String> decrypt(String info){
+    public static Map<String,String> decrypt(String info,String privateKey){
         StringBuilder storage = new StringBuilder();
-        decrypt(info,storage);
+        decrypt(info,storage,privateKey);
         return convert(storage.toString());
     }
 
@@ -62,12 +78,26 @@ public final class XOR{
      * @Remark: 异或解密
      * @param info 密文
      */
-    public static String decrypt(String info,StringBuilder storage){
+    public static Map<String,String> decrypt(String info){
+        return decrypt(info,null);
+    }
+
+    /**
+     * @Author: ZYJ
+     * @Date: 2022/04/16
+     * @Remark: 异或解密
+     * @param info 密文
+     */
+    private static String decrypt(String info,StringBuilder storage,String privateKey){
+        if(privateKey != null){
+            info = Integer.toHexString(privateKey.hashCode()) + info.substring(info.indexOf('-'));
+        }
+        System.out.println("info: " + info);
         int index = info.lastIndexOf('-');
         boolean key = index > -1;
         if(key){
             int temp = index;
-            index = decrypt(info.substring(0,temp),storage).hashCode();
+            index = decrypt(info.substring(0,temp),storage,null).hashCode();
             info = info.substring(temp + 1);
         }
         String str = core_decrypt(info,key ? index : info.length() >> 1);
@@ -94,7 +124,7 @@ public final class XOR{
      * @param info 加密信息
      * @param offset 偏移量
      */
-    private String core_encryption(String info,int offset){
+    private static String core_encryption(String info,int offset){
         int len = info.length();
         StringBuilder sb = new StringBuilder(len << 1);
         for(int i=0;i<len;i++) sb.append(xorOffset(info.charAt(i),offset + i));
@@ -125,7 +155,6 @@ public final class XOR{
      * @param json 解密结果
      */
     private static Map<String,String> convert(String json){
-        System.out.println(json);
         Map<String,String> storage = new HashMap<>();
         for(String s : json.split(",")){
             int index = s.indexOf(':');
@@ -163,7 +192,7 @@ public final class XOR{
      * @param num 基础值
      * @param offset 偏移量
      */
-    private String xorOffset(int num,int offset){
+    private static String xorOffset(int num,int offset){
         return Integer.toHexString(((~num & 0xff) + (offset % 0x10)) % 0xff);
     }
 
@@ -171,10 +200,12 @@ public final class XOR{
         XOR xor = new XOR();
         xor.put("name","aress");
         xor.put("age","20");
-        xor.put("url","https://translate.google.cn/?sl=en&tl=zh-CN&text=successive&op=translate");
-        String msg = xor.encryption(false,false);
-        System.out.println(msg);
-        Map<String,String> map = XOR.decrypt(msg);
-        System.out.println(map);
+        //xor.put("url","https://translate.google.cn/?sl=en&tl=zh-CN&text=successive&op=translate");
+        String msg = xor.encryption(false,false,"salt");
+        System.out.println("msg: " + msg);
+        System.out.println(XOR.decrypt(msg,"salt"));
+        System.out.println("================");
+        System.out.println(XOR.core_decrypt("919f949dc9a393a19495dda9a4a7d3dc",1512030448));
+        //System.out.println(map);
     }
 }
