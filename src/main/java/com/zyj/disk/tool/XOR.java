@@ -21,16 +21,25 @@ public final class XOR{
      * @Date: 2022/04/16
      * @Remark: 异或加密
      * @param isChaos {true : 随机加密 | false : 固定加密} 不影响解密结果
+     * @param successive {true : 链状加密 | false : 整合加密} 不影响解密结果
      */
-    public String encryption(boolean isChaos){
+    public String encryption(boolean isChaos,boolean successive){
         int offset = storage.hashCode();
         String headMsg = getHeadMsg(isChaos,offset);
         StringBuilder result = new StringBuilder();
+        if(successive) result.append(core_encryption(headMsg,headMsg.length()));
+        int count = storage.size();
         for(Map.Entry<String,String> item : storage.entrySet()){
             offset = headMsg.hashCode();
-            result.append(item.getKey()).append(":").append(item.getValue()).append(",");
+            if(successive){
+                headMsg = item.getKey() + ":" + item.getValue() + (--count > 0 ? "," : "");
+                result.append("-").append(core_encryption(headMsg,offset));
+            }else{
+                result.append(item.getKey()).append(":").append(item.getValue()).append(",");
+            }
         }
-        result.delete(result.length()-1,result.length());
+        if(successive) return result.toString();
+        result.delete(result.length()-2,result.length());
         return core_encryption(headMsg,headMsg.length())
                 + "-" + core_encryption(result.toString(),offset);
     }
@@ -42,11 +51,28 @@ public final class XOR{
      * @param info 密文
      */
     public static Map<String,String> decrypt(String info){
+        StringBuilder storage = new StringBuilder();
+        decrypt(info,storage);
+        return convert(storage.toString());
+    }
+
+    /**
+     * @Author: ZYJ
+     * @Date: 2022/04/16
+     * @Remark: 异或解密
+     * @param info 密文
+     */
+    public static String decrypt(String info,StringBuilder storage){
         int index = info.lastIndexOf('-');
-        String head = info.substring(0,index);
-        head = core_decrypt(head,head.length() >> 1);
-        head = core_decrypt(info.substring(index + 1),head.hashCode());
-        return convert(head);
+        boolean key = index > -1;
+        if(key){
+            int temp = index;
+            index = decrypt(info.substring(0,temp),storage).hashCode();
+            info = info.substring(temp + 1);
+        }
+        String str = core_decrypt(info,key ? index : info.length() >> 1);
+        if(key) storage.append(str);
+        return str;
     }
 
     /**
@@ -99,6 +125,7 @@ public final class XOR{
      * @param json 解密结果
      */
     private static Map<String,String> convert(String json){
+        System.out.println(json);
         Map<String,String> storage = new HashMap<>();
         for(String s : json.split(",")){
             int index = s.indexOf(':');
@@ -116,7 +143,7 @@ public final class XOR{
      */
     private String getHeadMsg(boolean isChaos,int offset){
         if(!isChaos) return Integer.toHexString(offset);
-        char[] chars = String.valueOf(System.currentTimeMillis()).toCharArray();
+        char[] chars = String.valueOf(System.nanoTime()).toCharArray();
         Random random = new Random();
         StringBuilder record = new StringBuilder();
         for(int i=chars.length-1;i>0;i--){
@@ -138,5 +165,16 @@ public final class XOR{
      */
     private String xorOffset(int num,int offset){
         return Integer.toHexString(((~num & 0xff) + (offset % 0x10)) % 0xff);
+    }
+
+    public static void main(String[] args){
+        XOR xor = new XOR();
+        xor.put("name","aress");
+        xor.put("age","20");
+        xor.put("url","https://translate.google.cn/?sl=en&tl=zh-CN&text=successive&op=translate");
+        String msg = xor.encryption(false,false);
+        System.out.println(msg);
+        Map<String,String> map = XOR.decrypt(msg);
+        System.out.println(map);
     }
 }
