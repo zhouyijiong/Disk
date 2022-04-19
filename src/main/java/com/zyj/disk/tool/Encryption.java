@@ -30,8 +30,4 @@ public final class Encryption{
             return null;
         }
     }
-
-    public String md5(String ...info){
-        return md5(String.join("",info));
-    }
 }
