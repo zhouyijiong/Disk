@@ -46,7 +46,7 @@ public abstract class XOR{
      * @Remark: 默认加密
      */
     protected String def_encryption(String head,String source,int offset){
-        return setHead(head) + "-" + setBody(source,head.hashCode()) + "-" + setCode(offset);
+        return setHead(head) + "-" + setBody(source,hash(head.hashCode())) + "-" + setCode(offset);
     }
 
     /**
@@ -57,9 +57,9 @@ public abstract class XOR{
     protected String def_decrypt(String cipher){
         String[] ciphers = cipher.split("-");
         cipher = ciphers[0];
-        int hash = decrypt(cipher,cipher.length() >> 1).hashCode();
+        int hash = hash(decrypt(cipher,cipher.length() >> 1).hashCode());
         cipher = decrypt(ciphers[1],hash);
-        hash = cipher.hashCode();
+        hash = hash(cipher.hashCode());
         return encryption(String.valueOf(hash),hash).equals(ciphers[2]) ? cipher : null;
     }
 
@@ -110,7 +110,7 @@ public abstract class XOR{
      */
     protected String getHeadMsg(int offset){
         if(!isChaos) return Integer.toHexString(offset);
-        char[] chars = String.valueOf(System.nanoTime()).toCharArray();
+        char[] chars = String.valueOf(hash(System.nanoTime())).toCharArray();
         Random random = new Random();
         StringBuilder record = new StringBuilder();
         for(int i=chars.length-1;i>0;i--){
@@ -121,5 +121,13 @@ public abstract class XOR{
             if(temp > '-') record.append(chars[i]);
         }
         return record.reverse().toString();
+    }
+
+    protected int hash(int hash){
+        return hash ^ (hash >>> 16);
+    }
+
+    private long hash(long hash){
+        return hash ^ (hash >>> 32);
     }
 }

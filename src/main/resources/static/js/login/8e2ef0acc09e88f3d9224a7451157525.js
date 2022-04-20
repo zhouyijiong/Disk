@@ -1,20 +1,27 @@
+let login_status;
+let login_url;
+const login_status_array = [
+	new LoginStatusVo('登录','login','/user/login'),
+	new LoginStatusVo('注册','registered','/user/registered')
+]
 window.onload=function(){
-	document.getElementById("usm").focus()
+	login_status = 0;
+	login_url = '/user/login'
+	document.getElementById("usm").focus();
 }
-
-let login_state = 1;
-
-function updateState(obj){
-	let login = document.getElementById("login");
-	if(login_state === 1){
-		login_state = 0;
-		obj.innerHTML="login";
-		login.value="注册";
-	}else{
-		login_state = 1;
-		obj.innerHTML="registered";
-		login.value="登录";
+class LoginStatusVo{
+	constructor(status,viewInfo,url){
+		this.status = status;
+		this.viewInfo = viewInfo;
+		this.url = url;
 	}
+}
+function updateState(obj){
+	let loginStatus = login_status_array[++login_status % login_status_array.length];
+	let login = document.getElementById("login");
+	login_url = loginStatus.url;
+	obj.innerHTML = loginStatus.viewInfo;
+	login.value = loginStatus.status;
 }
 function judgment(){
 	if(!navigator.cookieEnabled) {
@@ -28,7 +35,7 @@ function judgment(){
 		usm.focus();
 		return
 	}
-	var pwd = document.getElementById("pwd");
+	let pwd = document.getElementById("pwd");
 	if(!checkStr(pwd.value,6,16)){
 		alert("密码只能由6~16位字符或数字组成");
 		pwd.value="";
@@ -36,24 +43,18 @@ function judgment(){
 		return
 	}
 	pwd.value = md5(pwd.value);
-	$.ajax({
-		type:"POST",
-		url:"/user/"+(login_state === 1 ? 'login' : 'registered'),
-		dataType:"json",
-		data:{"username":usm.value,"password":pwd.value},
-		success:function(data){
 
-			if(data.code === 500){
-				alert(data.msg);
-				usm.value="";
-				pwd.value="";
-				usm.focus();
-				return
-			}
-			localStorage.access = data.access;
-			window.location.href = "/";
-		}
-	})
+	let data = new FormData();
+	data.set("username",usm.value);
+	data.set("password",pwd.value);
+
+	if(!ajax(POST,login_url,JSON,data)){
+		usm.value="";
+		pwd.value="";
+		usm.focus();
+		localStorage.access = data.access;
+		window.location.href = "/";
+	}
 }
 document.getElementById("usm").addEventListener("keyup",function({keyCode}){
 	if(keyCode === 13) document.getElementById("pwd").focus();

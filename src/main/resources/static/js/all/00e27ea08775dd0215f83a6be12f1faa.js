@@ -1,3 +1,27 @@
+let GET = "GET";
+let POST = "POST";
+let JSON = "json";
+
+function param_check(param,type){
+	if(typeof param !== type) throw "parameter must be " + type;
+}
+
+function form_data(){
+	return new FormData();
+}
+
+function hashcode(str){
+	param_check(str,'string');
+	let hash = 0,i,chr,len;
+	if(str.length === 0) return hash;
+	for(i=0,len=str.length;i<len;i++){
+		chr = str.charCodeAt(i);
+		hash = ((hash << 5) - hash) + chr;
+		hash |= 0;
+	}
+	return hash;
+}
+
 function checkStr(str,min,max){
 	var pattern=/^[0-9a-zA-Z]*$/;
 	return(str.length>=min&&str.length<=max)&&pattern.test(str)
@@ -47,6 +71,21 @@ function fileSizeFormat(size){
 	return sizeInfo
 }
 
+function ajax(type,url,dataType,formData){
+	let result = true;
+	$.ajax({
+		contentType:false,processData:false,
+		type:type,url:url,dataType:dataType,data:formData,
+		success:function(data){
+			if(data.code >= 4000){
+				result = false;
+				alert(data.msg);
+			}
+		}
+	})
+	return result;
+}
+
 function setCookie(name,value){
 	var Days = 7;
 	var exp = new Date();
@@ -75,4 +114,4 @@ function logout(){
 			window.location.href="/"
 		}
 	})
-};
+}

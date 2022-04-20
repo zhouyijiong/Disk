@@ -56,7 +56,10 @@ public final class ResponsiveCache<K,V>{
         }
         TimeVal<V> timeVal = container.get(key);
         if(timeVal == null) return null;
-        if(currentTime > timeVal.expirationTime) container.remove(key);
+        if(currentTime > timeVal.expirationTime){
+            container.remove(key);
+            return null;
+        }
         return timeVal.val;
     }
 }

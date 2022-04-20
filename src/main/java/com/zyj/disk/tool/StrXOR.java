@@ -11,7 +11,7 @@ public final class StrXOR extends XOR{
     }
 
     public String encryption(String info){
-        int hash = info.hashCode();
+        int hash = hash(info.hashCode());
         return def_encryption(getHeadMsg(hash),info,hash);
     }
 

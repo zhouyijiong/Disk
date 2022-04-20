@@ -34,7 +34,7 @@ public class MapXOR extends XOR{
      */
     public String encryption(){
         String source = storage.toString();
-        int hash = source.hashCode();
+        int hash = hash(source.hashCode());
         return def_encryption(getHeadMsg(hash),source,hash);
     }
 
