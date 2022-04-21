@@ -1,7 +1,6 @@
 package com.zyj.disk.tool;
 
 import lombok.AllArgsConstructor;
-import java.util.Random;
 
 /**
  * @Author: ZYJ
@@ -75,9 +74,8 @@ public abstract class XOR{
         StringBuilder sb = new StringBuilder(len << 1);
         for(int i=0;i<len;i++){
             int a = ~info.charAt(i) & 0xff;
-            int b = (offset + i) % 0x10;
-            int num = (a + b) % 0xff;
-            sb.append(Integer.toHexString(num));
+            int b = (offset + i) % 0x20;
+            sb.append(Integer.toHexString((a + b) % 0xff));
         }
         return sb.toString();
     }
@@ -95,9 +93,8 @@ public abstract class XOR{
         char[] chars = new char[offsetLen];
         for(int i=0,k=0;i<len;++k){
             int a = Integer.parseInt(info.substring(i,i += 2),0x10);
-            int b = (offset + k) % 0x10;
-            int num = 0xff - a + b;
-            chars[k] = (char)num;
+            int b = (offset + k) % 0x20;
+            chars[k] = (char)(0xff - a + b);//(~a & 0xff) + b
         }
         return new String(chars,0,offsetLen);
     }
@@ -110,24 +107,11 @@ public abstract class XOR{
      */
     protected String getHeadMsg(int offset){
         if(!isChaos) return Integer.toHexString(offset);
-        char[] chars = String.valueOf(hash(System.nanoTime())).toCharArray();
-        Random random = new Random();
-        StringBuilder record = new StringBuilder();
-        for(int i=chars.length-1;i>0;i--){
-            char temp = chars[i];
-            offset = random.nextInt(i);
-            chars[i] = chars[offset];
-            chars[offset] = temp;
-            if(temp > '-') record.append(chars[i]);
-        }
-        return record.reverse().toString();
+        long hash = System.nanoTime();
+        return String.valueOf(hash ^ (hash >>> 32L));
     }
 
     protected int hash(int hash){
         return hash ^ (hash >>> 16);
-    }
-
-    private long hash(long hash){
-        return hash ^ (hash >>> 32);
     }
 }
