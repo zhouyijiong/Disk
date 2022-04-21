@@ -1,59 +1,93 @@
-const MAP_PUT = 0,MAP_GET = 1,MAP_REMOVE = 2;
+/** 期望超过8个节点转为二叉树 */
+const DEFAULT_LOAD_FACTOR = 0.75;
 class HashMap{
-    constructor(){
+    constructor(size){
         this.size = 0;
-        this.array = new Array(16);
-        for(let i=0;i<this.array.length;i++) this.array[i] = [];
-    }
-    core(code,k,v){
-        let hash = hashcode(k);
-        hash = hash ^ (hash >>> 16);
-        let tempArray = this.getArray(hash);
-        let count = -1;
-        for(let node of tempArray){
-            count++;
-            if(node.hash === hash && node.key === k){
-                switch(code){
-                    case MAP_PUT:
-                        node.val = v;
-                        return true;
-                    case MAP_GET:
-                        return node.val;
-                    case MAP_REMOVE:
-                        tempArray.splice(count,1);
-                        this.size--;
-                        node = null;
-                        return true;
-                }
-            }
-        }
-        if(code === 0){
-            tempArray.push(new Node(hash,k,v));
-            this.size++;
-        }
-        return null;
+        this.array = new Array(size ? size : 16).fill(null);
+        this.threshold = this.array.length * DEFAULT_LOAD_FACTOR;
     }
     put(k,v){
-        if(this.core(MAP_PUT,k,v) && this.size > this.array.length * 0.75) this.expansion();
+        let hash = this.hash(k);
+        let index = this.getIndex(this.array.length,hash);
+        let node = this.array[index];
+        if(node == null) this.array[index] = new Node(hash,k,v);
+        else{
+            let parentNode = null;
+            do{
+                if(node.hash === hash && node.key === k){
+                    node.val = v;
+                    return this;
+                }
+                parentNode = node;
+                node = node.next;
+            }while(node != null);
+            parentNode.next = new Node(hash,k,v);
+        }
+        if(++this.size > this.threshold) this.expansion();
         return this;
     }
     get(k){
-        return this.core(MAP_GET,k);
+        let hash = this.hash(k);
+        let index = this.getIndex(this.array.length,hash);
+        let node = this.array[index];
+        while(node != null){
+            if(node.hash === hash && node.key === k) return node.val;
+            node = node.next;
+        }
+        return null;
     }
     remove(k){
-        return this.core(MAP_REMOVE,k);
+        let hash = this.hash(k);
+        let index = this.getIndex(this.array.length,hash);
+        let node = this.array[index];
+        if(node == null) return null;
+        let parentNode = null;
+        do{
+            if(node.hash === hash && node.key === k){
+                let val = node.val;
+                if(parentNode == null){
+                    this.array[index] = null;
+                }else{
+                    parentNode.next = node.next;
+                    node = null;
+                }
+                --this.size;
+                return val;
+            }
+            parentNode = node;
+            node = node.next;
+        }while(node != null);
+        return null;
     }
     clear(){
-        for(let i=0;i<this.array.length;++i) this.array[i].splice(0,this.array[i].length);
+        for(let i=0,len=this.array.length;i<len;++i) this.array[i] = null;
         this.size = 0;
     }
-    getArray(hash){
-        if(hash < 0) hash = -hash;
-        let index = (this.array.length-1) & hash;
-        return this.array[index];
+    hash(k){
+        let hash = hashcode(k);
+        return hash ^ (hash >>> 16);
+    }
+    getIndex(len,hash){
+        return (len - 1) & hash
     }
     expansion(){
-        for(let i=this.array.length,len=i<<1;i<len;++i) this.array[i] = [];
+        this.threshold = (this.array.length << 1) * DEFAULT_LOAD_FACTOR;
+        let newMap = new HashMap(this.array.length << 1);
+        let node = null,next = null;
+        for(let i=0,len=this.array.length;i<len;++i){
+            node = this.array[i];
+            while(node != null){
+                newMap.put(node.key,node.val);
+                next = node.next;
+                while(next != null){
+                    newMap.put(next.key,next.val);
+                    next = next.next;
+                }
+                node = null;
+            }
+        }
+        this.array = newMap.array;
+        newMap = null;
     }
 }
 class Node{
@@ -61,5 +95,6 @@ class Node{
         this.hash = hash;
         this.key = key;
         this.val = val;
+        this.next = null;
     }
 }

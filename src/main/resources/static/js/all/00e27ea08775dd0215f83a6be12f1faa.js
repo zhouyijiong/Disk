@@ -2,12 +2,13 @@ let GET = "GET";
 let POST = "POST";
 let JSON = "json";
 
-function param_check(param,type){
-	if(typeof param !== type) throw "parameter must be " + type;
-}
 
 function form_data(){
 	return new FormData();
+}
+
+function param_check(param,type){
+	if(typeof param !== type) throw "parameter must be " + type;
 }
 
 function hashcode(str){
