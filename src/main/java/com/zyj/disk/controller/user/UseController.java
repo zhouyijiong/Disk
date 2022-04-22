@@ -52,4 +52,42 @@ public class UseController{
 	public Map<String,Object> login(String username,String password){
 		return userService.login(username,password);
 	}
+
+	public static void main(String[] args) {
+		long p = 17;
+		long q = 23;
+		long sum = p*q;
+		long e = 3;
+		long c = (p-1)*(q-1);
+		long d = 235;
+
+
+		System.out.println((e * d) % c);
+
+		//PBK: (e,sum)    PRK: (d,sum)
+
+		/* 加密 */
+		int m = 'a';//314
+		System.out.println(Math.pow(m,e));
+		long m1 = (long)(Math.pow(m,e) % sum);
+		System.out.println(m1);
+
+		/* 解密 */
+		//System.out.println(Math.pow(m1,d) % sum);
+		System.out.println(test(m1,d,sum));
+	}
+
+	public static long test(long g,long x,long p){
+		long c = g % p;
+		long d = x;
+		long r = 1;
+		while(d > 0){
+			if(d % 2 == 1){
+				r = (r*c) % p;
+			}
+			d = d/2;
+			c = (c * c) % p;
+		}
+		return r;
+	}
 }

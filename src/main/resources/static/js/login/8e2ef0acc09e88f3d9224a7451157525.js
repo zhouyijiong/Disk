@@ -48,7 +48,7 @@ function judgment(){
 	data.set("username",usm.value);
 	data.set("password",pwd.value);
 
-	if(!ajax(POST,login_url,JSON,data)){
+	if(!ajax.post(login_url,data)){
 		usm.value="";
 		pwd.value="";
 		usm.focus();

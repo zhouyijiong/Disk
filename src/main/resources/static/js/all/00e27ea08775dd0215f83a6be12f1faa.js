@@ -1,26 +1,7 @@
-let GET = "GET";
-let POST = "POST";
-let JSON = "json";
-
-
+const GET = "GET",POST = "POST",JSON = "json";
+const ajax = new Ajax();
 function form_data(){
 	return new FormData();
-}
-
-function param_check(param,type){
-	if(typeof param !== type) throw "parameter must be " + type;
-}
-
-function hashcode(str){
-	param_check(str,'string');
-	let hash = 0,i,chr,len;
-	if(str.length === 0) return hash;
-	for(i=0,len=str.length;i<len;i++){
-		chr = str.charCodeAt(i);
-		hash = ((hash << 5) - hash) + chr;
-		hash |= 0;
-	}
-	return hash;
 }
 
 function checkStr(str,min,max){
@@ -70,21 +51,6 @@ function fileSizeFormat(size){
 		}
 	}
 	return sizeInfo
-}
-
-function ajax(type,url,dataType,formData){
-	let result = true;
-	$.ajax({
-		contentType:false,processData:false,
-		type:type,url:url,dataType:dataType,data:formData,
-		success:function(data){
-			if(data.code >= 4000){
-				result = false;
-				alert(data.msg);
-			}
-		}
-	})
-	return result;
 }
 
 function setCookie(name,value){
