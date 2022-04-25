@@ -1,6 +1,7 @@
 package com.zyj.disk.controller.page;
 
 import com.zyj.disk.sys.annotation.verify.Access;
+import com.zyj.disk.sys.identity.IdentityPackage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class PageController{
 	 * @Date: 2022/04/08
 	 * @return 访问用户后台
 	 */
-	@Access
+	@Access(identity = IdentityPackage.VISITOR)
 	@GetMapping("/management")
 	public String management(){
 		return USER;

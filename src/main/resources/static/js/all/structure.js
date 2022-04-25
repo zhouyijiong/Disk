@@ -1,13 +1,15 @@
 /**
  * @Author: ZYJ
  * @Date: 2022/04/022
- * @Remark: 父类 Object
+ * @Remark: 父类 Parent
  */
 {
-    class Object{
-        constructor(){}
+    class Parent{
+        constructor(type){
+            this.type = typeof type;
+            if(type) this.check = true;
+        }
         hashcode(str){
-            this.param_check(str,'string');
             let hash = 0,i,chr,len;
             if(str.length === 0) return hash;
             for(i=0,len=str.length;i<len;i++){
@@ -17,7 +19,7 @@
             }
             return hash;
         }
-        param_check(param,type){if(typeof param !== type) throw "parameter must be " + type;}
+        param_check(param){if(this.check && (typeof param !== this.type)) throw 'parameter must be ' + type;}
         toString(){return null;}
     }
 }
@@ -29,9 +31,9 @@
  */
 {
     const DEFAULT_LOAD_FACTOR = 0.75;
-    class HashMap extends Object{
+    class HashMap extends Parent{
         constructor(size){
-            super();
+            super('string');
             this.size = 0;
             this.array = new Array(size ? size : 16).fill(null);
             this.threshold = this.array.length * DEFAULT_LOAD_FACTOR;
@@ -94,7 +96,8 @@
             this.size = 0;
         }
         hash(k){
-            let hash = hashcode(k);
+            super.param_check(k);
+            let hash = super.hashcode(k);
             return hash ^ (hash >>> 16);
         }
         getIndex(hash){
@@ -127,6 +130,36 @@
             this.val = val;
             this.next = null;
         }
+    }
+}
+
+/**
+ * @Author: ZYJ
+ * @Date: 2022/04/25
+ * @Remark: K-Value
+ */
+{
+    class Pair extends Parent{
+        constructor(key,val){
+            super();
+            this.key = new Item(key);
+            this.val = new Item(val);
+        }
+        toString(){return '{' + this.key.toString() + ':' + this.val.toString() + '}';}
+        hashcode(){return super.hashcode(this.toString());}
+    }
+    class Item extends Object{
+        constructor(item){
+            super(item);
+            this.item = item;
+        }
+        set(item){
+            super.param_check(item);
+            this.item = item;
+        }
+        get(){return this.item;}
+        setType(type){super.type = type;}
+        toString(){return String(this.item);}
     }
 }
 

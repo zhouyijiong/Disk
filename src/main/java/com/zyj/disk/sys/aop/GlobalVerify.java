@@ -12,6 +12,7 @@ import com.zyj.disk.sys.annotation.verify.Access;
 import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;
+import com.zyj.disk.sys.identity.IdentityPackage;
 import com.zyj.disk.sys.tool.AOPTool;
 import com.zyj.disk.sys.tool.ResponsiveCache;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public final class GlobalVerify{
 
 	@Around("@annotation(access)")
 	public Object global(ProceedingJoinPoint joinPoint,Access access){
+		IdentityPackage.check(access.identity(),aopTool.getRequest().getAttribute("identity"));
 		try{
 			return StpUtil.isLogin() ? joinPoint.proceed() : "login/login";
 		}catch(Throwable throwable){

@@ -107,8 +107,8 @@ public abstract class XOR{
      */
     protected String getHeadMsg(int offset){
         if(!isChaos) return Integer.toHexString(offset);
-        long hash = System.nanoTime();
-        return String.valueOf(hash ^ (hash >>> 32L));
+            long hash = System.nanoTime();//* 0x39c204abfde6aL;
+        return String.valueOf(hash << 31 ^ (hash >>> 31));
     }
 
     protected int hash(int hash){
