@@ -37,19 +37,19 @@ public enum IdentitySet{
      * @Remark: 身份类
      * TODO 期望增加多对一的身份映射关系(如科技部,财务部,营业部等)
      */
-    private abstract static class Identity{}
+    private interface Identity{}
 
     /**
      * @Author: ZYJ
      * @Date: 2022/04/25
      * @Remark: 游客
      */
-    private static final class Visitor extends Identity{}
+    private static final class Visitor implements Identity{}
 
     /**
      * @Author: ZYJ
      * @Date: 2022/04/25
      * @Remark: 用户
      */
-    private static final class User extends Identity{}
+    private static final class User implements Identity{}
 }

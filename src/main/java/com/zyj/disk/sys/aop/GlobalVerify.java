@@ -4,8 +4,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
-import cn.dev33.satoken.stp.StpUtil;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.annotation.verify.Access;
@@ -68,9 +66,7 @@ public final class GlobalVerify{
 				throw new GlobalException(User.REQ_PARAM_LEN_ERROR,name,value);
 		}
 		try{
-			Object result = joinPoint.proceed();
-			if(paramsCheck.cookie()) StpUtil.login(ThreadLocalRandom.current().nextInt());
-			return result;
+			return joinPoint.proceed();
 		}catch(Throwable throwable){
 			throw new GlobalException(throwable);
 		}
