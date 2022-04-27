@@ -2,7 +2,6 @@ package com.zyj.disk.sys.generate;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import com.zyj.disk.sys.annotation.GenerateParam;
 import com.zyj.disk.sys.generate.file.*;
@@ -10,26 +9,11 @@ import com.zyj.disk.sys.generate.file.*;
 public final class Generate{
 	private static final List<FieldInfo> fieldInfos = new ArrayList<>();
 
-	public static void start(Class<?> clazz,String name,FileTypes...fileTypes)
+	public static void start(Class<?> clazz,String name,FileType...fileType)
 			throws InstantiationException,IllegalAccessException{
 		String path = init(clazz);
-		Arrays.stream(fileTypes).forEach(fileType -> {
-			switch(fileType){
-				case ENTITY:
-					new Entity(name,fieldInfos).create(path);
-					break;
-				case Mapper:
-					new Mapper(name,fieldInfos).create(path);
-					break;
-				case Service:
-					new Service(name,fieldInfos).create(path);
-					break;
-				case Controller:
-					new Controller(name,fieldInfos).create(path);
-					break;
-				case SQL:new SQL(name,fieldInfos).create(path);
-			}
-		});
+		FileType.init(name,fieldInfos);
+		for(FileType type : fileType) type.create(path);
 	}
 
 	private static String init(Class<?> clazz)throws InstantiationException,IllegalAccessException{

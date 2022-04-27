@@ -3,16 +3,19 @@ package com.zyj.disk.sys.generate.file;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import com.zyj.disk.sys.generate.FieldInfo;
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/4/13
+ * @Remark: 生成实体类
+ */
 public final class Entity extends FileType{
 	StringBuilder param;
 	StringBuilder body;
 
-	public Entity(String name,List<FieldInfo> fieldInfos){
-		super(name,"Entity");
-		this.fieldInfos = fieldInfos;
+	public Entity(){
+		super("Entity");
 		int capacity = fieldInfos.size() * 8;
 		this.param = new StringBuilder(capacity);
 		this.body  = new StringBuilder(capacity << 1);

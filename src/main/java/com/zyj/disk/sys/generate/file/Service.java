@@ -3,14 +3,14 @@ package com.zyj.disk.sys.generate.file;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import com.zyj.disk.sys.generate.FieldInfo;
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/4/13
+ * @Remark: 生成业务类
+ */
 public final class Service extends FileType{
-	public Service(String name,List<FieldInfo> fieldInfos){
-		super(name,"Service");
-		this.fieldInfos = fieldInfos;
-	}
+	public Service(){super("Service");}
 
 	@Override
 	void createHead(BufferedOutputStream bos,String packageName)throws IOException{

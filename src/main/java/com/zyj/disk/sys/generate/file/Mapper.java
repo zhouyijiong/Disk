@@ -3,14 +3,14 @@ package com.zyj.disk.sys.generate.file;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import com.zyj.disk.sys.generate.FieldInfo;
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/4/13
+ * @Remark: 生成映射类
+ */
 public final class Mapper extends FileType{
-	public Mapper(String name,List<FieldInfo> fieldInfos){
-		super(name,"Mapper");
-		this.fieldInfos = fieldInfos;
-	}
+	public Mapper(){super("Mapper");}
 
 	@Override
 	void createHead(BufferedOutputStream bos,String packageName)throws IOException{

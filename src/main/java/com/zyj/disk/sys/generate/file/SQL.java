@@ -4,14 +4,17 @@ import com.zyj.disk.sys.generate.FieldInfo;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/4/13
+ * @Remark: 生成 SQL 类
+ */
 public final class SQL extends FileType{
     StringBuilder table;
 
-    public SQL(String name,List<FieldInfo> fieldInfos){
-        super(name,"");
-        this.fieldInfos = fieldInfos;
+    public SQL(){
+        super("");
         table = new StringBuilder(fieldInfos.size() << 3);
     }
 

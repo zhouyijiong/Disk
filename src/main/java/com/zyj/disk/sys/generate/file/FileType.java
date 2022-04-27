@@ -10,14 +10,18 @@ import java.util.List;
 
 public abstract class FileType{
 	protected final String type;
-	protected final String sourceName;
 	protected final String className;
-	protected List<FieldInfo> fieldInfos;
+	protected static String sourceName;
+	protected static List<FieldInfo> fieldInfos;
 
-	protected FileType(String sourceName,String type){
+	protected FileType(String type){
 		this.type = type;
-		this.sourceName = sourceName;
 		this.className = oneStrToUp(sourceName) + type;
+	}
+
+	public static void init(String name,List<FieldInfo> fieldInfos){
+		FileType.sourceName = name;
+		FileType.fieldInfos = fieldInfos;
 	}
 
 	public void create(String path){

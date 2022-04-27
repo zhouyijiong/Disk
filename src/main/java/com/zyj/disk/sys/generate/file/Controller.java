@@ -1,10 +1,8 @@
 package com.zyj.disk.sys.generate.file;
 
-import com.zyj.disk.sys.generate.FieldInfo;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 /**
  * @Author: ZYJ
@@ -12,10 +10,7 @@ import java.util.List;
  * @Remark: 生成控制器类
  */
 public class Controller extends FileType{
-    public Controller(String name,List<FieldInfo> fieldInfos){
-        super(name,"Controller");
-        this.fieldInfos = fieldInfos;
-    }
+    public Controller(){ super("Controller"); }
 
     @Override
     void createHead(BufferedOutputStream bos,String packageName)throws IOException{
