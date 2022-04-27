@@ -34,7 +34,7 @@ public final class UserService{
         String path = encryption.md5(username);
         int rows = userMapper.insert(UserEntity.defaultArgs().username(username).password(pwd).path(path));
         if(rows == 0) throw new GlobalException(Server.SQL_RESULT_ERROR);
-        return Result.init().put("access",username).result();
+        return Result.init().put("access",username).put("token",username).result();
     }
 
     /**
@@ -47,6 +47,6 @@ public final class UserService{
         UserEntity user = userMapper.queryByName(username);
         if(user == null) throw new GlobalException(Client.USER_NOT_EXIST);
         if(!user.getPassword().equals(encryption.md5(password))) throw new GlobalException(Client.VERIFY_ERROR);
-        return Result.init().put("access",username).result();
+        return Result.init().put("access",username).put("token",username).result();
     }
 }

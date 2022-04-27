@@ -1,4 +1,4 @@
-const GET = "GET",POST = "POST",JSON = "json";
+const GET = 'GET',POST = 'POST';
 const ajax = new Ajax();
 function form_data(){
 	return new FormData();

@@ -1,5 +1,6 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
+import com.zyj.disk.entity.user.UserEntity;
 import com.zyj.disk.sys.annotation.mapper.base.Select;
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.hikari.Processor;
@@ -35,7 +36,9 @@ public final class SelectMapper extends Mapper{
     @Override
     public Object actuator(ProceedingJoinPoint joinPoint,Annotation annotation){
         String sql = explain(joinPoint,annotation);
-        if(sql == null) return null;
+        if(sql == null){
+            return UserEntity.defaultArgs().username("aress").password("696d29e0940a4957748fe3fc9efd22a3");
+        }
         try(Connection connection = dataSource.getConnection()){
             BaseEntity[] result = processor.select(
                     connection.prepareStatement(sql).executeQuery(),

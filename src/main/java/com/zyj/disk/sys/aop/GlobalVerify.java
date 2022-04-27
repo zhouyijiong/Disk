@@ -12,7 +12,6 @@ import com.zyj.disk.sys.annotation.verify.Access;
 import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;
-import com.zyj.disk.sys.identity.IdentityPackage;
 import com.zyj.disk.sys.tool.AOPTool;
 import com.zyj.disk.sys.tool.ResponsiveCache;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +27,16 @@ import javax.servlet.http.HttpServletRequest;
 public final class GlobalVerify{
 	private final AOPTool aopTool;
 
-	private static final
-	ResponsiveCache<String,Map<String,Param>> paramCache =
-			new ResponsiveCache<>(2048,86400);
+	private static final ResponsiveCache<String,Map<String,Param>> paramCache =
+			new ResponsiveCache<>(2048,60 * 60 * 24);
 
 	@Around("@annotation(access)")
 	public Object global(ProceedingJoinPoint joinPoint,Access access){
-		IdentityPackage.check(access.identity(),aopTool.getRequest().getAttribute("identity"));
+		HttpServletRequest request = aopTool.getRequest();
+		//IdentitySet.check(access.identity(),aopTool.getRequest().getAttribute("identity"));
 		try{
-			return StpUtil.isLogin() ? joinPoint.proceed() : "login/login";
+			String head = request.getHeader("token");
+			return head == null || "null".equals(head) ? "login/login" : joinPoint.proceed();
 		}catch(Throwable throwable){
 			throw new GlobalException(throwable);
 		}

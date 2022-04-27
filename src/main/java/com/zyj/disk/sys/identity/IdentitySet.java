@@ -7,14 +7,14 @@ import lombok.AllArgsConstructor;
 /**
  * @Author: ZYJ
  * @Date: 2022/4/25 16:46
- * @Remark: 身份包装类
+ * @Remark: 身份集(白名单模式)
  */
 @AllArgsConstructor
-public enum IdentityPackage{
-    NULL(null),
-
+public enum IdentitySet{
+    /** 限制为游客身份 */
     VISITOR(new Visitor()),
 
+    /** 限制为用户身份 */
     USER(new User());
 
     public final Identity ident;
@@ -24,9 +24,9 @@ public enum IdentityPackage{
      * @Date: 2022/04/25
      * @Remark: 判断当前身份是否属于访问区间内,如不是则抛出验证失败
      */
-    public static void check(IdentityPackage[] targets,Object current){
-        for(IdentityPackage item : targets){
-            if(item != IdentityPackage.NULL && item.ident.equals(current)) return;
+    public static void check(IdentitySet[] targets,Object current){
+        for(IdentitySet item : targets){
+            if(item.ident.equals(current)) return;
         }
         throw new GlobalException(Client.VERIFY_ERROR);
     }

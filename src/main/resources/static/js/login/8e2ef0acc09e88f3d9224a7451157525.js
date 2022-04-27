@@ -1,27 +1,22 @@
-let login_status;
-let login_url;
-const login_status_array = [
-	new LoginStatusVo('登录','login','/user/login'),
-	new LoginStatusVo('注册','registered','/user/registered')
-]
+let login_status = 0;
+let login_url = '/user/login';
 window.onload=function(){
-	login_status = 0;
-	login_url = '/user/login'
 	document.getElementById("usm").focus();
 }
-class LoginStatusVo{
-	constructor(status,viewInfo,url){
-		this.status = status;
-		this.viewInfo = viewInfo;
-		this.url = url;
-	}
-}
 function updateState(obj){
-	let loginStatus = login_status_array[++login_status % login_status_array.length];
+	let current,loginView;
+	if(++login_status % 2 === 0){
+		loginView = '登录';
+		current = 'registered';
+		login_url = '/user/login';
+	}else{
+		loginView = '注册';
+		current = 'login';
+		login_url = '/user/registered';
+	}
 	let login = document.getElementById("login");
-	login_url = loginStatus.url;
-	obj.innerHTML = loginStatus.viewInfo;
-	login.value = loginStatus.status;
+	obj.innerHTML = current;
+	login.value = loginView;
 }
 function judgment(){
 	if(!navigator.cookieEnabled) {
@@ -48,13 +43,16 @@ function judgment(){
 	data.set("username",usm.value);
 	data.set("password",pwd.value);
 
-	if(!ajax.post(login_url,data)){
+	if(ajax.post(login_url,data)){
 		usm.value="";
 		pwd.value="";
 		usm.focus();
-		localStorage.access = data.access;
-		window.location.href = "/";
+		localStorage.token = data.token;
 	}
+
+	//ajax.get('/management');
+	//ajax.syncGet('/management');
+	//window.location.href = "/";
 }
 document.getElementById("usm").addEventListener("keyup",function({keyCode}){
 	if(keyCode === 13) document.getElementById("pwd").focus();

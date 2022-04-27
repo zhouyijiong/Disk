@@ -28,11 +28,11 @@ public class UseController{
 	 */
 	@PostMapping("/registered")
 	@ParamsCheck(
-		cookie = true,
-		params = {
-				@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
-				@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
-		})
+			params = {
+					@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
+					@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
+			},cookie = true
+	)
 	public Map<String,Object> registered(String username,String password){
 		return userService.registered(username,password);
 	}
@@ -44,11 +44,11 @@ public class UseController{
 	 */
 	@PostMapping("/login")
 	@ParamsCheck(
-		cookie = true,
-		params = {
-				@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
-				@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
-		})
+			params = {
+					@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
+					@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
+			},cookie = true
+	)
 	public Map<String,Object> login(String username,String password){
 		return userService.login(username,password);
 	}

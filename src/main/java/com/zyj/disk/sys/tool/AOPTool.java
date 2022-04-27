@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
 @Component
@@ -17,8 +18,16 @@ public final class AOPTool{
     }
 
     public HttpServletRequest getRequest(){
+        return getHttpServletContext().getRequest();
+    }
+
+    public HttpServletResponse getResponse(){
+        return getHttpServletContext().getResponse();
+    }
+
+    private ServletRequestAttributes getHttpServletContext(){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if(attributes == null) throw new GlobalException(Server.REQUEST_PARAM_LOOS);
-        return attributes.getRequest();
+        return attributes;
     }
 }
