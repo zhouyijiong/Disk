@@ -7,16 +7,19 @@ import com.zyj.disk.sys.annotation.GenerateParam;
 import com.zyj.disk.sys.generate.file.*;
 
 public final class Generate{
+	private final String path;
 	private static final List<FieldInfo> fieldInfos = new ArrayList<>();
 
-	public static void start(Class<?> clazz,String name,FileType...fileType)
-			throws InstantiationException,IllegalAccessException{
-		String path = init(clazz);
+	public Generate(Class<?> clazz,String name) throws InstantiationException,IllegalAccessException{
+		this.path = init(clazz);
 		FileType.init(name,fieldInfos);
+	}
+
+	public void start(FileType...fileType){
 		for(FileType type : fileType) type.create(path);
 	}
 
-	private static String init(Class<?> clazz)throws InstantiationException,IllegalAccessException{
+	private String init(Class<?> clazz) throws InstantiationException,IllegalAccessException{
 		Object obj = clazz.newInstance();
 		String className = clazz.getName();
 		Field[] fields = clazz.getDeclaredFields();
@@ -40,7 +43,7 @@ public final class Generate{
 		return projectPath.replace(".","/");
 	}
 
-	private static String getType(int status,Field field,String length){
+	private String getType(int status,Field field,String length){
 		switch(field.getType().getSimpleName().hashCode()){
 			case 2086184     : return status == 0 ? "Byte"       : "tinyint"    + length;
 			case 79860828    : return status == 0 ? "Short"      : "smallint"   + length;

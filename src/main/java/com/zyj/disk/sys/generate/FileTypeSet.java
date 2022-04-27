@@ -1,20 +1,36 @@
 package com.zyj.disk.sys.generate;
 
 import com.zyj.disk.sys.generate.file.*;
-import lombok.AllArgsConstructor;
 
 /**
  * @Author: ZYJ
- * @Date: 2022/4/13 9:54
- * @Remark:
+ * @Date: 2022/4/27 19:04
+ * @Remark: 懒加载单例
  */
-@AllArgsConstructor
-public enum FileTypeSet{
-    ENTITY(new Entity()),
-    Mapper(new Mapper()),
-    Service(new Service()),
-    Controller(new Controller()),
-    SQL(new SQL());
+public final class FileTypeSet{
+    public FileType fileType;
 
-    public final FileType fileType;
+    private FileTypeSet(FileType fileType){
+        this.fileType = fileType;
+    }
+
+    public static FileType entity(){
+        return new Entity();
+    }
+
+    public static FileType mapper(){
+        return new Mapper();
+    }
+
+    public static FileType service(){
+        return new Service();
+    }
+
+    public static FileType controller(){
+        return new Controller();
+    }
+
+    public static FileType sql(){
+        return new SQL();
+    }
 }

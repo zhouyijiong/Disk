@@ -34,6 +34,6 @@ public final class Demo{
 	Integer authority = 0;
 
 	public static void main(String[] args)throws InstantiationException,IllegalAccessException,IOException{
-		Generate.start(Demo.class,"File");
+		new Generate(Demo.class,"File").start();
 	}
 }
