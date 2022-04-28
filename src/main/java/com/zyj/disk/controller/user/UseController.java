@@ -3,12 +3,13 @@ package com.zyj.disk.controller.user;
 import com.zyj.disk.service.user.UserService;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
+import com.zyj.disk.sys.result.Pair;
+import com.zyj.disk.sys.result.Response;
 import com.zyj.disk.sys.entity.Rules;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Map;
 
 /**
  * @Author: ZYJ
@@ -33,8 +34,11 @@ public class UseController{
 					@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
 			}
 	)
-	public Map<String,Object> registered(String username,String password){
-		return userService.registered(username,password);
+	public Response<String> registered(String username,String password){
+		userService.registered(username,password);
+		Pair<String,String> pair = new Pair<>("username",username);
+		pair.put("token",password);
+		return Response.success(pair.toJSONString());
 	}
 
 	/**
@@ -49,7 +53,10 @@ public class UseController{
 					@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
 			}
 	)
-	public Map<String,Object> login(String username,String password){
-		return userService.login(username,password);
+	public Response<String> login(String username,String password){
+		userService.login(username,password);
+		Pair<String,String> pair = new Pair<>("username",username);
+		pair.put("token",password);
+		return Response.success(pair.toJSONString());
 	}
 }
