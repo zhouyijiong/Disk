@@ -25,8 +25,8 @@ public final class Response<T>{
         this.data = data;
     }
 
-    public static<T> Response<T> success(T data){
-        return new Response<>(data);
+    public static Response<String> success(Pair<?,?> pair){
+        return new Response<>(pair.toJSONString());
     }
 
     public static<T> Response<T> error(GlobalException e){

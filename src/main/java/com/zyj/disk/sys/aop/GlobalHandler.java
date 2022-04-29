@@ -15,7 +15,7 @@ public class GlobalHandler{
     private final Record record = Record.initialize(this.getClass());
 
     @ExceptionHandler(GlobalException.class)
-    public Response<Exception> batteryException(GlobalException exception){
+    public Response<?> batteryException(GlobalException exception){
         record.error(exception);
         return Response.error(exception);
     }

@@ -3,8 +3,7 @@ package com.zyj.disk.controller.user;
 import com.zyj.disk.service.user.UserService;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
-import com.zyj.disk.sys.result.Pair;
-import com.zyj.disk.sys.result.Response;
+import com.zyj.disk.sys.result.*;
 import com.zyj.disk.sys.entity.Rules;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,9 +35,10 @@ public class UseController{
 	)
 	public Response<String> registered(String username,String password){
 		userService.registered(username,password);
-		Pair<String,String> pair = new Pair<>("username",username);
+		Pair<String,String> pair = new HashPair<>();
+		pair.put("access",username);
 		pair.put("token",password);
-		return Response.success(pair.toJSONString());
+		return Response.success(pair);
 	}
 
 	/**
@@ -55,8 +55,9 @@ public class UseController{
 	)
 	public Response<String> login(String username,String password){
 		userService.login(username,password);
-		Pair<String,String> pair = new Pair<>("username",username);
+		Pair<String,String> pair = new HashPair<>();
+		pair.put("access",username);
 		pair.put("token",password);
-		return Response.success(pair.toJSONString());
+		return Response.success(pair);
 	}
 }
