@@ -43,16 +43,18 @@ function judgment(){
 	data.set("username",usm.value);
 	data.set("password",pwd.value);
 
-	if(ajax.post(login_url,data)){
-		usm.value="";
-		pwd.value="";
-		usm.focus();
+	data = ajax.post(login_url,data);
+	if(data){
 		localStorage.token = data.token;
+		//ajax.get('/management');
+		//ajax.syncGet('/management');
+		//window.location.href = "/";
+	}else{
+		pwd.value = "";
+		usm.focus();
+		if(data == null) alert('系统错误');
+		if(data.code >= 4000) alert(data.message);
 	}
-
-	//ajax.get('/management');
-	//ajax.syncGet('/management');
-	//window.location.href = "/";
 }
 document.getElementById("usm").addEventListener("keyup",function({keyCode}){
 	if(keyCode === 13) document.getElementById("pwd").focus();

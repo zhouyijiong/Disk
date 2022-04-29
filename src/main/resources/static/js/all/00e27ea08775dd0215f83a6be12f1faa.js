@@ -1,21 +1,20 @@
-const GET = 'GET',POST = 'POST';
 const ajax = new Ajax();
 function form_data(){
 	return new FormData();
 }
 
 function checkStr(str,min,max){
-	var pattern=/^[0-9a-zA-Z]*$/;
+	let pattern=/^[0-9a-zA-Z]*$/;
 	return(str.length>=min&&str.length<=max)&&pattern.test(str)
 }
 
 function checkNum(str,min,max){
-	var pattern=/^[0-9]*$/;
+	let pattern=/^[0-9]*$/;
 	return(str.length>=min&&str.length<=max)&&pattern.test(str)
 }
 
 function checkMail(str){
-	var reg=/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+	let reg=/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
 	return reg.test(str)
 }
 

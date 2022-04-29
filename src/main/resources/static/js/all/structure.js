@@ -162,11 +162,9 @@ class Item extends Object{
  */
 class Ajax{
     constructor(){}
-    get(url,formData){return this.send(GET,url,'json',formData);}
-    post(url,formData){return this.send(POST,url,'json',formData)};
+    get(url,formData){return this.send('GET',url,'json',formData);}
+    post(url,formData){return this.send('POST',url,'json',formData)};
     send(type,url,dataType,formData){
-        let result = false;
-        alert('准备');
         $.ajax({
             type:type,
             url:url,
@@ -174,18 +172,12 @@ class Ajax{
             contentType:false,
             processData:false,
             data:formData,
-            async:false,
             beforeSend:function(XMLHttpRequest){
                 XMLHttpRequest.setRequestHeader('token',localStorage.getItem('token'));
             },
-            success:function(data){
-                if(data.code >= 4000){
-                    result = true;
-                    alert(data.msg);
-                }
-        	}
+            success:function(data){ return data; }
         });
-        return result;
+        return null;
     }
     syncGet(url){
         let xmlHttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
@@ -194,7 +186,7 @@ class Ajax{
                 location.reload();
             }
         }
-        xmlHttp.open(GET,url,false);
+        xmlHttp.open('GET',url,false);
         xmlHttp.setRequestHeader('token','aaaa');
         xmlHttp.send(null);
     }
