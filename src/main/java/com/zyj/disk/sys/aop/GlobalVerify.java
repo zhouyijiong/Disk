@@ -58,7 +58,7 @@ public final class GlobalVerify{
 			if(param == null) continue;
 			String value = request.getParameter(name);
 			if(param.required() && value == null)
-				throw new GlobalException(User.REQ_PARAM_REQUIRED,name,name);
+				throw new GlobalException(User.REQ_PARAM_REQUIRED,name);
 			if(param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
 				throw new GlobalException(User.REQ_PARAM_REGEX_ERROR,name,value);
 			int length = param.length();

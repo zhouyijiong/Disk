@@ -5,8 +5,10 @@
  */
 class Parent{
     constructor(type){
-        this.type = typeof type;
-        if(type) this.check = true;
+        if(type){
+            this.check = true;
+            this.type = typeof type;
+        }
     }
     hashcode(str){
         let hash = 0,i,chr,len;
@@ -127,6 +129,56 @@ class Node{
     }
 }
 
+class StringBuilder extends Parent{
+    constructor(size){
+        super('string');
+        this.array = [];
+    }
+    add(str){
+        this.param_check(str);
+        this.array[this.size++] = str;
+    }
+    toString(){
+        return this.array.join('');
+    }
+}
+
+/**
+ * @Author: ZYJ
+ * @Date: 2022/04/022
+ * @Remark: Ajax
+ */
+class Ajax{
+    constructor(){}
+    get(url,formData,success){return this.send('GET',url,'json',formData,success);}
+    post(url,formData,success){return this.send('POST',url,'json',formData,success);};
+    send(type,url,dataType,formData,success){
+        console.log(formData);
+        super.$.ajax({
+            type:type,
+            url:url,
+            dataType:dataType,
+            // contentType:false,
+            // processData:false,
+            data:formData,
+            beforeSend:function(XMLHttpRequest){
+                XMLHttpRequest.setRequestHeader('token',localStorage.getItem('token'));
+            },success:success
+        });
+    }
+    syncGet(url){
+        let xmlHttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+        xmlHttp.onreadystatechange = function(){
+            if(this.readyState === 4 && xmlHttp.status === 200){
+                location.reload();
+            }
+        }
+        xmlHttp.open('GET',url,false);
+        xmlHttp.setRequestHeader('token','aaaa');
+        xmlHttp.send(null);
+    }
+}
+
 /**
  * @Author: ZYJ
  * @Date: 2022/04/25
@@ -153,41 +205,4 @@ class Item extends Object{
     get(){return this.item;}
     setType(type){super.type = type;}
     toString(){return String(this.item);}
-}
-
-/**
- * @Author: ZYJ
- * @Date: 2022/04/022
- * @Remark: Ajax
- */
-class Ajax{
-    constructor(){}
-    get(url,formData){return this.send('GET',url,'json',formData);}
-    post(url,formData){return this.send('POST',url,'json',formData)};
-    send(type,url,dataType,formData){
-        $.ajax({
-            type:type,
-            url:url,
-            dataType:dataType,
-            contentType:false,
-            processData:false,
-            data:formData,
-            beforeSend:function(XMLHttpRequest){
-                XMLHttpRequest.setRequestHeader('token',localStorage.getItem('token'));
-            },
-            success:function(data){ return data; }
-        });
-        return null;
-    }
-    syncGet(url){
-        let xmlHttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-        xmlHttp.onreadystatechange = function(){
-            if(this.readyState === 4 && xmlHttp.status === 200){
-                location.reload();
-            }
-        }
-        xmlHttp.open('GET',url,false);
-        xmlHttp.setRequestHeader('token','aaaa');
-        xmlHttp.send(null);
-    }
 }

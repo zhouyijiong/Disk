@@ -43,18 +43,22 @@ function judgment(){
 	data.set("username",usm.value);
 	data.set("password",pwd.value);
 
-	data = ajax.post(login_url,data);
-	if(data){
-		localStorage.token = data.token;
-		//ajax.get('/management');
-		//ajax.syncGet('/management');
-		//window.location.href = "/";
-	}else{
-		pwd.value = "";
-		usm.focus();
-		if(data == null) alert('系统错误');
-		if(data.code >= 4000) alert(data.message);
-	}
+	let map = new HashMap();
+	map.put("username",usm.value).put("password",pwd.value)
+	ajax.post(login_url,map,function(response){
+		if(response.code > 0){
+			pwd.value = "";
+			usm.focus();
+			alert(response.message);
+		}else{
+			data = JSON.parse(response.data);
+			localStorage.token = data.token;
+			localStorage.access = data.access;
+			//ajax.get('/management');
+			// ajax.syncGet('/management');
+			// window.location.href = "/";
+		}
+	});
 }
 document.getElementById("usm").addEventListener("keyup",function({keyCode}){
 	if(keyCode === 13) document.getElementById("pwd").focus();
