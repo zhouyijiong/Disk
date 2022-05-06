@@ -5,7 +5,7 @@ import com.zyj.disk.sys.generate.file.*;
 /**
  * @Author: ZYJ
  * @Date: 2022/4/27 19:04
- * @Remark: 懒加载单例
+ * @Remark: fileType 模型
  */
 public final class FileTypeSet{
     public FileType fileType;

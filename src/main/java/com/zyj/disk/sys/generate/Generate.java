@@ -20,19 +20,16 @@ public final class Generate{
 	}
 
 	private String init(Class<?> clazz) throws InstantiationException,IllegalAccessException{
-		Object obj = clazz.newInstance();
 		String className = clazz.getName();
-		Field[] fields = clazz.getDeclaredFields();
 		Class<GenerateParam> annotationClass = GenerateParam.class;
-		String projectPath = className.substring(0,className.indexOf("sys"));
-		for(Field field : fields){
+		for(Field field : clazz.getDeclaredFields()){
 			if(field.isAnnotationPresent(annotationClass)){
 				field.setAccessible(true);
 				GenerateParam annotation = field.getAnnotation(annotationClass);
 				FieldInfo fieldInfo = new FieldInfo(
 						getType(0,field,null),
 						field.getName(),
-						field.get(obj),
+						field.get(clazz.newInstance()),
 						annotation.primary(),
 						annotation.unique(),
 						annotation.required(),
@@ -40,7 +37,7 @@ public final class Generate{
 				fieldInfos.add(fieldInfo);
 			}
 		}
-		return projectPath.replace(".","/");
+		return className.substring(0,className.indexOf("sys")).replace(".","/");
 	}
 
 	private String getType(int status,Field field,String length){
