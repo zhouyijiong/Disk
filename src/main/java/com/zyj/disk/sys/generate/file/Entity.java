@@ -25,7 +25,6 @@ public final class Entity extends FileType{
 	void createHead(BufferedOutputStream bos,String packageName)throws IOException{
 		String basePath = packageName + "entity.";
 		bos.write(packages(basePath + sourceName.toLowerCase()));
-		bos.write(imports(packageName + "sys.annotation.mapper.Mark;"));
 		bos.write(imports(packageName + "sys.entity.BaseEntity;"));
 		bos.write(imports("lombok.EqualsAndHashCode;"));
 		bos.write(imports("lombok.Getter;"));
@@ -49,14 +48,14 @@ public final class Entity extends FileType{
 		Object value = item.getValue();
 		String type = item.getClassType();
 		param.append(getMethod("public",className,key,type + " val","\n\t\t" + key + " = val;\n\t\treturn this;\n\t"));
-		field(bos,key,value,type);
+		field(bos,key,type);
 		if(value != null) body.append("\n\t\t\t").append(".").append(key).append("(").append(getFormatValue(type,value)).append(")");
 		for(int i=1;i<fieldInfos.size();i++){
 			item = fieldInfos.get(i);
 			key = item.getKey();
 			value = item.getValue();
 			type = item.getClassType();
-			field(bos,key,value,type);
+			field(bos,key,type);
 			if(value != null) body.append("\n\t\t\t").append(".").append(key).append("(").append(getFormatValue(type,value)).append(")");
 			param.append(getMethod("public",className,key,type + " val","\n\t\t" + key + " = val;\n\t\treturn this;\n\t"));
 		}
@@ -67,8 +66,7 @@ public final class Entity extends FileType{
 		bos.write("}".getBytes(StandardCharsets.UTF_8));
 	}
 
-	private void field(BufferedOutputStream bos,String key,Object value,String type)throws IOException{
-		if(value != null) bos.write("\n\t@Mark".getBytes(StandardCharsets.UTF_8));
+	private void field(BufferedOutputStream bos,String key,String type)throws IOException{
 		bos.write(("\n\tprivate " + type + " " + key + ";").getBytes(StandardCharsets.UTF_8));
 	}
 

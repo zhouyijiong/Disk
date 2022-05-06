@@ -1,6 +1,5 @@
 package com.zyj.disk.entity.user;
 
-import com.zyj.disk.sys.annotation.mapper.Mark;
 import com.zyj.disk.sys.entity.BaseEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -17,15 +16,10 @@ public final class UserEntity extends BaseEntity{
 	private String username;
 	private String password;
 	private String path;
-	@Mark
 	private Long capacity;
-	@Mark
 	private Integer fileCount;
-	@Mark
 	private Long fileSize;
-	@Mark
 	private Long totalFileSize;
-	@Mark
 	private Integer authority;
 
 	public static UserEntity noArgs(){
