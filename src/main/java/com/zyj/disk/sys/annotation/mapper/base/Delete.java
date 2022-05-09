@@ -21,5 +21,5 @@ public @interface Delete{
 
     boolean print() default false;
 
-    MapperMatch mapperMatch() default MapperMatch.PARAM;
+    MapperMatch mapperMatch() default MapperMatch.NO;
 }

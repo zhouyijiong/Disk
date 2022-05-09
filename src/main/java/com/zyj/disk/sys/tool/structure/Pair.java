@@ -1,4 +1,4 @@
-package com.zyj.disk.sys.result;
+package com.zyj.disk.sys.tool.structure;
 
 /**
  * @Author: ZYJ

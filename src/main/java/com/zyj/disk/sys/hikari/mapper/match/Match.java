@@ -2,7 +2,7 @@ package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.tool.ClassTool;
-import com.zyj.disk.sys.tool.ResponsiveCache;
+import com.zyj.disk.sys.tool.structure.ResponsiveCache;
 import org.aspectj.lang.ProceedingJoinPoint;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;

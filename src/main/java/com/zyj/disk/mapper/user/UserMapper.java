@@ -12,10 +12,10 @@ import com.zyj.disk.sys.entity.MapperMatch;
  */
 @MapperProxy
 public interface UserMapper{
-    @Insert
+    @Insert(mapperMatch = MapperMatch.ENTITY)
     int insert(UserEntity user);
 
-    @Insert
+    @Insert(mapperMatch = MapperMatch.ARRAY_ENTITY)
     int insert(UserEntity[] users);
 
     @Delete(where = "where id=#{id}",mapperMatch = MapperMatch.PARAM)

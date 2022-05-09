@@ -1,9 +1,9 @@
-package com.zyj.disk.sys.result;
+package com.zyj.disk.sys.tool.structure;
 
 /**
  * @Author: ZYJ
  * @Date: 2022/4/28 16:38
- * @Remark: 链表键值对,当作轻量级返回模型 size 最好不超过 100
+ * @Remark: 链表键值对,当作羽量级返回模型 size 最好不超过 100
  */
 public final class HashPair<K,V> extends Pair<K,V>{
     @Override

@@ -1,4 +1,4 @@
-package com.zyj.disk.sys.tool;
+package com.zyj.disk.sys.tool.structure;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,7 +17,7 @@ public final class ResponsiveCache<K,V>{
 
     private final Map<K,TimeVal<V>> container;
 
-    public ResponsiveCache(int size, int timing){
+    public ResponsiveCache(int size,int timing){
         this.size = size;
         this.timing = timing;
         this.targetTime = timing + currentTime();

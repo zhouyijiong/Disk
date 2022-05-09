@@ -12,11 +12,14 @@ import org.aspectj.lang.ProceedingJoinPoint;
 public final class Entity extends Match{
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
-        return false;
+        return joinPoint.getArgs().length == 1;
     }
 
     @Override
     public String insertExplain(ProceedingJoinPoint joinPoint,Insert insert){
+        BaseEntity entity = (BaseEntity) joinPoint.getArgs()[0];
+        String realName = classTool.getRealName(entity.getClass());
+        //insert into realName (a1,a2,a3)
         return null;
     }
 

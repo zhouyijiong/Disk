@@ -1,7 +1,7 @@
 package com.zyj.disk.sys.aop;
 
 import com.zyj.disk.sys.entity.Record;
-import com.zyj.disk.sys.result.Response;
+import com.zyj.disk.sys.entity.Response;
 import com.zyj.disk.sys.exception.GlobalException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.ControllerAdvice;

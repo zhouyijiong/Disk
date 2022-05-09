@@ -2,8 +2,6 @@ package com.zyj.disk.sys.aop;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.HashMap;
-import java.util.Map;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.annotation.verify.Access;
@@ -11,7 +9,9 @@ import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.User;
 import com.zyj.disk.sys.tool.AOPTool;
-import com.zyj.disk.sys.tool.ResponsiveCache;
+import com.zyj.disk.sys.tool.structure.HashPair;
+import com.zyj.disk.sys.tool.structure.Pair;
+import com.zyj.disk.sys.tool.structure.ResponsiveCache;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 public final class GlobalVerify{
 	private final AOPTool aopTool;
 
-	private static final ResponsiveCache<String,Map<String,Param>> paramCache =
+	private static final ResponsiveCache<String,Pair<String,Param>> paramCache =
 			new ResponsiveCache<>(2048,60 * 60 * 24);
 
 	@Around("@annotation(access)")
@@ -44,9 +44,9 @@ public final class GlobalVerify{
 	public Object global(ProceedingJoinPoint joinPoint,ParamsCheck paramsCheck){
 		Method method = aopTool.getMethod(joinPoint);
 		String key = joinPoint.getThis() + method.getName() + paramsCheck;
-		Map<String,Param> methodParamsCheck = paramCache.get(key);
+		Pair<String,Param> methodParamsCheck = paramCache.get(key);
 		if(methodParamsCheck == null){
-			methodParamsCheck = new HashMap<>();
+			methodParamsCheck = new HashPair<>();
 			Param[] params = paramsCheck.params();
 			for(Param param : params) methodParamsCheck.put(param.name(),param);
 			paramCache.put(key,methodParamsCheck,129600);

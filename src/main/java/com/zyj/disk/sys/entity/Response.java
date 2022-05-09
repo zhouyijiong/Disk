@@ -1,6 +1,7 @@
-package com.zyj.disk.sys.result;
+package com.zyj.disk.sys.entity;
 
 import com.zyj.disk.sys.exception.GlobalException;
+import com.zyj.disk.sys.tool.structure.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -27,10 +27,11 @@ public final class UserService{
      */
     public void registered(String username,String password){
         if(userMapper.queryByName(username) != null) throw new GlobalException(Client.USER_EXIST);
-        String pwd = encryption.md5(password);
-        String path = encryption.md5(username);
-        int rows = userMapper.insert(UserEntity.defaultArgs().username(username).password(pwd).path(path));
-        if(rows == 0) throw new GlobalException(Server.SQL_RESULT_ERROR);
+        if(userMapper.insert(UserEntity.defaultArgs()
+                .username(username)
+                .password(encryption.md5(password))
+                .path(encryption.md5(username))
+        ) == 0) throw new GlobalException(Server.SQL_RESULT_ERROR);
     }
 
     /**

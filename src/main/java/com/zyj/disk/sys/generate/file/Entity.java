@@ -16,7 +16,7 @@ public final class Entity extends FileType{
 
 	public Entity(){
 		super("Entity");
-		int capacity = fieldInfos.size() * 8;
+		int capacity = fieldInfos.size() << 3;
 		this.param = new StringBuilder(capacity);
 		this.body  = new StringBuilder(capacity << 1);
 	}

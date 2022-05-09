@@ -11,7 +11,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 public final class No extends Match{
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
-        return true;
+        return false;
     }
 
     @Override

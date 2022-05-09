@@ -19,5 +19,5 @@ public @interface Insert{
 
     boolean print() default false;
 
-    MapperMatch mapperMatch() default MapperMatch.PARAM;
+    MapperMatch mapperMatch();
 }
