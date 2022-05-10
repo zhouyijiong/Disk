@@ -18,9 +18,7 @@ public class MapXOR extends XOR{
     /**
      * @Author: ZYJ
      * @Date: 2022/04/16
-     * @Remark: 投递加密消息,return this
-     * @param k key
-     * @param v val
+     * @Remark: 投递加密消息
      */
     public MapXOR put(String k,String v){
         storage.put(k,v);
@@ -33,9 +31,9 @@ public class MapXOR extends XOR{
      * @Remark: xor encryption
      */
     public String encryption(){
-        String source = storage.toString();
-        int hash = hash(source.hashCode());
-        return def_encryption(getHeadMsg(hash),source,hash);
+        String info = storage.toString();
+        int hash = hash(info.hashCode());
+        return def_encryption(getHeadMsg(hash),info,hash);
     }
 
     /**

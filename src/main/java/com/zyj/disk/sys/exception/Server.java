@@ -9,10 +9,8 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public enum Server{
-    REQUEST_PARAM_LOOS(5000,"请求参数丢失"),
-    SQL_RESULT_ERROR(5001,"SQL返回异常")
-    ;
+    REQUEST_PARAM_LOOS(new GlobalException("请求参数丢失")),
+    SQL_RESULT_ERROR(new GlobalException("SQL返回异常"));
 
-    public final int code;
-    public final String msg;
+    public final GlobalException exception;
 }

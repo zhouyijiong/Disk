@@ -1,7 +1,6 @@
 package com.zyj.disk.sys.identity;
 
 import com.zyj.disk.sys.exception.Client;
-import com.zyj.disk.sys.exception.GlobalException;
 import lombok.AllArgsConstructor;
 
 /**
@@ -28,7 +27,7 @@ public enum IdentitySet{
         for(IdentitySet item : targets){
             if(item.ident.equals(current)) return;
         }
-        throw new GlobalException(Client.VERIFY_ERROR);
+        throw Client.VERIFY_ERROR.exception;
     }
 
     /**

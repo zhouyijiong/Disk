@@ -1,6 +1,5 @@
 package com.zyj.disk.sys.tool;
 
-import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.Server;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -27,7 +26,7 @@ public final class AOPTool{
 
     private ServletRequestAttributes getHttpServletContext(){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if(attributes == null) throw new GlobalException(Server.REQUEST_PARAM_LOOS);
+        if(attributes == null) throw Server.REQUEST_PARAM_LOOS.exception;
         return attributes;
     }
 }

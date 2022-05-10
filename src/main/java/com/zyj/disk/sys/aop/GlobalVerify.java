@@ -58,12 +58,12 @@ public final class GlobalVerify{
 			if(param == null) continue;
 			String value = request.getParameter(name);
 			if(param.required() && value == null)
-				throw new GlobalException(User.REQ_PARAM_REQUIRED,name);
+				throw User.REQ_PARAM_REQUIRED.exception.addArgs(name);
 			if(param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
-				throw new GlobalException(User.REQ_PARAM_REGEX_ERROR,name,value);
+				throw User.REQ_PARAM_REGEX_ERROR.exception.addArgs(name,value);
 			int length = param.length();
 			if(length != -1 && value.trim().length() != length)
-				throw new GlobalException(User.REQ_PARAM_LEN_ERROR,name,value);
+				throw User.REQ_PARAM_LEN_ERROR.exception.addArgs(name,value);
 		}
 		try{
 			return joinPoint.proceed();

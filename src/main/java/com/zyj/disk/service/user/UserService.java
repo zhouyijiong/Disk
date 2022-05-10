@@ -4,7 +4,6 @@ import com.zyj.disk.entity.user.UserEntity;
 import com.zyj.disk.mapper.user.UserMapper;
 import com.zyj.disk.tool.Encryption;
 import com.zyj.disk.sys.exception.Client;
-import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.exception.Server;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,12 +25,12 @@ public final class UserService{
      * @Remark: 注册账户
      */
     public void registered(String username,String password){
-        if(userMapper.queryByName(username) != null) throw new GlobalException(Client.USER_EXIST);
+        if(userMapper.queryByName(username) != null) throw Client.USER_EXIST.exception;
         if(userMapper.insert(UserEntity.defaultArgs()
                 .username(username)
                 .password(encryption.md5(password))
                 .path(encryption.md5(username))
-        ) == 0) throw new GlobalException(Server.SQL_RESULT_ERROR);
+        ) == 0) throw Server.SQL_RESULT_ERROR.exception;
     }
 
     /**
@@ -41,7 +40,7 @@ public final class UserService{
      */
     public void login(String username,String password){
         UserEntity user = userMapper.queryByName(username);
-        if(user == null) throw new GlobalException(Client.USER_NOT_EXIST);
-        if(!user.getPassword().equals(encryption.md5(password))) throw new GlobalException(Client.VERIFY_ERROR);
+        if(user == null || !user.getPassword().equals(encryption.md5(password)))
+            throw Client.ACCOUNT_OR_PASSWORD_ERROR.exception;
     }
 }

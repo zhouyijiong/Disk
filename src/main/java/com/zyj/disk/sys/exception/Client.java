@@ -9,11 +9,9 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public enum Client{
-    VERIFY_ERROR(4001,"验证失败"),
-    USER_EXIST(4002,"用户已存在"),
-    USER_NOT_EXIST(4003,"用户不存在")
-    ;
+    VERIFY_ERROR(new GlobalException("验证失败")),
+    USER_EXIST(new GlobalException("用户已存在")),
+    ACCOUNT_OR_PASSWORD_ERROR(new GlobalException("账号或密码不正确"));
 
-    public final int code;
-    public final String msg;
+    public final GlobalException exception;
 }
