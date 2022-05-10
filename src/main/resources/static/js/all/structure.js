@@ -1,6 +1,6 @@
 /**
  * @Author: ZYJ
- * @Date: 2022/04/022
+ * @Date: 2022/04/22
  * @Remark: 父类 Parent
  */
 class Parent{
@@ -20,22 +20,21 @@ class Parent{
         }
         return hash;
     }
-    param_check(param){if(this.check && (typeof param !== this.type)) throw 'parameter must be ' + type;}
+    param_check(param){if(this.check && (typeof param !== this.type)) throw 'parameter type must be ' + type;}
     toString(){return null;}
 }
 
 /**
  * @Author: ZYJ
- * @Date: 2022/04/022
+ * @Date: 2022/04/22
  * @Remark: 数据结构 HashMap TODO:期望超过8个节点转为二叉树
  */
-const DEFAULT_LOAD_FACTOR = 0.75;
 class HashMap extends Parent{
     constructor(size){
         super('string');
         this.size = 0;
-        this.array = new Array(size ? size : 16).fill(null);
-        this.threshold = this.array.length * DEFAULT_LOAD_FACTOR;
+        this.array = new Array(size ? size : 0x10).fill(null);
+        this.threshold = this.array.length * 0.75;
     }
     put(k,v){
         let hash = this.hash(k);
@@ -97,11 +96,11 @@ class HashMap extends Parent{
     hash(k){
         super.param_check(k);
         let hash = super.hashcode(k);
-        return hash ^ (hash >>> 16);
+        return hash ^ (hash >>> 0x10);
     }
     getIndex(hash){return (this.array.length - 1) & hash}
     expansion(){
-        this.threshold = (this.array.length << 1) * DEFAULT_LOAD_FACTOR;
+        this.threshold = (this.array.length << 1) * 0.75;
         let newMap = new HashMap(this.array.length << 1);
         let node = null,next = null;
         for(let i=0,len=this.array.length;i<len;++i){
@@ -119,6 +118,9 @@ class HashMap extends Parent{
         this.array = newMap.array;
         newMap = null;
     }
+    toString(){
+        return super.toString();
+    }
 }
 class Node{
     constructor(hash,key,val){
@@ -129,14 +131,22 @@ class Node{
     }
 }
 
+/**
+ * @Author: ZYJ
+ * @Date: 2022/05/06
+ * @Remark: StringBuilder
+ */
 class StringBuilder extends Parent{
     constructor(size){
         super('string');
-        this.array = [];
+        this.array = [size ? size : 0x10];
     }
     add(str){
         this.param_check(str);
         this.array[this.size++] = str;
+    }
+    hashcode(str){
+        return super.hashcode(this.toString());
     }
     toString(){
         return this.array.join('');
@@ -145,7 +155,7 @@ class StringBuilder extends Parent{
 
 /**
  * @Author: ZYJ
- * @Date: 2022/04/022
+ * @Date: 2022/04/22
  * @Remark: Ajax
  */
 class Ajax{
@@ -154,12 +164,12 @@ class Ajax{
     post(url,formData,success){return this.send('POST',url,'json',formData,success);};
     send(type,url,dataType,formData,success){
         console.log(formData);
-        super.$.ajax({
+        $.ajax({
             type:type,
             url:url,
             dataType:dataType,
-            // contentType:false,
-            // processData:false,
+            contentType: false,
+            processData: false,
             data:formData,
             beforeSend:function(XMLHttpRequest){
                 XMLHttpRequest.setRequestHeader('token',localStorage.getItem('token'));
@@ -193,7 +203,7 @@ class Pair extends Parent{
     toString(){return '{' + this.key.toString() + ':' + this.val.toString() + '}';}
     hashcode(){return super.hashcode(this.toString());}
 }
-class Item extends Object{
+class Item extends Parent{
     constructor(item){
         super(item);
         this.item = item;

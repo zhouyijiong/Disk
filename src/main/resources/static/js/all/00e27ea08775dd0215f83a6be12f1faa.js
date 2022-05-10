@@ -1,7 +1,5 @@
 const ajax = new Ajax();
-function form_data(){
-	return new FormData();
-}
+const byteArray = ['B','KB','MB','GB','TB','PB','EB','ZB','YB','BB','NB','DB','CB'];
 
 function checkStr(str,min,max){
 	let pattern=/^[0-9a-zA-Z]*$/;
@@ -10,7 +8,7 @@ function checkStr(str,min,max){
 
 function checkNum(str,min,max){
 	let pattern=/^[0-9]*$/;
-	return(str.length>=min&&str.length<=max)&&pattern.test(str)
+	return(str.length >= min && str.length <= max) && pattern.test(str)
 }
 
 function checkMail(str){
@@ -19,37 +17,42 @@ function checkMail(str){
 }
 
 function fileSizeFormat(size){
-	var sizeInfo="";
-	if(size<1024){
-		sizeInfo=size+" B"
-	}else{
-		if(size<1048576){
-			size/=1024;
-			sizeInfo=size.toFixed(2)+" KB"
-		}else{
-			if(size<1073741824){
-				size/=1024;
-				size/=1024;
-				sizeInfo=size.toFixed(2)+" MB"
-			}else{
-				if(size<1099511627776){
-					size/=1024;
-					size/=1024;
-					size/=1024;
-					sizeInfo=size.toFixed(2)+" GB"
-				}else{
-					if(size<9999999999999){
-						size/=1024;
-						size/=1024;
-						size/=1024;
-						size/=1024;
-						sizeInfo=size.toFixed(2)+" TB"
-					}
-				}
-			}
-		}
+	let index = 0;
+	while(size > 1023){
+		size >>= 10;
+		++index;
 	}
-	return sizeInfo
+	return size.toFixed(2) + byteArray[index];
+	// var sizeInfo="";
+	// if(size<1024){
+	// 	sizeInfo=size+" B"
+	// }else{
+	// 	if(size<1048576){
+	// 		size/=1024;
+	// 		sizeInfo=size.toFixed(2)+" KB"
+	// 	}else{
+	// 		if(size<1073741824){
+	// 			size/=1024;
+	// 			size/=1024;
+	// 			sizeInfo=size.toFixed(2)+" MB"
+	// 		}else{
+	// 			if(size<1099511627776){
+	// 				size/=1024;
+	// 				size/=1024;
+	// 				size/=1024;
+	// 				sizeInfo=size.toFixed(2)+" GB"
+	// 			}else{
+	// 				if(size<9999999999999){
+	// 					size/=1024;
+	// 					size/=1024;
+	// 					size/=1024;
+	// 					size/=1024;
+	// 					sizeInfo=size.toFixed(2)+" TB"
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 
 function setCookie(name,value){

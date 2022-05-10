@@ -3,8 +3,6 @@ package com.zyj.disk.service.user;
 import com.zyj.disk.entity.user.UserEntity;
 import com.zyj.disk.mapper.user.UserMapper;
 import com.zyj.disk.tool.Encryption;
-import com.zyj.disk.sys.exception.Client;
-import com.zyj.disk.sys.exception.Server;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,32 +13,24 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public final class UserService{
+public final class UserService extends UserServiceTemplate{
     private final UserMapper userMapper;
     private final Encryption encryption;
 
-    /**
-     * @Author: ZYJ
-     * @Date: 2022/04/01
-     * @Remark: 注册账户
-     */
-    public void registered(String username,String password){
-        if(userMapper.queryByName(username) != null) throw Client.USER_EXIST.exception;
-        if(userMapper.insert(UserEntity.defaultArgs()
+    @Override
+    UserEntity queryByName(String username){
+        return userMapper.queryByName(username);
+    }
+    @Override
+    int saveUser(String username,String password){
+        return userMapper.insert(UserEntity.defaultArgs()
                 .username(username)
                 .password(encryption.md5(password))
-                .path(encryption.md5(username))
-        ) == 0) throw Server.SQL_RESULT_ERROR.exception;
+                .path(encryption.md5(username)));
     }
 
-    /**
-     * @Author: ZYJ
-     * @Date: 2022/04/01
-     * @Remark: 登陆账户
-     */
-    public void login(String username,String password){
-        UserEntity user = userMapper.queryByName(username);
-        if(user == null || !user.getPassword().equals(encryption.md5(password)))
-            throw Client.ACCOUNT_OR_PASSWORD_ERROR.exception;
+    @Override
+    boolean userVerify(UserEntity user,String password){
+        return user == null || !user.getPassword().equals(encryption.md5(password));
     }
 }

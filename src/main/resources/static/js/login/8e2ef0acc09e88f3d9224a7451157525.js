@@ -43,9 +43,9 @@ function judgment(){
 	data.set("username",usm.value);
 	data.set("password",pwd.value);
 
-	let map = new HashMap();
-	map.put("username",usm.value).put("password",pwd.value)
-	ajax.post(login_url,map,function(response){
+	// let map = new HashMap();
+	// map.put("username",usm.value).put("password",pwd.value)
+	ajax.post(login_url,data,function(response){
 		if(response.code > 0){
 			pwd.value = "";
 			usm.focus();
