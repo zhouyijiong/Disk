@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public final class UserService extends UserServiceTemplate{
+public final class UserService extends UserTemplate{
     private final UserMapper userMapper;
     private final Encryption encryption;
 
@@ -21,6 +21,7 @@ public final class UserService extends UserServiceTemplate{
     UserEntity queryByName(String username){
         return userMapper.queryByName(username);
     }
+
     @Override
     int saveUser(String username,String password){
         return userMapper.insert(UserEntity.defaultArgs()

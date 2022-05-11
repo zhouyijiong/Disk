@@ -9,7 +9,7 @@ import com.zyj.disk.sys.exception.Server;
  * @Date: 2022/5/10 11:15
  * @Remark: 用户服务模板类
  */
-public abstract class UserServiceTemplate{
+public abstract class UserTemplate{
     /**
      * @Author: ZYJ
      * @Date: 2022/04/01

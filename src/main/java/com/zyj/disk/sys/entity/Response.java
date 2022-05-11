@@ -13,12 +13,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public final class Response<T>{
-    private int code;
     private String message;
     private T data;
 
-    private Response(int code,String message){
-        this.code = code;
+    private Response(String message){
         this.message = message;
     }
 
@@ -31,6 +29,6 @@ public final class Response<T>{
     }
 
     public static<T> Response<T> error(GlobalException e){
-        return new Response<>(e.getCode(),e.getMessage());
+        return new Response<>(e.getMessage());
     }
 }

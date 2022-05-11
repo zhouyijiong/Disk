@@ -24,6 +24,6 @@ public final class Mapper extends FileType{
 	
 	@Override
 	void createBody(BufferedOutputStream bos)throws IOException{
-		bos.write(("\npublic interface "+ className +"{}").getBytes(StandardCharsets.UTF_8));
+		bos.write(("\npublic interface " + className + "{}").getBytes(StandardCharsets.UTF_8));
 	}
 }
