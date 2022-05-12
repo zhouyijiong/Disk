@@ -7,13 +7,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/04/08
- * @Remark: 添加匹配模式 => {
- *     1 : MapperMatch.NO
- *     2 : MapperMatch.PARAM
- *     3 : MapperMatch.ENTITY
- *     4 : MapperMatch.ARRAY_ENTITY
+ * 添加匹配模式 => {
+ *      1 : MapperMatch.NO
+ *      2 : MapperMatch.PARAM
+ *      3 : MapperMatch.ENTITY
+ *      4 : MapperMatch.ARRAY_ENTITY
  * }
  */
 @Component

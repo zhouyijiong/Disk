@@ -4,9 +4,8 @@ import com.zyj.disk.sys.annotation.mapper.base.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/3/23 17:57
- * @Remark: { 无参数; 遍历'Entity Array'数组,循环获取每项中' !=null 的参数 == 判断'; 返回一组SQL; }
+ * 匹配模式 : 数组实体类
+ * 无SQL,循环匹配实体类
  */
 public final class ArrayEntity extends Match{
     @Override

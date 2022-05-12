@@ -5,9 +5,8 @@ import com.zyj.disk.sys.entity.BaseEntity;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/3/23 17:56
- * @Remark: { 无参数; 遍历'Entity'参数,取' !=null 的参数 == 判断'; 返回一条SQL; }
+ * 匹配模式 : 实体类
+ * 无SQL,实体类字段匹配
  */
 public final class Entity extends Match{
     @Override

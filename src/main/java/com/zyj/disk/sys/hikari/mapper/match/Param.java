@@ -4,9 +4,8 @@ import com.zyj.disk.sys.annotation.mapper.base.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/3/23 17:50
- * @Remark: { 有参数; 通过'#{}'对普通参数进行匹配 或 通过 ${*.*} 对 'Entity' 参数匹配; 返回一条SQL; }
+ * 匹配模式 : 参数
+ * 通过 '#{}' 或 '#{*.*}' 进行参数匹配
  */
 public final class Param extends Match{
     @Override

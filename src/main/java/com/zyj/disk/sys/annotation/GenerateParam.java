@@ -5,11 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/04/08
- * @Remark: 代码生成注解
- */
+/** 代码生成注解 */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GenerateParam{

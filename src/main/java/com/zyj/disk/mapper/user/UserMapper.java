@@ -5,11 +5,7 @@ import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.annotation.mapper.MapperProxy;
 import com.zyj.disk.sys.entity.MapperMatch;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/04/08
- * @Remark: 用户映射器
- */
+/** 用户映射器 */
 @MapperProxy
 public interface UserMapper{
     @Insert(mapperMatch = MapperMatch.ENTITY)

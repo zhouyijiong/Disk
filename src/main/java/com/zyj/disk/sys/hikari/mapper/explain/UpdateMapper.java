@@ -6,11 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/3/25 9:43
- * @Remark: update mapper
- */
+/** update mapper */
 @Component
 public final class UpdateMapper extends Mapper{
     public UpdateMapper(DataSource dataSource){

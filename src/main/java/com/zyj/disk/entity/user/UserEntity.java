@@ -4,11 +4,7 @@ import com.zyj.disk.sys.entity.BaseEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/04/08
- * @Remark: 用户实体类
- */
+/** 用户实体类 */
 @Getter
 @EqualsAndHashCode(callSuper = false)
 public final class UserEntity extends BaseEntity{

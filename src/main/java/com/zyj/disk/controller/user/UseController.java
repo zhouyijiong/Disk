@@ -12,11 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/04/01
- * @Remark: 用户控制器
- */
+/** 用户控制器 */
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -24,10 +20,10 @@ public class UseController{
 	private final UserService userService;
 
 	/**
-	 * @Author: ZYJ
-	 * @Date: 2022/04/01
-	 * @Remark: 注册 API
-	 */
+	 * 注册 API
+	 * @param username 要注册的用户名
+	 * @param password 要注册的密码
+	 * */
 	@PostMapping("/registered")
 	@ParamsCheck(
 			params = {
@@ -44,10 +40,10 @@ public class UseController{
 	}
 
 	/**
-	 * @Author: ZYJ
-	 * @Date: 2022/04/01
-	 * @Remark: 登录 API
-	 */
+	 * 登录 API
+	 * @param username 登陆用户名
+	 * @param password 登录密码
+	 * */
 	@PostMapping("/login")
 	@ParamsCheck(
 			params = {

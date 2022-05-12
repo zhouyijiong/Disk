@@ -6,11 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/4/8 13:13
- * @Remark: 参数校验注解
- */
+/** 参数校验注解 */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ParamsCheck{

@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
+/** SQL 注解映射 */
 @Aspect
 @Component
 @RequiredArgsConstructor

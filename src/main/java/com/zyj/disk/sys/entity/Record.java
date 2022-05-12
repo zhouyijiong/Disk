@@ -4,11 +4,7 @@ import com.zyj.disk.sys.exception.GlobalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/03/27 23:15
- * @Remark: 日志
- */
+/** 日志处理 */
 public final class Record{
     private final Logger logger;
 

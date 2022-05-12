@@ -6,11 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/3/25 9:37
- * @Remark: insert mapper
- */
+/** insert mapper */
 @Component
 public final class InsertMapper extends Mapper{
     public InsertMapper(DataSource dataSource){

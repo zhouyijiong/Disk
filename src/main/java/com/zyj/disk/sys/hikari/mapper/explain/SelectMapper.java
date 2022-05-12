@@ -12,11 +12,7 @@ import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 import java.sql.Connection;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/3/25 9:44
- * @Remark: select mapper
- */
+/** select mapper */
 @Component
 public final class SelectMapper extends Mapper{
     private final ClassTool classTool;

@@ -3,11 +3,7 @@ package com.zyj.disk.sys.identity;
 import com.zyj.disk.sys.exception.Client;
 import lombok.AllArgsConstructor;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/4/25 16:46
- * @Remark: 身份集(白名单模式)
- */
+/** 身份集(白名单模式) */
 @AllArgsConstructor
 public enum IdentitySet{
     /** 限制为游客身份 */
@@ -18,11 +14,7 @@ public enum IdentitySet{
 
     public final Identity ident;
 
-    /**
-     * @Author: ZYJ
-     * @Date: 2022/04/25
-     * @Remark: 判断当前身份是否属于访问区间内,如不是则抛出验证失败
-     */
+    /** 判断当前身份是否属于访问区间内,如不是则抛出验证失败 */
     public static void check(IdentitySet[] targets,Object current){
         for(IdentitySet item : targets){
             if(item.ident.equals(current)) return;
@@ -30,25 +22,13 @@ public enum IdentitySet{
         throw Client.VERIFY_ERROR.exception;
     }
 
-    /**
-     * @Author: ZYJ
-     * @Date: 2022/04/25
-     * @Remark: 身份类
-     * TODO 期望增加多对一的身份映射关系(如科技部,财务部,营业部等)
-     */
+    //TODO 期望增加多对一的身份映射关系(如科技部,财务部,营业部等)
+    /** 身份类 */
     private interface Identity{}
 
-    /**
-     * @Author: ZYJ
-     * @Date: 2022/04/25
-     * @Remark: 游客
-     */
+    /** 游客 */
     private static final class Visitor implements Identity{}
 
-    /**
-     * @Author: ZYJ
-     * @Date: 2022/04/25
-     * @Remark: 用户
-     */
+    /** 用户 */
     private static final class User implements Identity{}
 }

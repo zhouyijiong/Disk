@@ -3,11 +3,7 @@ package com.zyj.disk.sys.hikari.mapper.match;
 import com.zyj.disk.sys.annotation.mapper.base.*;
 import org.aspectj.lang.ProceedingJoinPoint;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/3/23 11:20
- * @Remark: { 无参数; 不匹配; 返回一条SQL; }
- */
+/** 不匹配 */
 public final class No extends Match{
     @Override
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){

@@ -6,12 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/04/08
- * @Remark: 限制被标记的方法访问状态必须为登录
- * TODO 取消依赖 token ,自行实现 token 机制
- */
+//TODO 取消依赖 token ,自行实现 token 机制
+/** 限制被标记的方法访问状态必须为登录 */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Access{

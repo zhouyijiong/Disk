@@ -2,11 +2,7 @@ package com.zyj.disk.sys.exception;
 
 import lombok.AllArgsConstructor;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/04/09
- * @Remark: 客户端产生的异常 [4000,4999]
- */
+/** 客户端异常 */
 @AllArgsConstructor
 public enum Client{
     VERIFY_ERROR(new GlobalException("验证失败")),

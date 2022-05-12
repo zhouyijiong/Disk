@@ -7,11 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/4/8
- * @Remark: 映射匹配调度类
- */
+/** 映射匹配调度类 */
 public abstract class Match{
     protected ClassTool classTool = new ClassTool();
 

@@ -6,11 +6,7 @@ import com.zyj.disk.tool.Encryption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/04/01
- * @Remark: 用户业务类
- */
+/** 用户业务类 */
 @Service
 @RequiredArgsConstructor
 public final class UserService extends UserTemplate{

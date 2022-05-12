@@ -7,11 +7,7 @@ import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 import java.sql.Connection;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/3/26 11:05
- * @Remark: 注解映射处理
- */
+/** 注解映射处理 */
 public abstract class Mapper{
     protected Match match;
     protected final Record record;

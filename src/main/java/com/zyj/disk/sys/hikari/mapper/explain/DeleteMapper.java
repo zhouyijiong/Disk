@@ -6,11 +6,7 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/3/22 9:41
- * @Remark: delete mapper
- */
+/** delete mapper */
 @Component
 public final class DeleteMapper extends Mapper{
     public DeleteMapper(DataSource dataSource){

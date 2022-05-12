@@ -1,19 +1,11 @@
 package com.zyj.disk.sys.tool.structure;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/4/28 16:35
- * @Remark: 链表键值对抽象类
- */
+/** 链表键值对抽象类 */
 public abstract class Pair<K,V>{
     protected Node<K,V> node;
     protected transient int size;
 
-    /**
-     * @Author: ZYJ
-     * @Date: 2022/04/28
-     * @Remark: 链表键值对
-     */
+    /** 链表键值对 */
     static final class Node<K,V>{
         public K key;
         public V val;

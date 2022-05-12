@@ -2,11 +2,7 @@ package com.zyj.disk.sys.exception;
 
 import lombok.AllArgsConstructor;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/04/09
- * @Remark: 使用者产生的错误 [6000,6999]
- */
+/** 使用者异常 */
 @AllArgsConstructor
 public enum User{
     MAPPER_CONFIG_ERROR(new GlobalException("映射配置异常")),
