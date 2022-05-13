@@ -22,7 +22,9 @@ public abstract class UserTemplate{
      * @param password 密码
      */
     public void login(String username,String password){
-        if(userVerify(queryByName(username),password)) throw Client.ACCOUNT_OR_PASSWORD_ERROR.exception;
+        UserEntity user = queryByName(username);
+        if(user == null || userVerify(user.getPassword(),password))
+            throw Client.ACCOUNT_OR_PASSWORD_ERROR.exception;
     }
 
     /**
@@ -42,9 +44,9 @@ public abstract class UserTemplate{
 
     /**
      * 用户登录校验
-     * @param user 用户实体类
-     * @param password 密码
+     * @param sourcePwd 用户密码
+     * @param requestPwd 请求密码
      * @return true : 校验失败 | false : 校验成功
      */
-    abstract boolean userVerify(UserEntity user,String password);
+    abstract boolean userVerify(String sourcePwd,String requestPwd);
 }

@@ -20,23 +20,22 @@ public abstract class Pair<K,V>{
     }
 
     /**
-     * @Author: ZYJ
-     * @Date: 2022/04/28
-     * @Remark: 添加元素
+     * 添加元素
+     * @param key key
+     * @param val val
      */
     public abstract void put(K key,V val);
 
     /**
-     * @Author: ZYJ
-     * @Date: 2022/04/28
-     * @Remark: 获取元素
+     * 获取元素
+     * @param key key
+     * @return val
      */
     public abstract V get(K key);
 
     /**
-     * @Author: ZYJ
-     * @Date: 2022/04/28
-     * @Remark: 转换成 json 字符串
+     * 转换成 json 字符串
+     * @return json 字符串
      */
     public abstract String toJSONString();
 

@@ -1,10 +1,6 @@
 package com.zyj.disk.tool;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/4/19 10:07
- * @Remark: 异或加解密 String
- */
+/** 异或加解密 String */
 public final class StrXOR extends XOR{
     public StrXOR(boolean isChaos,String privateKey){
         super(isChaos,privateKey);

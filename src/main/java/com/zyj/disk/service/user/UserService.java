@@ -27,7 +27,7 @@ public final class UserService extends UserTemplate{
     }
 
     @Override
-    boolean userVerify(UserEntity user,String password){
-        return user == null || !user.getPassword().equals(encryption.md5(password));
+    boolean userVerify(String sourcePwd,String requestPwd){
+        return !sourcePwd.equals(encryption.md5(requestPwd));
     }
 }

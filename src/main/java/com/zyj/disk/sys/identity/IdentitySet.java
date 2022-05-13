@@ -22,7 +22,7 @@ public enum IdentitySet{
         throw Client.VERIFY_ERROR.exception;
     }
 
-    //TODO 期望增加多对一的身份映射关系(如科技部,财务部,营业部等)
+    //TODO 增加群体类身份机制(如科技部,财务部,营业部等)
     /** 身份类 */
     private interface Identity{}
 

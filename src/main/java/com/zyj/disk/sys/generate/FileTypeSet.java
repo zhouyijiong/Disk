@@ -2,11 +2,7 @@ package com.zyj.disk.sys.generate;
 
 import com.zyj.disk.sys.generate.file.*;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/4/27 19:04
- * @Remark: fileType 模型
- */
+/** fileType 模型 */
 public final class FileTypeSet{
     public FileType fileType;
 
