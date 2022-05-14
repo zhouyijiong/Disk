@@ -39,11 +39,7 @@ public final class SelectMapper extends Mapper{
             BaseEntity[] result = processor.select(
                     connection.prepareStatement(sql).executeQuery(),
                     classTool.instance(((Select)annotation).result()));
-            switch(result.length){
-                case 0 : return null;
-                case 1 : return result[0];
-                default: return result;
-            }
+            return result.length == 0 ? null : result.length == 1 ? result[0] : result;
         }catch(Exception e){
             record.error(e);
         }
