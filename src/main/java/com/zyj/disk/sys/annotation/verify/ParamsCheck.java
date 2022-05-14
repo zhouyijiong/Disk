@@ -23,5 +23,5 @@ public @interface ParamsCheck{
 
         boolean required() default true;
     }
-    Param[] params();
+    Param[] value();
 }

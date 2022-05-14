@@ -23,12 +23,10 @@ public class UseController{
 	 * @param password 要注册的密码
 	 * */
 	@PostMapping("/registered")
-	@ParamsCheck(
-			params = {
-					@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
-					@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
-			}
-	)
+	@ParamsCheck({
+			@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
+			@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
+	})
 	public Response<String> registered(String username,String password){
 		userService.registered(username,password);
 		return userService.result(username);
@@ -40,12 +38,10 @@ public class UseController{
 	 * @param password 登录密码
 	 * */
 	@PostMapping("/login")
-	@ParamsCheck(
-			params = {
-					@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
-					@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
-			}
-	)
+	@ParamsCheck({
+			@Param(name = "username", regex = Rules.NUM_CHAR_LOW),
+			@Param(name = "password", regex = Rules.NUM_CHAR_LOW_32)
+	})
 	public Response<String> login(String username,String password){
 		userService.login(username,password);
 		return userService.result(username);

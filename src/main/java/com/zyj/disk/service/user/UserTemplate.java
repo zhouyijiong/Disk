@@ -78,6 +78,7 @@ public abstract class UserTemplate{
 
     /**
      * 返回响应类
+     *
      * @param username 用户名
      * @param token token
      * @return Response<String>
@@ -86,6 +87,7 @@ public abstract class UserTemplate{
 
     /**
      * 获取 Token
+     *
      * @param username 用户名
      * @return String token
      */

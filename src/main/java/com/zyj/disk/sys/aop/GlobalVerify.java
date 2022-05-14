@@ -47,7 +47,7 @@ public final class GlobalVerify{
 		Pair<String,Param> methodParamsCheck = paramCache.get(key);
 		if(methodParamsCheck == null){
 			methodParamsCheck = new HashPair<>();
-			Param[] params = paramsCheck.params();
+			Param[] params = paramsCheck.value();
 			for(Param param : params) methodParamsCheck.put(param.name(),param);
 			paramCache.put(key,methodParamsCheck,129600);
 		}
