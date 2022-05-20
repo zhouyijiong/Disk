@@ -6,12 +6,12 @@ public final class StrXOR extends XOR{
         super(isChaos,privateKey);
     }
 
-    public String encryption(String info){
+    public String encrypt(String info){
         int hash = hash(info.hashCode());
-        return def_encryption(getHeadMsg(hash),info,hash);
+        return defEncrypt(getHeadMsg(hash),info,hash);
     }
 
     public String decrypt(String cipher){
-        return def_decrypt(cipher);
+        return defDecrypt(cipher);
     }
 }

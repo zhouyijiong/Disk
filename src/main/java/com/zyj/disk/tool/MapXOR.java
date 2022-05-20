@@ -21,16 +21,16 @@ public class MapXOR extends XOR{
         return this;
     }
 
-    /** xor encryption */
-    public String encryption(){
+    /** xor encrypt */
+    public String encrypt(){
         String info = storage.toString();
         int hash = hash(info.hashCode());
-        return def_encryption(getHeadMsg(hash),info,hash);
+        return defEncrypt(getHeadMsg(hash),info,hash);
     }
 
     /** xor map decrypt */
     public Map<String,String> decrypt(String cipher){
-        String result = def_decrypt(cipher);
+        String result = defDecrypt(cipher);
         return result == null ? null : convert(result);
     }
 
