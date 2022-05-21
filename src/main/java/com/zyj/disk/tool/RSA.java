@@ -6,11 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Random;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/5/19 10:32
- * @Remark: RSA 非对称加密
- */
+/** RSA 非对称加密 */
 public class RSA{
     private final BigInteger N;
     private final BigInteger E = new BigInteger("65537");
