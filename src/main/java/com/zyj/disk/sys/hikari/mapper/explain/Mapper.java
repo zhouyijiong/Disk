@@ -15,7 +15,7 @@ public abstract class Mapper{
 
     public Mapper(DataSource dataSource,Class<? extends Mapper> clazz){
         this.dataSource = dataSource;
-        this.record = Record.initialize(clazz);
+        this.record = new Record(clazz);
     }
 
     abstract Match init(Annotation annotation);

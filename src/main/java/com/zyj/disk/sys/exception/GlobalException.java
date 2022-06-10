@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 /** 全局异常 */
 @Getter
-public class GlobalException extends RuntimeException{
+public final class GlobalException extends RuntimeException{
     private static final long serialVersionUID = 631924228114738472L;
 
     public GlobalException(Throwable throwable){

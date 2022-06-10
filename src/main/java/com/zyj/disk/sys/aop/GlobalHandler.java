@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 @ResponseBody
 public class GlobalHandler{
-    private final Record record = Record.initialize(this.getClass());
+    private final Record record = new Record(this.getClass());
 
     @ExceptionHandler(GlobalException.class)
     public Response<?> batteryException(GlobalException exception){

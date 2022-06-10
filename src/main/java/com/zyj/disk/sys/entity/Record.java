@@ -8,12 +8,8 @@ import org.slf4j.LoggerFactory;
 public final class Record{
     private final Logger logger;
 
-    private Record(Class<?> clazz){
+    public Record(Class<?> clazz){
         logger = LoggerFactory.getLogger(clazz);
-    }
-
-    public static Record initialize(Class<?> clazz){
-        return new Record(clazz);
     }
 
     public void error(GlobalException e){

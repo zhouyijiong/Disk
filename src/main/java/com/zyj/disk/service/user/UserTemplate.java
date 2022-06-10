@@ -13,7 +13,7 @@ public abstract class UserTemplate{
      * @param username 用户名
      * @param password 密码
      */
-    public void registered(String username,String password){
+    public final void registered(String username,String password){
         if(queryUserByName(username) != null) throw Client.USER_EXIST.exception;
         UserEntity entity = initUserEntity(username,password);
         if(saveUser(entity) == 0) throw Server.SQL_RESULT_ERROR.exception;
@@ -25,7 +25,7 @@ public abstract class UserTemplate{
      * @param username 用户名
      * @param password 密码
      */
-    public void login(String username,String password){
+    public final void login(String username,String password){
         UserEntity user = queryUserByName(username);
         if(user == null || userVerify(user.getPassword(),password))
             throw Client.ACCOUNT_OR_PASSWORD_ERROR.exception;
@@ -37,7 +37,7 @@ public abstract class UserTemplate{
      * @param username 用户名
      * @return Response<String>
      */
-    public Response<String> result(String username){
+    public final Response<String> result(String username){
         String token = getToken(username);
         return result(username,token);
     }

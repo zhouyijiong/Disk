@@ -1,12 +1,30 @@
 package com.zyj.disk.tool;
 
 import lombok.AllArgsConstructor;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 
 /** 异或加解密(对称加密) */
 @AllArgsConstructor
 public abstract class XOR{
-    protected final boolean isChaos;
-    protected final String privateKey;
+    protected String encrypt(String info,boolean isChaos,String privateKey){
+        int hash = hash(info.hashCode());
+
+        String head;
+        if(privateKey == null){
+            head = getHeadMsg(hash,isChaos);
+        }else{
+            head = new BigInteger(privateKey.getBytes(StandardCharsets.UTF_8)).toString();
+        }
+
+        return defEncrypt(head,info,hash,privateKey);
+    }
+
+    public String decrypt(String info){
+        return decrypt(info,null);
+    }
+
+    public abstract String decrypt(String info,String privateKey);
 
     /** 密码头 */
     protected String setHead(String head){
@@ -33,7 +51,7 @@ public abstract class XOR{
      * 获取加密头
      * @param offset 偏移量
      */
-    protected String getHeadMsg(int offset){
+    protected String getHeadMsg(int offset,boolean isChaos){
         if(!isChaos) return Integer.toHexString(offset);
         long hash = System.nanoTime();//* 0x39c204abfde6a;
         return String.valueOf(hash << 31 ^ (hash >>> 31));
@@ -45,22 +63,32 @@ public abstract class XOR{
 
     /**
      * 默认加密
+     *
      * @param head 密码头
      * @param source 原文
      * @param offset 偏移量
      * @return String 密文
      */
-    protected String defEncrypt(String head,String source,int offset){
-        return setHead(head) + "-" + setBody(source,hash(head.hashCode())) + "-" + setCode(offset);
+    protected String defEncrypt(String head,String source,int offset,String privateKey){
+        if(privateKey != null) head = new BigInteger(privateKey.getBytes(StandardCharsets.UTF_8)).toString();
+        String info = setBody(source,hash(head.hashCode())) + "-" + setCode(offset);
+        return privateKey == null ? setHead(head) + "-" + info : info;
     }
 
     /**
      * 默认解密
+     *
      * @param cipher 密文
      * @return String 原文
      */
-    protected String defDecrypt(String cipher){
-        String[] ciphers = cipher.split("-");
+    protected String defDecrypt(String cipher,String privateKey){
+        String[] ciphers;
+        if(privateKey == null){
+            ciphers = cipher.split("-");
+        }else{
+            String head = setHead(new BigInteger(privateKey.getBytes(StandardCharsets.UTF_8)).toString());
+            ciphers = (head + "-" + cipher).split("-");
+        }
         cipher = ciphers[0];
         int hash = hash(coreDecrypt(cipher,cipher.length() >> 1).hashCode());
         cipher = coreDecrypt(ciphers[1],hash);
@@ -70,6 +98,7 @@ public abstract class XOR{
 
     /**
      * 加密核心
+     *
      * @param info 原文
      * @param offset 偏移量
      * @return String 密文
@@ -87,6 +116,7 @@ public abstract class XOR{
 
     /**
      * 解密核心
+     *
      * @param info 密文
      * @param offset 偏移量
      * @return String 原文

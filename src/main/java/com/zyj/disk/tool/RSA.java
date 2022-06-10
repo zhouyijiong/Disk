@@ -1,43 +1,43 @@
 package com.zyj.disk.tool;
 
 import lombok.AllArgsConstructor;
+import lombok.ToString;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.Random;
 
 /** RSA 非对称加密 */
 public class RSA{
-    private final BigInteger N;
-    private final BigInteger E = new BigInteger("65537");
-    private final BigInteger D;
+    public final Key PK;
+    public final Key SK;
 
+    @ToString
     @AllArgsConstructor
-    static final class Key{
+    public static final class Key{
         private final BigInteger num;
         private final BigInteger total;
 
         public String encrypt(String info){
-            byte[] dataBytes = info.getBytes(StandardCharsets.UTF_8);
-            return Base64.getEncoder().encodeToString(new BigInteger(dataBytes).modPow(num,total).toByteArray());
+            return new BigInteger(info.getBytes(StandardCharsets.UTF_8)).modPow(num,total).toString(32);
         }
 
         public String decrypt(String info){
-            byte[] dataBytes = info.getBytes(StandardCharsets.UTF_8);
-            byte[] decodeData = Base64.getDecoder().decode(dataBytes);
-            return new String(new BigInteger(decodeData).modPow(num,total).toByteArray());
+            return new String(new BigInteger(info,32).modPow(num,total).toByteArray());
         }
     }
 
-    public RSA(int len){
+    public RSA(int len,int base){
         int factorLen = len >> 1;
         Random random = new Random();
         BigInteger p = BigInteger.probablePrime(factorLen,random);
         BigInteger q = BigInteger.probablePrime(factorLen,random);
-        N = p.multiply(q);
+        BigInteger N = p.multiply(q);
         BigInteger f = N.subtract(p).subtract(q).add(BigInteger.ONE);
-        D = getD(E,f).getD(f);
+        BigInteger E = BigInteger.valueOf(base);
+        BigInteger D = getD(E,f).getD(f);
         if(E.multiply(D).mod(f).intValue() != 1) throw new RuntimeException();
+        PK = new Key(E,N);
+        SK = new Key(D,N);
     }
 
     private Result getD(BigInteger a,BigInteger b){
@@ -57,11 +57,9 @@ public class RSA{
         }
     }
 
-    public Key getPK(){
-        return new Key(E,N);
-    }
-
-    public Key getSK(){
-        return new Key(D,N);
+    public static void main(String[] args) {
+        RSA rsa = new RSA(2048,65537);
+        String result = rsa.PK.encrypt("Administrator");
+        rsa.SK.decrypt(result);
     }
 }
