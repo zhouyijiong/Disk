@@ -19,7 +19,7 @@ public class PageController{
 	}
 
 	/** 访问用户后台 */
-	@Access(identity = IdentitySet.VISITOR)
+	@Access(identity = {IdentitySet.USER})
 	@GetMapping("/management")
 	public String management(){
 		return USER;
