@@ -46,7 +46,7 @@ function judgment(){
 	// let map = new HashMap();
 	// map.put("username",usm.value).put("password",pwd.value)
 	ajax.post(login_url,data,function(response){
-		if(response.code > 0){
+		if(response.message){
 			pwd.value = "";
 			usm.focus();
 			alert(response.message);
@@ -54,9 +54,7 @@ function judgment(){
 			data = JSON.parse(response.data);
 			localStorage.token = data.token;
 			localStorage.access = data.access;
-			//ajax.get('/management');
-			// ajax.syncGet('/management');
-			// window.location.href = "/";
+			ajax.get('/management');
 		}
 	});
 }

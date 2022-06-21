@@ -23,36 +23,6 @@ function fileSizeFormat(size){
 		++index;
 	}
 	return size.toFixed(2) + byteArray[index];
-	// var sizeInfo="";
-	// if(size<1024){
-	// 	sizeInfo=size+" B"
-	// }else{
-	// 	if(size<1048576){
-	// 		size/=1024;
-	// 		sizeInfo=size.toFixed(2)+" KB"
-	// 	}else{
-	// 		if(size<1073741824){
-	// 			size/=1024;
-	// 			size/=1024;
-	// 			sizeInfo=size.toFixed(2)+" MB"
-	// 		}else{
-	// 			if(size<1099511627776){
-	// 				size/=1024;
-	// 				size/=1024;
-	// 				size/=1024;
-	// 				sizeInfo=size.toFixed(2)+" GB"
-	// 			}else{
-	// 				if(size<9999999999999){
-	// 					size/=1024;
-	// 					size/=1024;
-	// 					size/=1024;
-	// 					size/=1024;
-	// 					sizeInfo=size.toFixed(2)+" TB"
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-	// }
 }
 
 function setCookie(name,value){

@@ -163,7 +163,6 @@ class Ajax{
     get(url,formData,success){return this.send('GET',url,'json',formData,success);}
     post(url,formData,success){return this.send('POST',url,'json',formData,success);};
     send(type,url,dataType,formData,success){
-        console.log(formData);
         $.ajax({
             type:type,
             url:url,
@@ -175,17 +174,6 @@ class Ajax{
                 XMLHttpRequest.setRequestHeader('token',localStorage.getItem('token'));
             },success:success
         });
-    }
-    syncGet(url){
-        let xmlHttp = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-        xmlHttp.onreadystatechange = function(){
-            if(this.readyState === 4 && xmlHttp.status === 200){
-                location.reload();
-            }
-        }
-        xmlHttp.open('GET',url,false);
-        xmlHttp.setRequestHeader('token','aaaa');
-        xmlHttp.send(null);
     }
 }
 
