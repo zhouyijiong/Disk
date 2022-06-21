@@ -28,16 +28,19 @@ public final class ClassTool{
         return val == null ? null : (val instanceof String) ? "'" + val + "'" : val;
     }
 
-    public String getFieldByName(BaseEntity entity,Field[] fields,String[] names) throws IllegalAccessException{
-        StringBuilder sb = new StringBuilder();
-        for(Field field : fields){
-            for(String name : names){
-                if(name.equals(field.getName())){
-                    sb.append(getFieldValue(field,entity)).append(",");
+    public String getEntityFieldValueByName(BaseEntity entity,Field[] fields,String[] names) throws IllegalAccessException{
+        int len = names.length;
+        StringBuilder sb = new StringBuilder(len * 15);
+        sb.append("(");
+        for(String fieldName : names){
+            for(Field field : fields){
+                if(fieldName.equals(field.getName())){
+                    sb.append(getFieldValue(field,entity));
+                    if(--len > 0) sb.append(",");
                 }
             }
         }
-        return sb.toString();
+        return sb.append(")").toString();
     }
 
     public String getEntityFieldValueAFieldName(BaseEntity entity,Field[] fields) throws IllegalAccessException{

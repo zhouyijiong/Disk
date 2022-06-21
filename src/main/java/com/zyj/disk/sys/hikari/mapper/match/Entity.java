@@ -25,12 +25,17 @@ public final class Entity implements Match,InsertOperate,DeleteOperate,UpdateOpe
         Class<? extends BaseEntity> clazz = entity.getClass();
         Field[] fields = clazz.getDeclaredFields();
         StringBuilder sb = new StringBuilder(fields.length * 15);
+        boolean targetExists = insert.target().length > 0;
         sb.append("insert into ")
                 .append(classTool.getRealName(clazz))
-                .append(insert.target().length == 0 ? classTool.getEntityFieldName(fields) : formatTarget(insert.target()))
+                .append(targetExists ? formatTarget(insert.target()) : classTool.getEntityFieldName(fields))
                 .append("values");
         try{
-            sb.append(classTool.getEntityValueADefault(entity));
+            if(targetExists){
+                sb.append(classTool.getEntityFieldValueByName(entity,fields,insert.target()));
+            }else{
+                sb.append(classTool.getEntityValueADefault(entity));
+            }
         }catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e){
             record.error(e);
         }
