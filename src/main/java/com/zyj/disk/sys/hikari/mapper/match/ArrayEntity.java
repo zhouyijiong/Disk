@@ -32,15 +32,25 @@ public final class ArrayEntity implements Match,InsertOperate{
         Class<? extends BaseEntity> clazz = entityList.get(0).getClass();
         Field[] fields = clazz.getDeclaredFields();
         StringBuilder sb = new StringBuilder(fields.length * 15 * entityList.size());
+        boolean targetExists = insert.target().length > 0;
         sb.append("insert into ")
                 .append(classTool.getRealName(clazz))
-                .append(insert.target().length == 0 ? classTool.getEntityFieldName(fields) : formatTarget(insert.target()))
+                .append(targetExists ? formatTarget(insert.target()) : classTool.getEntityFieldName(fields))
                 .append("values");
         try{
-            sb.append(classTool.getEntityValueADefault(entityList.get(0)));
+            if(targetExists){
+                sb.append(classTool.getEntityFieldValueByName(entityList.get(0),fields,insert.target()));
+            }else{
+                sb.append(classTool.getEntityValueADefault(entityList.get(0)));
+            }
             if(entityList.size() == 1) return sb.toString();
             for(int i=1;i<entityList.size();++i){
-                sb.append(",").append(classTool.getEntityValueADefault(entityList.get(i)));
+                sb.append(",");
+                if(targetExists){
+                    sb.append(classTool.getEntityFieldValueByName(entityList.get(i),fields,insert.target()));
+                }else{
+                    sb.append(classTool.getEntityValueADefault(entityList.get(i)));
+                }
             }
         }catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e){
             record.error(e);
