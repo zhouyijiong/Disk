@@ -15,7 +15,8 @@ public final class Response<T>{
     private Response(){}
 
     public static Response<String> success(Pair<?,?> pair){
-        return new Response<String>().data(pair.toJSONString());
+        Response<String> response = new Response<>();
+        return pair == null ? response : response.data(pair.toJSONString());
     }
 
     public static<T> Response<T> error(GlobalException e){

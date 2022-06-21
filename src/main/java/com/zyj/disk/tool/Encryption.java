@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 
 @Component
 public final class Encryption{
-    private final Record record = new Record(this.getClass());
+    private static final Record record = new Record(Encryption.class);
 
     /** MD5 */
     private String view(byte[] bytes){

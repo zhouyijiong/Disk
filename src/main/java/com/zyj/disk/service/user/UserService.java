@@ -33,7 +33,7 @@ public final class UserService extends UserTemplate{
     }
 
     @Override
-    int saveUser(UserEntity userEntity){
+    int addUser(UserEntity userEntity){
         return userMapper.insert(userEntity);
     }
 
@@ -56,5 +56,18 @@ public final class UserService extends UserTemplate{
         token.put("username",username);
         token.put("identity",IdentitySet.USER);
         return token.generate();
+    }
+
+    public void testInsert(){
+        UserEntity entity = UserEntity.noArgs()
+                .id(1)
+                .username("admin")
+                .password("password")
+                .path("/1/admin/password");
+        userMapper.insert(entity);
+    }
+
+    public void testDelete(){
+        userMapper.delete(UserEntity.noArgs().id(1));
     }
 }

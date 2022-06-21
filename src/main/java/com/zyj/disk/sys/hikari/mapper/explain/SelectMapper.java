@@ -4,7 +4,7 @@ import com.zyj.disk.entity.user.UserEntity;
 import com.zyj.disk.sys.annotation.mapper.base.Select;
 import com.zyj.disk.sys.entity.BaseEntity;
 import com.zyj.disk.sys.hikari.Processor;
-import com.zyj.disk.sys.hikari.mapper.match.Match;
+import com.zyj.disk.sys.hikari.mapper.operate.SelectOperate;
 import com.zyj.disk.sys.tool.ClassTool;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
@@ -25,8 +25,12 @@ public final class SelectMapper extends Mapper{
     }
 
     @Override
-    Match init(Annotation annotation){
-        return ((Select) annotation).mapperMatch().match;
+    String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
+        Select select = (Select) annotation;
+        SelectOperate operateMatch = select.match().match;
+        String sql = operateMatch.selectExplain(joinPoint,select);
+        if(select.print()) System.out.println(sql);
+        return operateMatch.selectCheck(joinPoint,select) ? sql : null;
     }
 
     @Override

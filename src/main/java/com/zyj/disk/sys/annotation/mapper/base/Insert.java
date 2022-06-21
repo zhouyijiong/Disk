@@ -1,6 +1,9 @@
 package com.zyj.disk.sys.annotation.mapper.base;
 
-import com.zyj.disk.sys.entity.MapperMatch;
+import com.zyj.disk.sys.hikari.mapper.match.ArrayEntity;
+import com.zyj.disk.sys.hikari.mapper.match.Entity;
+import com.zyj.disk.sys.hikari.mapper.operate.InsertOperate;
+import lombok.AllArgsConstructor;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -15,5 +18,24 @@ public @interface Insert{
 
     boolean print() default false;
 
-    MapperMatch mapperMatch();
+    Match match() default Match.ENTITY;
+
+    @AllArgsConstructor
+    enum Match{
+        /**
+         * 无参数
+         * 遍历'Entity'参数,取' !=null 的参数 == 判断'
+         * 返回一条SQL
+         */
+        ENTITY(new Entity()),
+
+        /**
+         * 无参数
+         * 遍历'Entity Array'数组,循环获取每项中' !=null 的参数 == 判断'
+         * 返回一组SQL
+         */
+        ARRAY_ENTITY(new ArrayEntity());
+
+        public final InsertOperate match;
+    }
 }

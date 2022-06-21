@@ -1,7 +1,8 @@
 package com.zyj.disk.sys.hikari.mapper.explain;
 
 import com.zyj.disk.sys.annotation.mapper.base.Delete;
-import com.zyj.disk.sys.hikari.mapper.match.Match;
+import com.zyj.disk.sys.hikari.mapper.operate.DeleteOperate;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
@@ -14,7 +15,11 @@ public final class DeleteMapper extends Mapper{
     }
 
     @Override
-    Match init(Annotation annotation){
-        return ((Delete) annotation).mapperMatch().match;
+    String explain(ProceedingJoinPoint joinPoint,Annotation annotation){
+        Delete delete = (Delete) annotation;
+        DeleteOperate operateMatch = delete.match().match;
+        String sql = operateMatch.deleteExplain(joinPoint,delete);
+        if(delete.print()) System.out.println(sql);
+        return operateMatch.deleteCheck(joinPoint,delete) ? sql : null;
     }
 }

@@ -2,55 +2,83 @@ package com.zyj.disk.sys.hikari.mapper.match;
 
 import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.entity.BaseEntity;
+import com.zyj.disk.sys.entity.Record;
+import com.zyj.disk.sys.exception.User;
+import com.zyj.disk.sys.hikari.mapper.operate.*;
 import org.aspectj.lang.ProceedingJoinPoint;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * 匹配模式 : 实体类
  * 无SQL,实体类字段匹配
  */
-public final class Entity extends Match{
-    @Override
+public final class Entity implements Match,InsertOperate,DeleteOperate,UpdateOperate,SelectOperate{
+    public static final Record record = new Record(Entity.class);
+
     public boolean insertCheck(ProceedingJoinPoint joinPoint,Insert insert){
-        return joinPoint.getArgs().length == 1;
+        return checkEntity(joinPoint);
     }
 
-    @Override
     public String insertExplain(ProceedingJoinPoint joinPoint,Insert insert){
         BaseEntity entity = (BaseEntity) joinPoint.getArgs()[0];
-        String realName = classTool.getRealName(entity.getClass());
-        //insert into realName (a1,a2,a3)
-        return null;
+        Class<? extends BaseEntity> clazz = entity.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        StringBuilder sb = new StringBuilder(fields.length * 15);
+        sb.append("insert into ")
+                .append(classTool.getRealName(clazz))
+                .append(insert.target().length == 0 ? classTool.getEntityFieldName(fields) : formatTarget(insert.target()))
+                .append("values");
+        try{
+            sb.append(classTool.getEntityValueADefault(entity));
+        }catch(InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e){
+            record.error(e);
+        }
+        return sb.toString();
     }
 
-    @Override
     public boolean deleteCheck(ProceedingJoinPoint joinPoint,Delete delete){
-        if(!"".equals(delete.where())) return true;
-        for(Object param : joinPoint.getArgs()) if(!(param instanceof BaseEntity)) return true;
-        return false;
+        if(!"".equals(delete.where())) throw User.SQL_PARAM_REDUNDANT.exception;
+        return checkEntity(joinPoint);
     }
 
-    @Override
     public String deleteExplain(ProceedingJoinPoint joinPoint,Delete delete){
+        BaseEntity entity = (BaseEntity) joinPoint.getArgs()[0];
+        Class<? extends BaseEntity> clazz = entity.getClass();
+        Field[] fields = clazz.getDeclaredFields();
+        StringBuilder sb = new StringBuilder(fields.length * 15);
+        sb.append("delete from ")
+                .append(classTool.getRealName(clazz))
+                .append(" where 1=1");
+        try{
+            sb.append(classTool.getEntityFieldValueAFieldName(entity,fields));
+        }catch(IllegalAccessException e){
+            record.error(e);
+        }
+        return sb.toString();
+    }
+
+    public boolean selectCheck(ProceedingJoinPoint joinPoint,Select select){
+        return checkEntity(joinPoint);
+    }
+
+    public String selectExplain(ProceedingJoinPoint joinPoint,Select select){
+
         return null;
     }
 
-    @Override
-    public boolean updateCheck(ProceedingJoinPoint joinPoint,Update update){
-        return false;
+    public boolean updateCheck(ProceedingJoinPoint joinPoint, Update update){
+        return checkEntity(joinPoint);
     }
 
-    @Override
     public String updateExplain(ProceedingJoinPoint joinPoint,Update update){
         return null;
     }
 
-    @Override
-    public boolean selectCheck(ProceedingJoinPoint joinPoint,Select select){
-        return false;
-    }
-
-    @Override
-    public String selectExplain(ProceedingJoinPoint joinPoint,Select select){
-        return null;
+    boolean checkEntity(ProceedingJoinPoint joinPoint){
+        Object[] args = joinPoint.getArgs();
+        if(args.length != 1) throw User.SQL_PARAM_REDUNDANT.exception;
+        if(!(args[0] instanceof BaseEntity)) throw User.SQL_PARAM_TYPE_ERROR.exception.addArgs("must be a BaseEntity");
+        return true;
     }
 }

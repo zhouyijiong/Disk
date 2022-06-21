@@ -3,20 +3,23 @@ package com.zyj.disk.mapper.user;
 import com.zyj.disk.entity.user.UserEntity;
 import com.zyj.disk.sys.annotation.mapper.base.*;
 import com.zyj.disk.sys.annotation.mapper.MapperProxy;
-import com.zyj.disk.sys.entity.MapperMatch;
+import java.util.List;
 
 /** 用户映射器 */
 @MapperProxy
 public interface UserMapper{
-    @Insert(mapperMatch = MapperMatch.ENTITY)
+    @Insert(match = Insert.Match.ENTITY)
     int insert(UserEntity user);
 
-    @Insert(mapperMatch = MapperMatch.ARRAY_ENTITY)
-    int insert(UserEntity[] users);
+    @Insert(match = Insert.Match.ARRAY_ENTITY)
+    int insert(List<UserEntity> users);
 
-    @Delete(where = "where id=#{id}",mapperMatch = MapperMatch.PARAM)
+    @Delete(where = "where id=#{id}",match = Delete.Match.PARAM)
     int delete(Integer id);
 
-    @Select(where = "where username=#{name}",result = UserEntity.class,mapperMatch = MapperMatch.PARAM)
+    @Delete(match = Delete.Match.ENTITY)
+    int delete(UserEntity entity);
+
+    @Select(where = "where username=#{name}",result = UserEntity.class,match = Select.Match.PARAM)
     UserEntity queryByName(String name);
 }

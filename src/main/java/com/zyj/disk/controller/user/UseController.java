@@ -6,6 +6,7 @@ import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.entity.Response;
 import com.zyj.disk.sys.entity.Rules;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,11 +40,23 @@ public class UseController{
 	 * */
 	@PostMapping("/login")
 	@ParamsCheck({
-			@Param(name = "username", regex = Rules.NUM_CHAR_LOW),
-			@Param(name = "password", regex = Rules.NUM_CHAR_LOW_32)
+			@Param(name = "username",regex = Rules.NUM_CHAR_LOW),
+			@Param(name = "password",regex = Rules.NUM_CHAR_LOW_32)
 	})
 	public Response<String> login(String username,String password){
 		userService.login(username,password);
 		return userService.result(username);
+	}
+
+	@GetMapping("/testInsert")
+	public Response<String> testInsert(){
+		userService.testInsert();
+		return Response.success(null);
+	}
+
+	@GetMapping("/testDelete")
+	public Response<String> testDelete(){
+		userService.testDelete();
+		return Response.success(null);
 	}
 }

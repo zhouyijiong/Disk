@@ -9,19 +9,17 @@ import com.zyj.disk.sys.exception.Server;
 public abstract class UserTemplate{
     /**
      * 注册账户
-     *
      * @param username 用户名
      * @param password 密码
      */
     public final void registered(String username,String password){
         if(queryUserByName(username) != null) throw Client.USER_EXIST.exception;
         UserEntity entity = initUserEntity(username,password);
-        if(saveUser(entity) == 0) throw Server.SQL_RESULT_ERROR.exception;
+        if(addUser(entity) == 0) throw Server.SQL_RESULT_ERROR.exception;
     }
 
     /**
      * 登录账户
-     *
      * @param username 用户名
      * @param password 密码
      */
@@ -33,7 +31,6 @@ public abstract class UserTemplate{
 
     /**
      * 返回响应类
-     *
      * @param username 用户名
      * @return Response<String>
      */
@@ -44,7 +41,6 @@ public abstract class UserTemplate{
 
     /**
      * 根据用户名查询用户
-     *
      * @param username 用户名
      * @return UserEntity
      */
@@ -52,7 +48,6 @@ public abstract class UserTemplate{
 
     /**
      * 初始化用户实体类
-     *
      * @param username 用户名
      * @param password 密码
      * @return UserEntity
@@ -61,15 +56,13 @@ public abstract class UserTemplate{
 
     /**
      * 新增用户
-     *
      * @param userEntity 用户实体类
      * @return int SQL影响行数
      */
-    abstract int saveUser(UserEntity userEntity);
+    abstract int addUser(UserEntity userEntity);
 
     /**
      * 用户登录校验
-     *
      * @param sourcePwd 用户密码
      * @param requestPwd 请求密码
      * @return true : 校验失败 | false : 校验成功
@@ -78,7 +71,6 @@ public abstract class UserTemplate{
 
     /**
      * 返回响应类
-     *
      * @param username 用户名
      * @param token token
      * @return Response<String>
@@ -87,7 +79,6 @@ public abstract class UserTemplate{
 
     /**
      * 获取 Token
-     *
      * @param username 用户名
      * @return String token
      */
