@@ -52,9 +52,10 @@ function judgment(){
 			alert(response.message);
 		}else{
 			data = JSON.parse(response.data);
-			localStorage.token = data.token;
-			localStorage.access = data.access;
-			ajax.get('/management');
+			sessionStorage.token = data.token;
+			sessionStorage.access = data.access;
+			setCookie("token",data.token,7);
+			window.location.href='/management';
 		}
 	});
 }

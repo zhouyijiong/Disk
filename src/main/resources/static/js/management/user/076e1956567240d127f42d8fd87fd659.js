@@ -15,7 +15,7 @@ function getCapacityInfo(){
 				alert(data.error);
 				logout();
 			}else{
-				var pbc = document.getElementById('progressBarInfoCapacity').innerHTML = 
+				var pbc = document.getElementById('progressBarInfoCapacity').innerHTML =
 					fileSizeFormat(data.useCapacityValue) + "/" + fileSizeFormat(data.totalCapacity);
 				var obj = document.getElementById('progressDown').style.width = data.useCapacityPercentage + '%';
 			}
@@ -24,9 +24,9 @@ function getCapacityInfo(){
 }
 
 function topSetChange(obj){
-	var index = obj.selectedIndex;
+	let index = obj.selectedIndex;
 	if(index > 0){
-		if(index == 1){
+		if(index === 1){
 			logout();
 		}else{
 			changeMode();

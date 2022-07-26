@@ -25,7 +25,6 @@ public final class Entity extends FileType{
 	void createHead(BufferedOutputStream bos,String packageName)throws IOException{
 		String basePath = packageName + "entity.";
 		bos.write(packages(basePath + sourceName.toLowerCase()));
-		bos.write(imports(packageName + "sys.entity.BaseEntity;"));
 		bos.write(imports("lombok.EqualsAndHashCode;"));
 		bos.write(imports("lombok.Getter;"));
 		for(FieldInfo item : fieldInfos){
@@ -41,7 +40,7 @@ public final class Entity extends FileType{
 
 	@Override
 	void createBody(BufferedOutputStream bos)throws IOException{
-		bos.write(("\npublic final class "+ className +" extends BaseEntity{").getBytes(StandardCharsets.UTF_8));
+		bos.write(("\npublic final class "+ className +"{").getBytes(StandardCharsets.UTF_8));
 		body.append("\n\t\treturn noArgs()");
 		FieldInfo item = fieldInfos.get(0);
 		String key = item.getKey();

@@ -31,9 +31,9 @@ public final class Demo{
 	Long totalFileSize = 3221225472L;
 
 	@GenerateParam(length = "(1)")
-	Integer authority = 0;
+	Byte authority = 0;
 
 	public static void main(String[] args)throws InstantiationException,IllegalAccessException,IOException{
-		new Generate(Demo.class,"File").start();
+		new Generate(Demo.class,"file").start(FileTypeSet.controller());
 	}
 }
