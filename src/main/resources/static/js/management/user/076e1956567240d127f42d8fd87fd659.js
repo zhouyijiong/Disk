@@ -1,6 +1,6 @@
 window.onload = function (){
-/*	queryCategory('all');
-	getCapacityInfo();*/
+	/*	queryCategory('all');
+        getCapacityInfo();*/
 }
 
 function getCapacityInfo(){
@@ -15,7 +15,7 @@ function getCapacityInfo(){
 				alert(data.error);
 				logout();
 			}else{
-				var pbc = document.getElementById('progressBarInfoCapacity').innerHTML = 
+				var pbc = document.getElementById('progressBarInfoCapacity').innerHTML =
 					fileSizeFormat(data.useCapacityValue) + "/" + fileSizeFormat(data.totalCapacity);
 				var obj = document.getElementById('progressDown').style.width = data.useCapacityPercentage + '%';
 			}
@@ -24,9 +24,9 @@ function getCapacityInfo(){
 }
 
 function topSetChange(obj){
-	var index = obj.selectedIndex;
+	let index = obj.selectedIndex;
 	if(index > 0){
-		if(index == 1){
+		if(index === 1){
 			logout();
 		}else{
 			changeMode();
@@ -176,7 +176,7 @@ function appendTr(data,tag){
 					td2_input.style.color = 'rgba(0,0,255,0.6)';
 				}else if(file.isShare == 1){
 					td2_input.style.color = 'rgba(100,0,100,0.6)';
-			}
+				}
 		}
 		td2.appendChild(td2_input);
 		var td3 = document.createElement('td');

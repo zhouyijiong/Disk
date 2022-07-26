@@ -15,15 +15,15 @@ public final class Mapper extends FileType{
 	@Override
 	void createHead(BufferedOutputStream bos,String packageName)throws IOException{
 		bos.write(packages(packageName + "mapper." + sourceName.toLowerCase()));
-		bos.write(imports("org.springframework.stereotype.Component;"));
-		bos.write(imports(packageName + "sys.annotation.mapper.MapperProxy;"));
+		bos.write(imports("com.baomidou.mybatisplus.core.mapper.BaseMapper;"));
+		bos.write(imports(packageName + "entity." + sourceName.toLowerCase() + "." + oneStrToUp(sourceName) + ";"));
+		bos.write(imports("org.apache.ibatis.annotations.Mapper;"));
 		bos.write("\n".getBytes(StandardCharsets.UTF_8));
-		bos.write(annotations("Component"));
-		bos.write(annotations("MapperProxy"));
+		bos.write(annotations("Mapper"));
 	}
-	
+
 	@Override
 	void createBody(BufferedOutputStream bos)throws IOException{
-		bos.write(("\npublic interface " + className + "{}").getBytes(StandardCharsets.UTF_8));
+		bos.write(("\npublic interface " + className + " extends BaseMapper<" + oneStrToUp(sourceName) + ">{}").getBytes(StandardCharsets.UTF_8));
 	}
 }

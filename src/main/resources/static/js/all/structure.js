@@ -171,7 +171,7 @@ class Ajax{
             processData: false,
             data:formData,
             beforeSend:function(XMLHttpRequest){
-                XMLHttpRequest.setRequestHeader('token',localStorage.getItem('token'));
+                XMLHttpRequest.setRequestHeader('token',sessionStorage.getItem('token'));
             },success:success
         });
     }

@@ -25,11 +25,10 @@ function fileSizeFormat(size){
 	return size.toFixed(2) + byteArray[index];
 }
 
-function setCookie(name,value){
-	var Days = 7;
-	var exp = new Date();
-	exp.setTime(exp.getTime() + Days * 7 * 60 * 60 * 1000);
-	document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+function setCookie(name,value,day){
+	let exp = new Date();
+	exp.setTime(exp.getTime() + day * 60 * 60 * 24 * 1000);
+	document.cookie = name + "=" + escape(value) + ";expires=" + exp.toUTCString();
 }
 
 function getCookie(name){
@@ -41,7 +40,7 @@ function delCookie(name){
 	var exp = new Date();
 	exp.setTime(exp.getTime() - 1);
 	var cval = getCookie(name);
-    if(cval != null)document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
+	if(cval != null)document.cookie = name + "=" + cval + ";expires=" + exp.toGMTString();
 }
 
 function logout(){

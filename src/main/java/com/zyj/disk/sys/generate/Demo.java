@@ -11,19 +11,19 @@ public final class Demo{
 
 	@GenerateParam(length = "(10)",unique = true)
 	String username;
-	
+
 	@GenerateParam(length = "(32)")
 	String password;
-	
+
 	@GenerateParam(length = "(32)",unique = true)
 	String path;
-	
+
 	@GenerateParam(length = "(13)")
 	Long capacity = 3221225472L;
-	
+
 	@GenerateParam(length = "(4)")
 	Integer fileCount = 100;
-	
+
 	@GenerateParam(length = "(13)")
 	Long fileSize = 3221225472L;
 
@@ -31,9 +31,9 @@ public final class Demo{
 	Long totalFileSize = 3221225472L;
 
 	@GenerateParam(length = "(1)")
-	Integer authority = 0;
+	Byte authority = 0;
 
 	public static void main(String[] args)throws InstantiationException,IllegalAccessException,IOException{
-		new Generate(Demo.class,"File").start();
+		new Generate(Demo.class,"file").start(FileTypeSet.controller());
 	}
 }
