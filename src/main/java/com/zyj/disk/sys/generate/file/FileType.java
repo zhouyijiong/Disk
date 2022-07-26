@@ -16,7 +16,7 @@ public abstract class FileType{
 
 	protected FileType(String type){
 		this.type = type;
-		this.className = oneStrToUp(sourceName) + ("Entity".equals(type) ? "" : type);
+		this.className = oneStrToUp(sourceName) + type;
 	}
 
 	public static void init(String name,List<FieldInfo> fieldInfos){
@@ -38,7 +38,7 @@ public abstract class FileType{
 	abstract void createBody(BufferedOutputStream bos)throws IOException;
 
 	BufferedOutputStream createFile(String path)throws IOException{
-		String finallyPath = "./src/main/java/" + path + type.toLowerCase() + "/" + sourceName.toLowerCase() + "/" + sourceName + ("Entity".equals(type) ? "" : type) + ".java";
+		String finallyPath = "./src/main/java/" + path + type.toLowerCase() + "/" + sourceName.toLowerCase() + "/" + sourceName + type + ".java";
 		return createDirectoryAndFile(finallyPath);
 	}
 
@@ -53,7 +53,7 @@ public abstract class FileType{
 		return new BufferedOutputStream(new FileOutputStream(file,true));
 	}
 
-	public static String oneStrToUp(String str){
+	String oneStrToUp(String str){
 		String temp = str.toLowerCase();
 		return temp.substring(0,1).toUpperCase() + temp.substring(1);
 	}

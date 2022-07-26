@@ -12,7 +12,7 @@ public final class Generate{
 
 	public Generate(Class<?> clazz,String name) throws InstantiationException,IllegalAccessException{
 		this.path = init(clazz);
-		FileType.init(FileType.oneStrToUp(name),fieldInfos);
+		FileType.init(name,fieldInfos);
 	}
 
 	public void start(FileType...fileType){
