@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh" id="html" data-mode="morning">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>个人磁盘</title>
+    <link rel="stylesheet" type="text/css" href="./css/management/user/ffc90b2228d79043a3bd2eb96d283ed3.css">
+</head>
+<body>
+<div id="top" class="container">
+    <div id="top-logo" class="container">Disk</div>
+    <div id="top-operating" class="selected container">
+        <label>
+            <select class="top-operating-select selected" onchange="topSetChange(this)">
+                <option>设置</option>
+                <option>登出</option>
+                <option>切换模式</option>
+            </select>
+        </label>
+    </div>
+</div>
+<div id="after">
+    <div id="after-left" class="container">
+        <div id="fileCategoryDiv">
+            <label><input id="fileCategorySearch" type="text" placeholder="类别搜索"></label>
+            <input id="fileCategoryOperate" class="selected" type="button" value="添加 / 删除" onclick="operateCategory()">
+        </div>
+        <div id="fileCategoryListDiv">
+            <table id="fileCategoryList">
+                <thead>
+                <tr>
+                    <td>购买</td>
+                </tr>
+                <tr>
+                    <td>收藏</td>
+                </tr>
+                <tr>
+                    <td>分享</td>
+                </tr>
+                <tr>
+                    <td>站内</td>
+                </tr>
+                <tr>
+                    <td>回收站</td>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="fileCategoryPageDiv">
+            <div>
+                <input class="fileCategoryPage selected" type="button" value="上一页">
+            </div>
+            <div>
+                <input class="fileCategoryPage selected" type="button" value="下一页">
+            </div>
+        </div>
+        <div id="progressBarDiv">
+            <div id="progressBarCapacity" class="after-left-s-l-info"></div>
+            <div id="progressBarInfo" class="after-left-s-l-info">0/30G</div>
+        </div>
+    </div>
+    <div id="after-right" class="container">
+        <div id="after-right-top">
+            <div id="fileSearchDiv" class="container">
+                <label><input id="fileSearch" type="text" placeholder="文件搜索"></label>
+            </div>
+            <div id="fileUploadDiv" class="container">
+                <div class="upload">
+                    <input type="file" name="myfile" multiple="multiple" onchange="fileUpload(this)"/>
+                    <div>上传文件</div>
+                </div>
+            </div>
+            <div id="filePageDiv" class="container">
+                <label><input type="number" placeholder="page"></label>
+                <span class="selected" onclick="pageChange(-1)">上一页</span>
+                <span class="selected" onclick="pageChange(1)">下一页</span>
+                <span id="page">1/1</span>
+            </div>
+        </div>
+        <div id="after-right-after">
+            <table id="fileList">
+                <thead>
+                <tr>
+                    <td class="td1 after-tr-td"><label><input type="checkbox"></label></td>
+                    <td class="td2 after-tr-td">文件名</td>
+                    <td class="td3 after-tr-td">文件大小</td>
+                    <td class="td4 after-tr-td">上传时间</td>
+                    <td class="td5 after-tr-td">修改时间</td>
+                    <td class="td6 after-tr-td">预览</td>
+                    <td class="td7 after-tr-td">下载/分享/删除</td>
+                </tr>
+<!--                <tr>
+                    <td class="td1"><label><input type="checkbox"></label></td>
+                    <td class="td2"><label><input disabled="disabled" class="fileName" type="text" value="基于springboot 的考研信息交流平台(2).doc"></label></td>
+                    <td class="td3">34KB</td>
+                    <td class="td4">2022-08-02 10:20</td>
+                    <td class="td5">2022-08-02 10:20</td>
+                    <td class="td6">预览</td>
+                    <td class="td7">下载</td>
+                </tr>-->
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="./js/all/structure.js"></script>
+<script src="./js/all/algorithm.js"></script>
+<script src="./js/all/00e27ea08775dd0215f83a6be12f1faa.js"></script>
+<script src="./js/jquery/3ca220de1df80931eef33a8d84c35557.js"></script>
+<script src="./js/management/user/test.js"></script>
+</body>
+</html>

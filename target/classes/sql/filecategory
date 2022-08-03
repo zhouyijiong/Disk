@@ -1,0 +1,6 @@
+CREATE TABLE file_category(
+	id int primary key auto_increment NOT NULL,
+	user_id int(13) NOT NULL,
+	file_category_hash varchar(32) NOT NULL
+);
+ALTER TABLE file_category DEFAULT CHARSET utf8;
