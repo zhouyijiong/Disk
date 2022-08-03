@@ -45,7 +45,7 @@ function judgment(){
 
 	// let map = new HashMap();
 	// map.put("username",usm.value).put("password",pwd.value)
-	ajax.post(login_url,data,function(response){
+	ajax.post(login_url,{'username':usm.value,'password':pwd.value},function(response){
 		if(response.message){
 			pwd.value = "";
 			usm.focus();

@@ -1,6 +1,5 @@
 package com.zyj.disk.sys.entity;
 
-import com.zyj.disk.sys.exception.GlobalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +13,7 @@ public final class Record {
         logger = LoggerFactory.getLogger(clazz);
     }
 
-    public void error(GlobalException e) {
+    public void error(RuntimeException e) {
         logger.error("错误信息:{}", e.getMessage());
     }
 

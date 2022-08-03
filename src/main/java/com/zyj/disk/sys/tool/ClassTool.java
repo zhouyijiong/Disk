@@ -1,29 +1,51 @@
 package com.zyj.disk.sys.tool;
 
-//import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.zyj.disk.sys.exception.GlobalException;
-import com.zyj.disk.sys.exception.Server;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zyj.disk.sys.entity.Record;
+import com.zyj.disk.sys.exception.server.ServerException;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 
-/**
- * @Author: ZYJ
- * @Date: 2022/7/6 11:04
- * @Remark:
- */
 public final class ClassTool {
-//    public static <Entity, Vo> QueryWrapper<Entity> queryBuild(Vo entity) {
-//        Object val;
-//        QueryWrapper<Entity> wrapper = new QueryWrapper<>();
-//        try {
-//            for (Field field : entity.getClass().getDeclaredFields()) {
-//                field.setAccessible(true);
-//                if ((val = field.get(entity)) == null) continue;
-//                wrapper.eq(field.getName(), val);
-//            }
-//        } catch (IllegalAccessException e) {
-//            throw new GlobalException(Server.SQL_BUILD_ERROR.exception);
-//        }
-//        return wrapper;
-//    }
+    private static final Record record = new Record(ClassTool.class);
+
+    public static <Entity, Vo> QueryWrapper<Entity> queryBuild(Vo entity) {
+        Object val;
+        QueryWrapper<Entity> wrapper = new QueryWrapper<>();
+        try {
+            for (Field field : entity.getClass().getDeclaredFields()) {
+                field.setAccessible(true);
+                if ((val = field.get(entity)) == null || "serialVersionUID".equals(field.getName())) continue;
+                wrapper.eq(field.getName(), val);
+            }
+            return wrapper;
+        } catch (IllegalAccessException e) {
+            record.error(e);
+            return null;
+        }
+    }
+
+    public static byte[] serialize(Object obj) {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            new ObjectOutputStream(out).writeObject(obj);
+            return out.toByteArray();
+        } catch (IOException e) {
+            record.error(e);
+            return null;
+        }
+    }
+
+    public static Object deserialize(byte[] data) {
+        try (ByteArrayInputStream in = new ByteArrayInputStream(data)) {
+            return new ObjectInputStream(in).readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            record.error(e);
+            return null;
+        }
+    }
 }

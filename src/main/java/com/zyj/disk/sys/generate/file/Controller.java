@@ -23,7 +23,8 @@ public class Controller extends FileType{
         bos.write(imports("org.springframework.web.bind.annotation.RestController;"));
         bos.write("\n".getBytes(StandardCharsets.UTF_8));
         bos.write(annotations("RestController"));
-        bos.write(annotations("RequestMapping(\"/" + lowName + "\")"));
+        String oneToLowName = sourceName.substring(0,1).toLowerCase() + sourceName.substring(1);
+        bos.write(annotations("RequestMapping(\"/" + oneToLowName + "\")"));
         bos.write(annotations("RequiredArgsConstructor"));
     }
 

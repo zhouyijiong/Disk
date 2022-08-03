@@ -22,7 +22,6 @@ div{
 	font-family: 方正粗黑宋简体;
 	font-size: 80px;
 	color: #fff;
-	display: inline;
 }
 #top-operating{
 	color: #fff;
@@ -95,6 +94,14 @@ div{
 	top:0px;
 	left:0;
 	z-index:2;
+}
+#after-left-fileCategorySearch{
+	width: 100%;
+	height: 100%;
+	padding: 0;
+}
+#fileCategoryList{
+	padding-top: 10px;
 }
 #after-right{
 	width: 89.93%;

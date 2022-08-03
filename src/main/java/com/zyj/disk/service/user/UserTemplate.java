@@ -2,8 +2,8 @@ package com.zyj.disk.service.user;
 
 import com.zyj.disk.entity.user.User;
 import com.zyj.disk.sys.entity.Response;
-import com.zyj.disk.sys.exception.Client;
-import com.zyj.disk.sys.exception.Server;
+import com.zyj.disk.sys.exception.client.Client;
+import com.zyj.disk.sys.exception.server.Server;
 
 /**
  * 用户业务模板类
@@ -15,9 +15,11 @@ public abstract class UserTemplate {
      * @param username 用户名
      * @param password 密码
      */
-    public final void registered(String username, String password) {
-        if (queryUserByName(username) != null) throw Client.USER_EXIST.exception;
-        if (saveUser(initUser(username, password)) == 0) throw Server.SQL_RESULT_ERROR.exception;
+    public final User registered(String username, String password) {
+        if (queryUserByName(username) != null) throw Client.USER_EXIST.e;
+        User user = initUser(username, password);
+        if (saveUser(user) == 0) throw Server.SQL_RESULT_ERROR.e;
+        return user;
     }
 
     /**
@@ -26,21 +28,22 @@ public abstract class UserTemplate {
      * @param username 用户名
      * @param password 密码
      */
-    public final void login(String username, String password) {
+    public final User login(String username, String password) {
         User user = queryUserByName(username);
         if (user == null || userVerify(user.getPassword(), password))
-            throw Client.ACCOUNT_OR_PASSWORD_ERROR.exception;
+            throw Client.ACCOUNT_VERIFY_FAIL.e;
+        return user;
     }
 
     /**
      * 返回响应类
      *
-     * @param username 用户名
+     * @param user 用户
      * @return Response<String>
      */
-    public final Response<String> result(String username) {
-        String token = getToken(username);
-        return result(username, token);
+    public final Response<String> result(User user) {
+        String token = getToken(user);
+        return result(user.getUsername(), token);
     }
 
     /**
@@ -89,8 +92,8 @@ public abstract class UserTemplate {
     /**
      * 获取 Token
      *
-     * @param username 用户名
+     * @param user 用户
      * @return String token
      */
-    abstract String getToken(String username);
+    abstract String getToken(User user);
 }

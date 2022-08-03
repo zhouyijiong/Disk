@@ -2,6 +2,7 @@ package com.zyj.disk.controller.page;
 
 import com.zyj.disk.sys.annotation.verify.Access;
 import com.zyj.disk.sys.identity.IdentitySet;
+import com.zyj.disk.sys.identity.UserIdentity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class PageController {
-	private static final String USER = "management/user/b78ba6e0a8460310bc11b9daaa826a2c";
+	private static final String USER = "management/user/test";//b78ba6e0a8460310bc11b9daaa826a2c
 
 	/**
 	 * 访问首页

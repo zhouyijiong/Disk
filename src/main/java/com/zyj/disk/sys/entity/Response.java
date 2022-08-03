@@ -1,6 +1,5 @@
 package com.zyj.disk.sys.entity;
 
-import com.zyj.disk.sys.exception.GlobalException;
 import com.zyj.disk.sys.tool.structure.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,7 @@ public final class Response<T> {
         return pair == null ? response : response.data(pair.toJSONString());
     }
 
-    public static <T> Response<T> error(GlobalException e) {
+    public static <T> Response<T> error(RuntimeException e) {
         return new Response<T>().message(e.getMessage());
     }
 

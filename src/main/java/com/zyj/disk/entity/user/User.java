@@ -4,13 +4,16 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 /**
  * 用户实体类
  */
 @Getter
 @ToString
 @EqualsAndHashCode(callSuper = false)
-public final class User {
+public final class User implements Serializable {
+	private static final long serialVersionUID = -6842655538879153825L;
 	private Integer id;
 	private String username;
 	private String password;

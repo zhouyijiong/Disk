@@ -9,31 +9,13 @@ public final class Demo{
 	@GenerateParam(primary = true)
 	Integer id;
 
-	@GenerateParam(length = "(10)",unique = true)
-	String username;
+	@GenerateParam(length = "(13)")
+	Integer userId;
 
 	@GenerateParam(length = "(32)")
-	String password;
-
-	@GenerateParam(length = "(32)",unique = true)
-	String path;
-
-	@GenerateParam(length = "(13)")
-	Long capacity = 3221225472L;
-
-	@GenerateParam(length = "(4)")
-	Integer fileCount = 100;
-
-	@GenerateParam(length = "(13)")
-	Long fileSize = 3221225472L;
-
-	@GenerateParam(length = "(13)")
-	Long totalFileSize = 3221225472L;
-
-	@GenerateParam(length = "(1)")
-	Byte authority = 0;
+	String fileCategoryHash;
 
 	public static void main(String[] args)throws InstantiationException,IllegalAccessException,IOException{
-		new Generate(Demo.class,"file").start(FileTypeSet.controller());
+		new Generate(Demo.class,"fileCategory").start(FileTypeSet.sql());
 	}
 }

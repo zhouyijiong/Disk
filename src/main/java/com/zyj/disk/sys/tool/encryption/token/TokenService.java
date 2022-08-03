@@ -14,6 +14,6 @@ public final class TokenService {
     private TokenMapper tokenMapper;
 
     public int save(TokenEntity token) {
-        return 0;//tokenMapper.insert(token);
+        return tokenMapper.insert(token);
     }
 }

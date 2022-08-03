@@ -26,7 +26,7 @@ public final class SQL extends FileType {
 
     @Override
     void createHead(BufferedOutputStream bos, String packageName) throws IOException {
-        String tbName = sourceName.toLowerCase();
+        String tbName = SysTool.humpToLine(sourceName.substring(0,1).toLowerCase() + sourceName.substring(1));
         table.append("CREATE TABLE ").append(tbName).append("(");
         for (FieldInfo item : fieldInfos) getRow(item);
         table.delete(table.length() - 1, table.length()).append("\n);");

@@ -1,6 +1,6 @@
 package com.zyj.disk.sys.tool;
 
-import com.zyj.disk.sys.exception.Server;
+import com.zyj.disk.sys.exception.server.Server;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public final class AOPTool{
 
     private ServletRequestAttributes getHttpServletContext(){
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if(attributes == null) throw Server.REQUEST_PARAM_LOOS.exception;
+        if(attributes == null) throw Server.REQUEST_PARAM_LOOS.e;
         return attributes;
     }
 }
