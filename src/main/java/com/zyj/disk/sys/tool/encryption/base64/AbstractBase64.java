@@ -3,9 +3,7 @@ package com.zyj.disk.sys.tool.encryption.base64;
 import java.util.Arrays;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/6/14 10:45
- * @Remark: base64
+ * base64
  */
 public class AbstractBase64 {
     static final int[] INV = new int[256];

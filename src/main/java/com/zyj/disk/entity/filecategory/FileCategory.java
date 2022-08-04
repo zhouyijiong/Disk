@@ -14,10 +14,6 @@ public final class FileCategory{
 		return new FileCategory();
 	}
 
-	public static FileCategory defaultArgs(){
-		return noArgs();
-	}
-
 	public FileCategory id(Integer val){
 		id = val;
 		return this;

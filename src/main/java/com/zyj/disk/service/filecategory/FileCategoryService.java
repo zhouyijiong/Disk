@@ -12,7 +12,7 @@ public final class FileCategoryService implements FileCategoryTemplate {
 
     @Override
     public FileCategory initFileCategory(Integer userId, String fileCategoryHash) {
-		return FileCategory.noArgs().userId(userId).fileCategoryHash(fileCategoryHash);
+        return FileCategory.noArgs().userId(userId).fileCategoryHash(fileCategoryHash);
     }
 
     @Override

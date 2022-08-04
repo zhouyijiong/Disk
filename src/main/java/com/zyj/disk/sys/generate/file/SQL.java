@@ -2,14 +2,13 @@ package com.zyj.disk.sys.generate.file;
 
 import com.zyj.disk.sys.generate.FieldInfo;
 import com.zyj.disk.sys.tool.SysTool;
+
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/4/13
- * @Remark: 生成 SQL 类
+ * 生成SQL类
  */
 public final class SQL extends FileType {
     StringBuilder table;
@@ -26,7 +25,7 @@ public final class SQL extends FileType {
 
     @Override
     void createHead(BufferedOutputStream bos, String packageName) throws IOException {
-        String tbName = SysTool.humpToLine(sourceName.substring(0,1).toLowerCase() + sourceName.substring(1));
+        String tbName = SysTool.humpToLine(sourceName.substring(0, 1).toLowerCase() + sourceName.substring(1));
         table.append("CREATE TABLE ").append(tbName).append("(");
         for (FieldInfo item : fieldInfos) getRow(item);
         table.delete(table.length() - 1, table.length()).append("\n);");

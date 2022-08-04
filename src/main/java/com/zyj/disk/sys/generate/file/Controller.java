@@ -5,15 +5,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/4/13
- * @Remark: 生成控制器类
+ * 生成控制器类
  */
-public class Controller extends FileType{
-    public Controller(){ super("Controller"); }
+public class Controller extends FileType {
+    public Controller() {
+        super("Controller");
+    }
 
     @Override
-    void createHead(BufferedOutputStream bos,String packageName)throws IOException{
+    void createHead(BufferedOutputStream bos, String packageName) throws IOException {
         String lowName = sourceName.toLowerCase();
         String oneToUpName = oneStrToUp(sourceName);
         bos.write(packages(packageName + "controller." + lowName));
@@ -23,16 +23,16 @@ public class Controller extends FileType{
         bos.write(imports("org.springframework.web.bind.annotation.RestController;"));
         bos.write("\n".getBytes(StandardCharsets.UTF_8));
         bos.write(annotations("RestController"));
-        String oneToLowName = sourceName.substring(0,1).toLowerCase() + sourceName.substring(1);
+        String oneToLowName = sourceName.substring(0, 1).toLowerCase() + sourceName.substring(1);
         bos.write(annotations("RequestMapping(\"/" + oneToLowName + "\")"));
         bos.write(annotations("RequiredArgsConstructor"));
     }
 
     @Override
-    void createBody(BufferedOutputStream bos)throws IOException{
+    void createBody(BufferedOutputStream bos) throws IOException {
         String oneToUpName = oneStrToUp(sourceName);
         String service = sourceName.toLowerCase() + "Service";
-        bos.write(("\npublic class "+ className +"{").getBytes(StandardCharsets.UTF_8));
+        bos.write(("\npublic class " + className + "{").getBytes(StandardCharsets.UTF_8));
         bos.write(("\n\tprivate final " + oneToUpName + "Service " + service + ";").getBytes(StandardCharsets.UTF_8));
         bos.write("\n}".getBytes(StandardCharsets.UTF_8));
     }

@@ -11,11 +11,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface GenerateParam {
-	boolean primary() default false;
+    boolean primary() default false;
 
-	boolean unique() default false;
+    boolean unique() default false;
 
-	boolean required() default true;
+    boolean required() default true;
 
-	String length() default "";
+    String length() default "";
 }

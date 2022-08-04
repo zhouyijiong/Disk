@@ -6,9 +6,7 @@ import lombok.Getter;
 import java.math.BigInteger;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/6/16 13:14
- * @Remark: token entity
+ * Token Entity
  */
 @Getter
 public final class TokenEntity {

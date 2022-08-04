@@ -1,6 +1,6 @@
 package com.zyj.disk.sys.tool.encryption.token;
 
-import com.zyj.disk.sys.exception.server.Server;
+import com.zyj.disk.sys.exception.server.ServerError;
 import com.zyj.disk.sys.tool.ClassTool;
 import com.zyj.disk.sys.tool.encryption.base64.AbstractBase64;
 import com.zyj.disk.sys.tool.encryption.base64.ByteArrayBase64;
@@ -32,15 +32,15 @@ public final class Token<K, V> {
         return DES.decrypt(token);
     }
 
-    public String serializeParam(Object o){
+    public String serializeParam(Object o) {
         byte[] bytes = ClassTool.serialize(o);
-        if(bytes == null) throw Server.SERIALIZE_FAIL.e;
+        if (bytes == null) throw ServerError.SERIALIZE_FAIL;
         return ByteArrayBase64.encodeToString(bytes);
     }
 
-    public static Object deSerializeParam(String str){
+    public static Object deSerializeParam(String str) {
         Object obj = ClassTool.deserialize(AbstractBase64.decode(str.getBytes(StandardCharsets.UTF_8)));
-        if(obj == null) throw Server.DESERIALIZE_FAIL.e;
+        if (obj == null) throw ServerError.DESERIALIZE_FAIL;
         return obj;
     }
 }

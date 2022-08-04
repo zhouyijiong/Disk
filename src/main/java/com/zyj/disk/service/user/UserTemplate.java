@@ -2,8 +2,8 @@ package com.zyj.disk.service.user;
 
 import com.zyj.disk.entity.user.User;
 import com.zyj.disk.sys.entity.Response;
-import com.zyj.disk.sys.exception.client.Client;
-import com.zyj.disk.sys.exception.server.Server;
+import com.zyj.disk.sys.exception.client.ClientError;
+import com.zyj.disk.sys.exception.server.ServerError;
 
 /**
  * 用户业务模板类
@@ -16,9 +16,9 @@ public abstract class UserTemplate {
      * @param password 密码
      */
     public final User registered(String username, String password) {
-        if (queryUserByName(username) != null) throw Client.USER_EXIST.e;
+        if (queryUserByName(username) != null) throw ClientError.USER_EXIST;
         User user = initUser(username, password);
-        if (saveUser(user) == 0) throw Server.SQL_RESULT_ERROR.e;
+        if (saveUser(user) == 0) throw ServerError.SQL_RESULT_FAIL;
         return user;
     }
 
@@ -31,7 +31,7 @@ public abstract class UserTemplate {
     public final User login(String username, String password) {
         User user = queryUserByName(username);
         if (user == null || userVerify(user.getPassword(), password))
-            throw Client.ACCOUNT_VERIFY_FAIL.e;
+            throw ClientError.ACCOUNT_VERIFY_FAIL;
         return user;
     }
 

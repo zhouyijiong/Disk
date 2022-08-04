@@ -1,7 +1,7 @@
 package com.zyj.disk.sys.tool.encryption.des;
 
 import com.zyj.disk.sys.entity.Record;
-import com.zyj.disk.sys.exception.server.Server;
+import com.zyj.disk.sys.exception.server.ServerError;
 import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.tool.encryption.PrivateKey;
 import com.zyj.disk.sys.tool.encryption.token.RsaSet;
@@ -51,7 +51,7 @@ public final class DES {
      */
     public static String encrypt(String source) {
         byte[] bytes = encrypt(source.getBytes(StandardCharsets.UTF_8));
-        if(bytes == null) throw Server.DES_ENCRYPT_FAIL.e;
+        if (bytes == null) throw ServerError.DES_ENCRYPT_FAIL;
         return new BigInteger(bytes).toString(32);
     }
 
@@ -63,7 +63,7 @@ public final class DES {
      */
     public static String decrypt(String cipher) {
         byte[] bytes = decrypt(new BigInteger(cipher, 32).toByteArray());
-        if (bytes == null) throw Server.DES_DECRYPT_FAIL.e;
+        if (bytes == null) throw ServerError.DES_DECRYPT_FAIL;
         return new String(bytes);
     }
 

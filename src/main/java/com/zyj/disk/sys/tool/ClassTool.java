@@ -2,7 +2,6 @@ package com.zyj.disk.sys.tool;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zyj.disk.sys.entity.Record;
-import com.zyj.disk.sys.exception.server.ServerException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -11,6 +10,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 
+/**
+ * Class Tool
+ */
 public final class ClassTool {
     private static final Record record = new Record(ClassTool.class);
 

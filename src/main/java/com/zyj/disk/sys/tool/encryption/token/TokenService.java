@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/6/16 13:25
- * @Remark: token service
+ * Token Service
  */
 @Service
 @AllArgsConstructor

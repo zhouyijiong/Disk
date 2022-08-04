@@ -4,9 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/7/26 11:07
- * @Remark: 系统工具类
+ * SYS Tool
  */
 public final class SysTool {
     private static final Pattern humpPattern = Pattern.compile("[A-Z]");

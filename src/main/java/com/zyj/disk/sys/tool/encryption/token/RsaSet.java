@@ -4,9 +4,7 @@ import com.zyj.disk.sys.tool.encryption.rsa.RSA;
 import lombok.AllArgsConstructor;
 
 /**
- * @Author: ZYJ
- * @Date: 2022/6/13 15:41
- * @Remark: rsa set
+ * RSA set
  */
 @AllArgsConstructor
 public enum RsaSet {

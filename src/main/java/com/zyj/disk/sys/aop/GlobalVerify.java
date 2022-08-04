@@ -9,8 +9,8 @@ import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.annotation.verify.Access;
 import com.zyj.disk.sys.entity.Rules;
-import com.zyj.disk.sys.exception.client.Client;
-import com.zyj.disk.sys.exception.develop.Develop;
+import com.zyj.disk.sys.exception.client.ClientError;
+import com.zyj.disk.sys.exception.develop.DevelopError;
 import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.identity.IdentitySet;
 import com.zyj.disk.sys.tool.AOPTool;
@@ -55,7 +55,7 @@ public final class GlobalVerify {
             System.out.println(str);
             JSONObject jsonObject = JSONObject.parseObject(str);
             IdentitySet identitySet = (IdentitySet) Token.deSerializeParam(jsonObject.get("identity").toString());
-            if(!identitySet.identity.check(access.identity())) throw Client.IDENTITY_VERIFY_FAIL.e;
+            if (!identitySet.identity.check(access.identity())) throw ClientError.IDENTITY_VERIFY_FAIL;
             current = (User) Token.deSerializeParam(jsonObject.get("user").toString());
             return joinPoint.proceed();
         } catch (Throwable throwable) {
@@ -84,12 +84,12 @@ public final class GlobalVerify {
             if (param == null) continue;
             String value = request.getParameter(name);
             if (param.required() && value == null)
-                throw Develop.PARAM_REQUIRED.e.addArgs(name);
+                throw DevelopError.PARAM_REQUIRED.addArgs(name);
             if (param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
-                throw Develop.PARAM_REGEX_VERIFY_FAIL.e.addArgs(name, value);
+                throw DevelopError.PARAM_REGEX_VERIFY_FAIL.addArgs(name, value);
             int length = param.length();
             if (length != -1 && value.trim().length() != length)
-                throw Develop.PARAM_LENGTH_ERROR.e.addArgs(name, value);
+                throw DevelopError.PARAM_LENGTH_ERROR.addArgs(name, value);
         }
         try {
             return joinPoint.proceed();

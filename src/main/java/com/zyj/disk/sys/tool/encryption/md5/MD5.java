@@ -7,13 +7,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * MD5
+ */
 @Component
 public final class MD5 {
     private static final Record record = new Record(MD5.class);
 
-    /**
-     * MD5
-     */
     private String view(byte[] bytes) {
         StringBuilder hexValue = new StringBuilder();
         for (byte b : bytes) {
