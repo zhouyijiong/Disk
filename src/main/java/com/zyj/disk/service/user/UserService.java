@@ -7,6 +7,7 @@ import com.zyj.disk.sys.entity.Response;
 import com.zyj.disk.sys.exception.server.ServerError;
 import com.zyj.disk.sys.identity.IdentitySet;
 import com.zyj.disk.sys.tool.ClassTool;
+import com.zyj.disk.sys.tool.encryption.xor.Codec;
 import com.zyj.disk.sys.tool.structure.HashPair;
 import com.zyj.disk.sys.tool.structure.Pair;
 import com.zyj.disk.sys.tool.encryption.token.Token;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 public final class UserService extends UserTemplate {
     private final UserMapper userMapper;
     private final MD5 md5;
+    private final Codec codec;
 
     @Override
     User queryUserByName(String username) {
@@ -58,7 +60,7 @@ public final class UserService extends UserTemplate {
 
     @Override
     String getToken(User user) {
-        Token<String, Object> token = new Token<>();
+        Token<String,Object> token = new Token<>();
         token.put("user", token.serializeParam(user));
         token.put("identity", token.serializeParam(IdentitySet.USER));
         return token.generate();

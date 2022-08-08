@@ -52,11 +52,11 @@ public final class GlobalVerify {
         if (token == null) return "login/login";
         try {
             String str = Token.parse(token);
-            System.out.println(str);
+            if(str == null) throw ClientError.TOKEN_EXPIRED;
             JSONObject jsonObject = JSONObject.parseObject(str);
-            IdentitySet identitySet = (IdentitySet) Token.deSerializeParam(jsonObject.get("identity").toString());
+            IdentitySet identitySet = Token.deSerializeParam(jsonObject.get("identity").toString(),IdentitySet.class);
             if (!identitySet.identity.check(access.identity())) throw ClientError.IDENTITY_VERIFY_FAIL;
-            current = (User) Token.deSerializeParam(jsonObject.get("user").toString());
+            current = Token.deSerializeParam(jsonObject.get("user").toString(),User.class);
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             Cookie cookie = new Cookie("token", token);

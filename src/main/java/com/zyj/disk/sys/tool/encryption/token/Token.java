@@ -1,46 +1,36 @@
 package com.zyj.disk.sys.tool.encryption.token;
 
-import com.zyj.disk.sys.exception.server.ServerError;
-import com.zyj.disk.sys.tool.ClassTool;
-import com.zyj.disk.sys.tool.encryption.base64.AbstractBase64;
-import com.zyj.disk.sys.tool.encryption.base64.ByteArrayBase64;
+import com.google.gson.Gson;
+import com.zyj.disk.sys.tool.encryption.PrivateKey;
 import com.zyj.disk.sys.tool.encryption.des.DES;
+import com.zyj.disk.sys.tool.encryption.xor.Codec;
 import com.zyj.disk.sys.tool.structure.HashPair;
 import com.zyj.disk.sys.tool.structure.Pair;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * 令牌机制
  */
 public final class Token<K, V> {
-    private final Pair<K, V> pair;
-
-    public Token() {
-        pair = new HashPair<>();
-    }
+    private static final DES des = new DES();
+    private final Pair<K, V> pair = new HashPair<>();
 
     public void put(K key, V val) {
         pair.put(key, val);
     }
 
     public String generate() {
-        return DES.encrypt(pair.toJSONString());
+        return des.encrypt(pair.toJSONString());
     }
 
     public static String parse(String token) {
-        return DES.decrypt(token);
+        return des.decrypt(token);
     }
 
     public String serializeParam(Object o) {
-        byte[] bytes = ClassTool.serialize(o);
-        if (bytes == null) throw ServerError.SERIALIZE_FAIL;
-        return ByteArrayBase64.encodeToString(bytes);
+        return Codec.complex(new Gson().toJson(o), PrivateKey.OFFSET);
     }
 
-    public static Object deSerializeParam(String str) {
-        Object obj = ClassTool.deserialize(AbstractBase64.decode(str.getBytes(StandardCharsets.UTF_8)));
-        if (obj == null) throw ServerError.DESERIALIZE_FAIL;
-        return obj;
+    public static <T> T deSerializeParam(String str, Class<T> tClass) {
+        return new Gson().fromJson(Codec.complex(str, PrivateKey.OFFSET), tClass);
     }
 }

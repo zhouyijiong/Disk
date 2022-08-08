@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
  */
 @AllArgsConstructor
 public abstract class XOR {
-    protected String encrypt(String info, boolean isChaos, String privateKey) {
+    public String encrypt(String info, boolean isChaos, String privateKey) {
         String head;
         int hash = hash(info.hashCode());
         if (privateKey == null) {

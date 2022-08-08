@@ -8,11 +8,11 @@ function operateCategory() {
     if (data.length > 0) {
         alert('删除');
     } else {
-        let fileCategory = prompt('请输入文件类别:');
-        if (!fileCategory) return;
-        ajax.post('/fileCategory/addFileCategory', {'fileCategoryHash':md5(fileCategory)}, function (response) {
+        let category = prompt('请输入文件类别:');
+        if (!category) return;
+        ajax.post('/fileCategory/addFileCategory', {'category':category}, function (response) {
             console.log(response);
         });
-        console.log(fileCategory);
+        console.log(category);
     }
 }

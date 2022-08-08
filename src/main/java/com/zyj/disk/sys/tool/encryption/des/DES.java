@@ -22,16 +22,15 @@ import java.security.SecureRandom;
  * DES加解密
  */
 public final class DES {
-    static final Cipher ENCRYPT_MODE;
-    static final Cipher DECRYPT_MODE;
+    private final Cipher ENCRYPT_MODE;
+    private final Cipher DECRYPT_MODE;
     private static final Record record = new Record(DES.class);
 
-    static {
+    public DES() {
         try {
             KeyGenerator generator = KeyGenerator.getInstance("DES");
-            SecureRandom secureRandom =
-                    new SecureRandom(RsaSet.PUBLIC.RSA.SK.encrypt(PrivateKey.PK).getBytes(StandardCharsets.UTF_8));
-            generator.init(secureRandom);
+            byte[] privateKey = RsaSet.PUBLIC.RSA.SK.encrypt(PrivateKey.PK).getBytes(StandardCharsets.UTF_8);
+            generator.init(new SecureRandom(privateKey));
             Key key = generator.generateKey();
             ENCRYPT_MODE = Cipher.getInstance("DES");
             DECRYPT_MODE = Cipher.getInstance("DES");
@@ -49,7 +48,7 @@ public final class DES {
      * @param source 原文
      * @return 密文
      */
-    public static String encrypt(String source) {
+    public String encrypt(String source) {
         byte[] bytes = encrypt(source.getBytes(StandardCharsets.UTF_8));
         if (bytes == null) throw ServerError.DES_ENCRYPT_FAIL;
         return new BigInteger(bytes).toString(32);
@@ -61,10 +60,9 @@ public final class DES {
      * @param cipher 密文
      * @return 原文
      */
-    public static String decrypt(String cipher) {
+    public String decrypt(String cipher) {
         byte[] bytes = decrypt(new BigInteger(cipher, 32).toByteArray());
-        if (bytes == null) throw ServerError.DES_DECRYPT_FAIL;
-        return new String(bytes);
+        return bytes == null ? null : new String(bytes);
     }
 
     /**
@@ -73,7 +71,7 @@ public final class DES {
      * @param sourceByteArray 原文字节数组
      * @return 密文字节数组
      */
-    private static byte[] encrypt(byte[] sourceByteArray) {
+    private byte[] encrypt(byte[] sourceByteArray) {
         try {
             return ENCRYPT_MODE.doFinal(sourceByteArray);
         } catch (IllegalBlockSizeException | BadPaddingException e) {
@@ -88,7 +86,7 @@ public final class DES {
      * @param cipherByteArray 密文字节数组
      * @return 原文字节数组
      */
-    private static byte[] decrypt(byte[] cipherByteArray) {
+    private byte[] decrypt(byte[] cipherByteArray) {
         try {
             return DECRYPT_MODE.doFinal(cipherByteArray);
         } catch (IllegalBlockSizeException | BadPaddingException e) {

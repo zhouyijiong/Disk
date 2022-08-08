@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 @AllArgsConstructor
 public enum Rules {
-    NULL(Pattern.compile("")),
+    NULL(null),
     CHARACTER_LOW(Pattern.compile("[a-z]+")),
     NUM(Pattern.compile("[0-9]+")),
     NUM_CHAR_LOW(Pattern.compile("[0-9a-z]+")),

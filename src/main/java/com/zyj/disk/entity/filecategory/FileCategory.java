@@ -8,7 +8,7 @@ import lombok.Getter;
 public final class FileCategory{
 	private Integer id;
 	private Integer userId;
-	private String fileCategoryHash;
+	private String categoryCode;
 
 	public static FileCategory noArgs(){
 		return new FileCategory();
@@ -24,8 +24,8 @@ public final class FileCategory{
 		return this;
 	}
 
-	public FileCategory fileCategoryHash(String val){
-		fileCategoryHash = val;
+	public FileCategory categoryCode(String val){
+		categoryCode = val;
 		return this;
 	}
 }
