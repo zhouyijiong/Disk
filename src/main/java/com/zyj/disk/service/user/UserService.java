@@ -7,6 +7,7 @@ import com.zyj.disk.sys.entity.Response;
 import com.zyj.disk.sys.exception.server.ServerError;
 import com.zyj.disk.sys.identity.IdentitySet;
 import com.zyj.disk.sys.tool.ClassTool;
+import com.zyj.disk.sys.tool.encryption.PrivateKey;
 import com.zyj.disk.sys.tool.encryption.xor.Codec;
 import com.zyj.disk.sys.tool.structure.HashPair;
 import com.zyj.disk.sys.tool.structure.Pair;
@@ -60,9 +61,9 @@ public final class UserService extends UserTemplate {
 
     @Override
     String getToken(User user) {
-        Token<String,Object> token = new Token<>();
-        token.put("user", token.serializeParam(user));
-        token.put("identity", token.serializeParam(IdentitySet.USER));
+        Token<String, Object> token = new Token<>();
+        token.put("user", Codec.codingObj(user, PrivateKey.OFFSET));
+        token.put("identity", Codec.codingObj(IdentitySet.USER, PrivateKey.OFFSET));
         return token.generate();
     }
 }

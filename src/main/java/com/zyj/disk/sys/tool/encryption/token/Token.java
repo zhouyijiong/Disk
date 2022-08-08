@@ -1,9 +1,6 @@
 package com.zyj.disk.sys.tool.encryption.token;
 
-import com.google.gson.Gson;
-import com.zyj.disk.sys.tool.encryption.PrivateKey;
 import com.zyj.disk.sys.tool.encryption.des.DES;
-import com.zyj.disk.sys.tool.encryption.xor.Codec;
 import com.zyj.disk.sys.tool.structure.HashPair;
 import com.zyj.disk.sys.tool.structure.Pair;
 
@@ -24,13 +21,5 @@ public final class Token<K, V> {
 
     public static String parse(String token) {
         return des.decrypt(token);
-    }
-
-    public String serializeParam(Object o) {
-        return Codec.complex(new Gson().toJson(o), PrivateKey.OFFSET);
-    }
-
-    public static <T> T deSerializeParam(String str, Class<T> tClass) {
-        return new Gson().fromJson(Codec.complex(str, PrivateKey.OFFSET), tClass);
     }
 }

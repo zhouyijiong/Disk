@@ -14,6 +14,7 @@ import com.zyj.disk.sys.exception.develop.DevelopError;
 import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.identity.IdentitySet;
 import com.zyj.disk.sys.tool.AOPTool;
+import com.zyj.disk.sys.tool.encryption.xor.Codec;
 import com.zyj.disk.sys.tool.structure.HashPair;
 import com.zyj.disk.sys.tool.structure.Pair;
 import com.zyj.disk.sys.tool.structure.ResponsiveCache;
@@ -52,11 +53,11 @@ public final class GlobalVerify {
         if (token == null) return "login/login";
         try {
             String str = Token.parse(token);
-            if(str == null) throw ClientError.TOKEN_EXPIRED;
+            if (str == null) throw ClientError.TOKEN_EXPIRED;
             JSONObject jsonObject = JSONObject.parseObject(str);
-            IdentitySet identitySet = Token.deSerializeParam(jsonObject.get("identity").toString(),IdentitySet.class);
+            IdentitySet identitySet = Codec.decodingObj(jsonObject.get("identity").toString(), IdentitySet.class);
             if (!identitySet.identity.check(access.identity())) throw ClientError.IDENTITY_VERIFY_FAIL;
-            current = Token.deSerializeParam(jsonObject.get("user").toString(),User.class);
+            current = Codec.decodingObj(jsonObject.get("user").toString(), User.class);
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             Cookie cookie = new Cookie("token", token);

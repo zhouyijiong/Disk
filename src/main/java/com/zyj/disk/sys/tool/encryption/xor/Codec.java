@@ -1,5 +1,7 @@
 package com.zyj.disk.sys.tool.encryption.xor;
 
+import com.google.gson.Gson;
+import com.zyj.disk.sys.tool.encryption.PrivateKey;
 import org.springframework.stereotype.Component;
 
 /**
@@ -17,9 +19,17 @@ public final class Codec {
     }
 
     public static byte[] simple(byte[] bytes, int offset) {
-        for(int i=0;i<bytes.length;++i){
+        for (int i = 0; i < bytes.length; ++i) {
             bytes[i] = (byte) ((-bytes[i] & 0xff) + ((offset + i) % 0x10) & 0xff);
         }
         return bytes;
+    }
+
+    public static String codingObj(Object o, int offset) {
+        return complex(new Gson().toJson(o), offset);
+    }
+
+    public static <T> T decodingObj(String json, Class<T> tClass) {
+        return new Gson().fromJson(Codec.complex(json, PrivateKey.OFFSET), tClass);
     }
 }
