@@ -21,46 +21,44 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public final class UserService extends UserTemplate {
+public final class UserService implements UserTemplate {
     private final UserMapper userMapper;
-    private final MD5 md5;
-    private final Codec codec;
 
     @Override
-    User queryUserByName(String username) {
+    public User queryUserByName(String username) {
         QueryWrapper<User> wrapper = ClassTool.queryBuild(User.noArgs().username(username));
         if (wrapper == null) throw ServerError.SQL_BUILD_FAIL;
         return userMapper.selectOne(wrapper);
     }
 
     @Override
-    User initUser(String username, String password) {
+    public User initUser(String username, String password) {
         return User.defaultArgs()
                 .username(username)
-                .password(md5.encrypt(password))
-                .path(md5.encrypt(username));
+                .password(MD5.encrypt(password))
+                .path(MD5.encrypt(username));
     }
 
     @Override
-    int saveUser(User userEntity) {
+    public int saveUser(User userEntity) {
         return userMapper.insert(userEntity);
     }
 
     @Override
-    boolean userVerify(String sourcePwd, String requestPwd) {
-        return !sourcePwd.equals(md5.encrypt(requestPwd));
+    public boolean userVerify(String sourcePwd, String requestPwd) {
+        return !sourcePwd.equals(MD5.encrypt(requestPwd));
     }
 
     @Override
-    Response<String> result(String username, String token) {
+    public Response<String> result(String username, String token) {
         Pair<String, String> pair = new HashPair<>();
         pair.put("access", username);
         pair.put("token", token);
-        return Response.success(pair);
+        return Response.success(pair.toJSONString());
     }
 
     @Override
-    String getToken(User user) {
+    public String getToken(User user) {
         Token<String, Object> token = new Token<>();
         token.put("user", Codec.codingObj(user, PrivateKey.OFFSET));
         token.put("identity", Codec.codingObj(IdentitySet.USER, PrivateKey.OFFSET));

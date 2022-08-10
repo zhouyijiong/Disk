@@ -8,14 +8,14 @@ import com.zyj.disk.sys.exception.server.ServerError;
 /**
  * 用户业务模板类
  */
-public abstract class UserTemplate {
+public interface UserTemplate {
     /**
      * 注册账户
      *
      * @param username 用户名
      * @param password 密码
      */
-    public final User registered(String username, String password) {
+    default User registered(String username, String password) {
         if (queryUserByName(username) != null) throw ClientError.USER_EXIST;
         User user = initUser(username, password);
         if (saveUser(user) == 0) throw ServerError.SQL_RESULT_FAIL;
@@ -28,7 +28,7 @@ public abstract class UserTemplate {
      * @param username 用户名
      * @param password 密码
      */
-    public final User login(String username, String password) {
+    default User login(String username, String password) {
         User user = queryUserByName(username);
         if (user == null || userVerify(user.getPassword(), password))
             throw ClientError.ACCOUNT_VERIFY_FAIL;
@@ -41,7 +41,7 @@ public abstract class UserTemplate {
      * @param user 用户
      * @return Response<String>
      */
-    public final Response<String> result(User user) {
+    default Response<String> result(User user) {
         String token = getToken(user);
         return result(user.getUsername(), token);
     }
@@ -52,7 +52,7 @@ public abstract class UserTemplate {
      * @param username 用户名
      * @return User
      */
-    abstract User queryUserByName(String username);
+    User queryUserByName(String username);
 
     /**
      * 初始化用户实体类
@@ -61,7 +61,7 @@ public abstract class UserTemplate {
      * @param password 密码
      * @return User
      */
-    abstract User initUser(String username, String password);
+    User initUser(String username, String password);
 
     /**
      * 新增用户
@@ -69,7 +69,7 @@ public abstract class UserTemplate {
      * @param userEntity 用户实体类
      * @return int SQL影响行数
      */
-    abstract int saveUser(User userEntity);
+    int saveUser(User userEntity);
 
     /**
      * 用户登录校验
@@ -78,7 +78,7 @@ public abstract class UserTemplate {
      * @param requestPwd 请求密码
      * @return true : 校验失败 | false : 校验成功
      */
-    abstract boolean userVerify(String sourcePwd, String requestPwd);
+    boolean userVerify(String sourcePwd, String requestPwd);
 
     /**
      * 返回响应类
@@ -87,7 +87,7 @@ public abstract class UserTemplate {
      * @param token    token
      * @return Response<String>
      */
-    abstract Response<String> result(String username, String token);
+    Response<String> result(String username, String token);
 
     /**
      * 获取 Token
@@ -95,5 +95,5 @@ public abstract class UserTemplate {
      * @param user 用户
      * @return String token
      */
-    abstract String getToken(User user);
+    String getToken(User user);
 }

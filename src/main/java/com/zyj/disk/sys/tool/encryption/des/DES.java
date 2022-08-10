@@ -4,7 +4,7 @@ import com.zyj.disk.sys.entity.Record;
 import com.zyj.disk.sys.exception.server.ServerError;
 import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.tool.encryption.PrivateKey;
-import com.zyj.disk.sys.tool.encryption.token.RsaSet;
+import com.zyj.disk.sys.tool.encryption.rsa.RsaSet;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -22,11 +22,10 @@ import java.security.SecureRandom;
  * DES加解密
  */
 public final class DES {
-    private final Cipher ENCRYPT_MODE;
-    private final Cipher DECRYPT_MODE;
+    private static final Cipher ENCRYPT_MODE;
+    private static final Cipher DECRYPT_MODE;
     private static final Record record = new Record(DES.class);
-
-    public DES() {
+    static {
         try {
             KeyGenerator generator = KeyGenerator.getInstance("DES");
             byte[] privateKey = RsaSet.PUBLIC.RSA.SK.encrypt(PrivateKey.PK).getBytes(StandardCharsets.UTF_8);
@@ -48,7 +47,7 @@ public final class DES {
      * @param source 原文
      * @return 密文
      */
-    public String encrypt(String source) {
+    public static String encrypt(String source) {
         byte[] bytes = encrypt(source.getBytes(StandardCharsets.UTF_8));
         if (bytes == null) throw ServerError.DES_ENCRYPT_FAIL;
         return new BigInteger(bytes).toString(32);
@@ -60,7 +59,7 @@ public final class DES {
      * @param cipher 密文
      * @return 原文
      */
-    public String decrypt(String cipher) {
+    public static String decrypt(String cipher) {
         byte[] bytes = decrypt(new BigInteger(cipher, 32).toByteArray());
         return bytes == null ? null : new String(bytes);
     }
@@ -71,7 +70,7 @@ public final class DES {
      * @param sourceByteArray 原文字节数组
      * @return 密文字节数组
      */
-    private byte[] encrypt(byte[] sourceByteArray) {
+    private static byte[] encrypt(byte[] sourceByteArray) {
         try {
             return ENCRYPT_MODE.doFinal(sourceByteArray);
         } catch (IllegalBlockSizeException | BadPaddingException e) {
@@ -86,7 +85,7 @@ public final class DES {
      * @param cipherByteArray 密文字节数组
      * @return 原文字节数组
      */
-    private byte[] decrypt(byte[] cipherByteArray) {
+    private static byte[] decrypt(byte[] cipherByteArray) {
         try {
             return DECRYPT_MODE.doFinal(cipherByteArray);
         } catch (IllegalBlockSizeException | BadPaddingException e) {

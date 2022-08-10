@@ -2,6 +2,7 @@ package com.zyj.disk.sys.tool;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zyj.disk.sys.entity.Record;
+import com.zyj.disk.sys.exception.server.ServerError;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -28,7 +29,7 @@ public final class ClassTool {
             return wrapper;
         } catch (IllegalAccessException e) {
             record.error(e);
-            return null;
+            throw ServerError.SQL_BUILD_FAIL;
         }
     }
 

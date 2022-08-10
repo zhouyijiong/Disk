@@ -8,7 +8,6 @@ import com.zyj.disk.sys.tool.structure.Pair;
  * 令牌机制
  */
 public final class Token<K, V> {
-    private static final DES des = new DES();
     private final Pair<K, V> pair = new HashPair<>();
 
     public void put(K key, V val) {
@@ -16,10 +15,10 @@ public final class Token<K, V> {
     }
 
     public String generate() {
-        return des.encrypt(pair.toJSONString());
+        return DES.encrypt(pair.toJSONString());
     }
 
     public static String parse(String token) {
-        return des.decrypt(token);
+        return DES.decrypt(token);
     }
 }

@@ -1,6 +1,5 @@
-package com.zyj.disk.sys.tool.encryption.token;
+package com.zyj.disk.sys.tool.encryption.rsa;
 
-import com.zyj.disk.sys.tool.encryption.rsa.RSA;
 import lombok.AllArgsConstructor;
 
 /**

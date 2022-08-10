@@ -7,7 +7,7 @@ import lombok.Getter;
 @EqualsAndHashCode(callSuper = false)
 public final class FileCategory{
 	private Integer id;
-	private Integer userId;
+	private String userHash;
 	private String categoryCode;
 
 	public static FileCategory noArgs(){
@@ -19,8 +19,8 @@ public final class FileCategory{
 		return this;
 	}
 
-	public FileCategory userId(Integer val){
-		userId = val;
+	public FileCategory userHash(String val){
+		userHash = val;
 		return this;
 	}
 

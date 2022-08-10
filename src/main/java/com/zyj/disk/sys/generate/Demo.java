@@ -10,13 +10,13 @@ public final class Demo {
     @GenerateParam(primary = true)
     Integer id;
 
-    @GenerateParam(length = "(13)")
-    Integer userId;
+    @GenerateParam(length = "(32)")
+    String userHash;
 
     @GenerateParam(length = "(40)")
     String categoryCode;
 
     public static void main(String[] args) throws InstantiationException, IllegalAccessException, IOException {
-        new Generate(Demo.class, "fileCategory").start(FileTypeSet.sql(),FileTypeSet.entity());
+        new Generate(Demo.class, "fileCategory").start(FileTypeSet.sql());
     }
 }

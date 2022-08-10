@@ -1,24 +1,21 @@
 package com.zyj.disk.sys.entity;
 
-import com.zyj.disk.sys.tool.structure.Pair;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 请求返回模型
  */
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public final class Response<T> {
     private String message;
     private T data;
 
-    private Response() {
-    }
-
-    public static Response<String> success(Pair<?, ?> pair) {
-        Response<String> response = new Response<>();
-        return pair == null ? response : response.data(pair.toJSONString());
+    public static<T> Response<T> success(T data) {
+        return new Response<T>().data(data);
     }
 
     public static <T> Response<T> error(RuntimeException e) {
