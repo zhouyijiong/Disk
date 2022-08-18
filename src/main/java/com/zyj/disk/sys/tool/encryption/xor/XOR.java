@@ -1,101 +1,79 @@
 package com.zyj.disk.sys.tool.encryption.xor;
 
-import lombok.AllArgsConstructor;
-
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
+import com.zyj.disk.sys.tool.encryption.md5.MD5;
 
 /**
  * 异或加解密(对称加密)
  */
-@AllArgsConstructor
-public abstract class XOR {
-    public String encrypt(String info, boolean isChaos, String privateKey) {
-        String head;
-        int hash = hash(info.hashCode());
-        if (privateKey == null) {
-            head = getHeadMsg(hash, isChaos);
-        } else {
-            head = new BigInteger(privateKey.getBytes(StandardCharsets.UTF_8)).toString();
-        }
-        return defEncrypt(head, info, hash, privateKey);
+public final class XOR {
+    public static String encrypt(String str) {
+        String head = getRandomFactor();
+        return getHead(head) + "-" + getBody(str, hash(head)) + "-" + getCode(hash(str));
     }
 
-    public abstract String decrypt(String info, String privateKey);
+    public static String decrypt(String str) {
+        return decryptCore(str.split("-"));
+    }
+
+    public static String encrypt(String str, String privateKey) {
+        String head = privateKeyGarble(privateKey);
+        return getBody(str, hash(head)) + "-" + getCode(hash(str));
+    }
+
+    public static String decrypt(String str, String privateKey) {
+        return decryptCore((privateKeyGarble(privateKey) + "-" + str).split("-"));
+    }
 
     /**
-     * 密码头
+     * 获取密码头
+     *
+     * @param str 待加密信息
+     * @return 加密头
      */
-    protected String setHead(String head) {
-        return coreEncrypt(head, head.length());
+    static String getHead(String str) {
+        return encrypt(str, str.length());
     }
 
     /**
      * 获取密码体
      *
      * @param offset 偏移量
+     * @return 密码体
      */
-    protected String setBody(String body, int offset) {
-        return coreEncrypt(body, offset);
+    static String getBody(String body, int offset) {
+        return encrypt(body, offset);
     }
 
     /**
      * 获取校验码
      *
      * @param offset 偏移量
+     * @return 校验码
      */
-    protected String setCode(int offset) {
-        return coreEncrypt(String.valueOf(offset), offset);
+    static String getCode(int offset) {
+        return encrypt(String.valueOf(offset), offset);
     }
 
     /**
-     * 获取加密头
+     * 获取随机因子
      *
-     * @param offset 偏移量
+     * @return 随即因子
      */
-    protected String getHeadMsg(int offset, boolean isChaos) {
-        if (!isChaos) return Integer.toHexString(offset);
-        long hash = System.nanoTime();//* 0x39c204abfde6a;
-        return String.valueOf(hash << 31 ^ (hash >>> 31));
+    static String getRandomFactor() {
+        return String.valueOf(System.nanoTime() * 0x39c204abfde6aL << 31 ^ (System.nanoTime() >>> 31));
     }
 
-    protected int hash(int hash) {
+
+    /**
+     * calc hash
+     *
+     * @param str 信息
+     * @return hash
+     */
+    static int hash(String str) {
+        if (str == null) return 0;
+        int hash = str.hashCode();
         return hash ^ (hash >>> 16);
-    }
-
-    /**
-     * 默认加密
-     *
-     * @param head   密码头
-     * @param source 原文
-     * @param offset 偏移量
-     * @return String 密文
-     */
-    protected String defEncrypt(String head, String source, int offset, String privateKey) {
-        if (privateKey != null) head = new BigInteger(privateKey.getBytes(StandardCharsets.UTF_8)).toString();
-        String info = setBody(source, hash(head.hashCode())) + "-" + setCode(offset);
-        return privateKey == null ? setHead(head) + "-" + info : info;
-    }
-
-    /**
-     * 默认解密
-     *
-     * @param cipher 密文
-     * @return String 原文
-     */
-    protected String defDecrypt(String cipher, String privateKey) {
-        String[] ciphers;
-        if (privateKey == null) {
-            ciphers = cipher.split("-");
-        } else {
-            String head = setHead(new BigInteger(privateKey.getBytes(StandardCharsets.UTF_8)).toString());
-            ciphers = (head + "-" + cipher).split("-");
-        }
-        cipher = ciphers[0];
-        int hash = hash(coreDecrypt(cipher, cipher.length() >> 1).hashCode());
-        cipher = coreDecrypt(ciphers[1], hash);
-        hash = hash(cipher.hashCode());
-        return coreEncrypt(String.valueOf(hash), hash).equals(ciphers[2]) ? cipher : null;
     }
 
     /**
@@ -105,7 +83,7 @@ public abstract class XOR {
      * @param offset 偏移量
      * @return String 密文
      */
-    protected String coreEncrypt(String info, int offset) {
+    static String encrypt(String info, int offset) {
         int len = info.length();
         StringBuilder sb = new StringBuilder(len << 1);
         for (int i = 0; i < len; i++) {
@@ -116,6 +94,14 @@ public abstract class XOR {
         return sb.toString();
     }
 
+    static String decryptCore(String[] ciphers){
+        String str = ciphers[0];
+        int hash = hash(decrypt(str, str.length() >> 1));
+        str = decrypt(ciphers[1], hash);
+        hash = hash(str);
+        return encrypt(String.valueOf(hash), hash).equals(ciphers[2]) ? str : null;
+    }
+
     /**
      * 解密核心
      *
@@ -123,7 +109,7 @@ public abstract class XOR {
      * @param offset 偏移量
      * @return String 原文
      */
-    protected String coreDecrypt(String info, int offset) {
+    static String decrypt(String info, int offset) {
         int len = info.length();
         int offsetLen = len >> 1;
         char[] chars = new char[offsetLen];
@@ -133,5 +119,9 @@ public abstract class XOR {
             chars[k] = (char) (0xff - a + b);//(~a & 0xff) + b
         }
         return new String(chars, 0, offsetLen);
+    }
+
+    static String privateKeyGarble(String privateKey){
+        return MD5.encrypt(privateKey);
     }
 }

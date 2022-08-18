@@ -23,7 +23,7 @@ public class PageController {
 	/**
 	 * 访问用户后台
 	 */
-	@Access(identity = {IdentitySet.USER})
+	@Access(IdentitySet.USER)
 	@GetMapping("/management")
 	public String management() {
 		//TODO 取消方法内容，切面解耦动态访问，附加：置换成接口

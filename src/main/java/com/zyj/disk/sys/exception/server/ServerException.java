@@ -11,6 +11,6 @@ public final class ServerException extends RuntimeException {
     }
 
     public ServerException(Throwable throwable) {
-        super(throwable);
+        super(throwable.getLocalizedMessage());
     }
 }

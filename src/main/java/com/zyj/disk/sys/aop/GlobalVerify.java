@@ -3,8 +3,7 @@ package com.zyj.disk.sys.aop;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
-import com.alibaba.fastjson.JSONObject;
-import com.zyj.disk.entity.user.User;
+import com.zyj.disk.sys.annotation.verify.Level;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.annotation.verify.Access;
@@ -12,13 +11,14 @@ import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.client.ClientError;
 import com.zyj.disk.sys.exception.develop.DevelopError;
 import com.zyj.disk.sys.exception.server.ServerException;
-import com.zyj.disk.sys.identity.IdentitySet;
+import com.zyj.disk.sys.identity.Identity;
 import com.zyj.disk.sys.tool.AOPTool;
-import com.zyj.disk.sys.tool.encryption.xor.Codec;
+import com.zyj.disk.sys.tool.encryption.token.Token;
+import com.zyj.disk.sys.tool.encryption.token.Tokens;
+import com.zyj.disk.sys.tool.encryption.xor.XOR;
 import com.zyj.disk.sys.tool.structure.HashPair;
 import com.zyj.disk.sys.tool.structure.Pair;
 import com.zyj.disk.sys.tool.structure.ResponsiveCache;
-import com.zyj.disk.sys.tool.encryption.token.Token;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -37,32 +37,43 @@ public final class GlobalVerify {
     private static final ResponsiveCache<String, Pair<String, Param>> paramCache =
             new ResponsiveCache<>(2048, 60 * 60 * 24);
 
-    public static User current;
-
     @Around("@annotation(access)")
     public Object global(ProceedingJoinPoint joinPoint, Access access) {
-        String token = null;
-        HttpServletRequest request = aopTool.getRequest();
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) return "login/login";
-        for (Cookie item : cookies) {
-            if (!"token".equals(item.getName())) continue;
-            token = item.getValue();
-            break;
-        }
-        if (token == null) return "login/login";
+        Cookie identityCookie = getCookie("identity");
+        if (identityCookie == null) return "login/login";
+        String identity = identityCookie.getValue();
+        if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
+        if (!Identity.check(XOR.decrypt(identity), access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
         try {
-            String str = Token.parse(token);
-            if (str == null) throw ClientError.TOKEN_EXPIRED;
-            JSONObject jsonObject = JSONObject.parseObject(str);
-            IdentitySet identitySet = Codec.decodingObj(jsonObject.get("identity").toString(), IdentitySet.class);
-            if (!identitySet.identity.check(access.identity())) throw ClientError.IDENTITY_VERIFY_FAIL;
-            current = Codec.decodingObj(jsonObject.get("user").toString(), User.class);
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            Cookie cookie = new Cookie("token", token);
-            cookie.setMaxAge(0);
-            aopTool.getResponse().addCookie(cookie);
+            identityCookie.setPath("/");
+            identityCookie.setMaxAge(0);
+            aopTool.getResponse().addCookie(identityCookie);
+            throw new ServerException(throwable);
+        }
+    }
+
+    @Around("@annotation(level)")
+    public Object global(ProceedingJoinPoint joinPoint, Level level) {
+        Cookie tokenCookie = getCookie("token");
+        if (tokenCookie == null) return "login/login";
+        String token = tokenCookie.getValue();
+        if ((token = Token.parse(token)) == null) throw ClientError.TOKEN_EXPIRED;
+        if (Tokens.token.get() == null) {
+            Tokens.token.set(token);
+            System.out.println(token);
+            Pair<String, String> pair = HashPair.fromPair(token);
+//        IdentitySet identitySet = Codec.decodingObj(jsonObject.get("identity").toString(), IdentitySet.class);
+//        if (!identitySet.identity.check(access.identity())) throw ClientError.IDENTITY_VERIFY_FAIL;
+//        current = Codec.decodingObj(jsonObject.get("user").toString(), User.class);
+        }
+        try {
+            return joinPoint.proceed();
+        } catch (Throwable throwable) {
+            tokenCookie.setPath("/");
+            tokenCookie.setMaxAge(0);
+            aopTool.getResponse().addCookie(tokenCookie);
             throw new ServerException(throwable);
         }
     }
@@ -97,5 +108,15 @@ public final class GlobalVerify {
         } catch (Throwable throwable) {
             throw new ServerException(throwable);
         }
+    }
+
+    private Cookie getCookie(String key) {
+        Cookie[] cookies = aopTool.getRequest().getCookies();
+        if (cookies == null) return null;
+        for (Cookie item : cookies) {
+            if (!key.equals(item.getName())) continue;
+            return item;
+        }
+        return null;
     }
 }

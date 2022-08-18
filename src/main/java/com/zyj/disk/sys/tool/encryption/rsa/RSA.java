@@ -1,7 +1,7 @@
 package com.zyj.disk.sys.tool.encryption.rsa;
 
 import com.zyj.disk.sys.tool.encryption.PrivateKey;
-import com.zyj.disk.sys.tool.encryption.xor.Codec;
+import com.zyj.disk.sys.tool.encryption.codec.Codec;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -25,11 +25,11 @@ public class RSA {
         public String encrypt(String info) {
             BigInteger bigNum = new BigInteger(info.getBytes(StandardCharsets.UTF_8)).modPow(num, product);
             byte[] bytes = bigNum.toByteArray();
-            return new String(Codec.simple(bytes, PrivateKey.OFFSET),0,bytes.length);
+            return new String(Codec.simple(bytes, PrivateKey.OFFSET), 0, bytes.length);
         }
 
         public String decrypt(String info) {
-            byte[] bytes = Codec.simple(info.getBytes(StandardCharsets.UTF_8),PrivateKey.OFFSET);
+            byte[] bytes = Codec.simple(info.getBytes(StandardCharsets.UTF_8), PrivateKey.OFFSET);
             BigInteger bigNum = new BigInteger(bytes).modPow(num, product);
             return new String(bigNum.toByteArray());
         }

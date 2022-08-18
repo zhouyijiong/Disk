@@ -54,7 +54,9 @@ function judgment(){
 			data = JSON.parse(response.data);
 			sessionStorage.token = data.token;
 			sessionStorage.access = data.access;
-			setCookie("token",data.token,7);
+			sessionStorage.identity = data.identity;
+			setCookie('token',data.token,7);
+			setCookie('identity',data.identity,7);
 			window.location.href='/management';
 		}
 	});

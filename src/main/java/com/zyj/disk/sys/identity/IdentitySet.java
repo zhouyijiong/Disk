@@ -20,4 +20,8 @@ public enum IdentitySet {
     USER(new UserIdentity());
 
     public final Identity identity;
+
+    public boolean check(IdentitySet[] identitySets) {
+        return false;
+    }
 }

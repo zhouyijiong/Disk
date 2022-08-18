@@ -1,3 +1,7 @@
+window.onload = function () {
+    getFileCategoryList();
+}
+
 function operateCategory() {
     let fileCategoryList = document.getElementById('fileCategoryList').rows;
     let data = [];
@@ -10,9 +14,27 @@ function operateCategory() {
     } else {
         let category = prompt('请输入文件类别:');
         if (!category) return;
-        ajax.post('/fileCategory/addFileCategory', {'category':category}, function (response) {
-            console.log(response);
-        });
-        console.log(category);
+        ajax.post(
+            '/fileCategory/addFileCategory',
+            {'category': category},
+            function (response) {
+                if (response.message != null) {
+                    alert(response.message);
+                    if (response.message === '身份信息过期') {
+                        delCookie('token');
+                        delCookie('identity');
+                        window.location.href = '/';
+                    }
+                }
+            });
     }
+}
+
+function getFileCategoryList() {
+    ajax.get(
+        '/fileCategory/getFileCategoryList',
+        null,
+        function (response) {
+            console.log(response);
+        })
 }

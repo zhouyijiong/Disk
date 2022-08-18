@@ -5,7 +5,7 @@ import com.zyj.disk.entity.filecategory.FileCategory;
 import com.zyj.disk.sys.tool.ClassTool;
 import com.zyj.disk.sys.tool.encryption.PrivateKey;
 import com.zyj.disk.sys.tool.encryption.md5.MD5;
-import com.zyj.disk.sys.tool.encryption.xor.Codec;
+import com.zyj.disk.sys.tool.encryption.codec.Codec;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.zyj.disk.mapper.filecategory.FileCategoryMapper;

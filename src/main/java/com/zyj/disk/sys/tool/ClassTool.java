@@ -23,8 +23,8 @@ public final class ClassTool {
         try {
             for (Field field : entity.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                if ((val = field.get(entity)) == null || "serialVersionUID".equals(field.getName())) continue;
-                wrapper.eq(field.getName(), val);
+                if ((val = field.get(entity)) == null) continue;
+                wrapper.eq(SysTool.humpToLine(field.getName()), val);
             }
             return wrapper;
         } catch (IllegalAccessException e) {

@@ -1,4 +1,4 @@
-package com.zyj.disk.sys.tool.encryption.base64;
+package com.zyj.disk.sys.tool.encryption.codec;
 
 import java.nio.charset.StandardCharsets;
 

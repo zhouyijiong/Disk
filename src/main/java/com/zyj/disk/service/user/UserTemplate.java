@@ -42,8 +42,7 @@ public interface UserTemplate {
      * @return Response<String>
      */
     default Response<String> result(User user) {
-        String token = getToken(user);
-        return result(user.getUsername(), token);
+        return result(user.getUsername(), getToken(user), getIdentity());
     }
 
     /**
@@ -87,7 +86,7 @@ public interface UserTemplate {
      * @param token    token
      * @return Response<String>
      */
-    Response<String> result(String username, String token);
+    Response<String> result(String username, String token, String identity);
 
     /**
      * 获取 Token
@@ -96,4 +95,6 @@ public interface UserTemplate {
      * @return String token
      */
     String getToken(User user);
+
+    String getIdentity();
 }

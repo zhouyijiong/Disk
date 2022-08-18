@@ -74,7 +74,6 @@ public final class DES {
         try {
             return ENCRYPT_MODE.doFinal(sourceByteArray);
         } catch (IllegalBlockSizeException | BadPaddingException e) {
-            record.error(e);
             return null;
         }
     }
@@ -89,7 +88,6 @@ public final class DES {
         try {
             return DECRYPT_MODE.doFinal(cipherByteArray);
         } catch (IllegalBlockSizeException | BadPaddingException e) {
-            record.error(e);
             return null;
         }
     }

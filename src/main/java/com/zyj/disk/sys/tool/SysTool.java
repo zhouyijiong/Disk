@@ -22,8 +22,7 @@ public final class SysTool {
         while (matcher.find()) {
             matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
         }
-        matcher.appendTail(sb);
-        return sb.toString();
+        return matcher.appendTail(sb).toString();
     }
 
     /**

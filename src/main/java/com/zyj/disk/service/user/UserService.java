@@ -8,7 +8,8 @@ import com.zyj.disk.sys.exception.server.ServerError;
 import com.zyj.disk.sys.identity.IdentitySet;
 import com.zyj.disk.sys.tool.ClassTool;
 import com.zyj.disk.sys.tool.encryption.PrivateKey;
-import com.zyj.disk.sys.tool.encryption.xor.Codec;
+import com.zyj.disk.sys.tool.encryption.codec.Codec;
+import com.zyj.disk.sys.tool.encryption.xor.XOR;
 import com.zyj.disk.sys.tool.structure.HashPair;
 import com.zyj.disk.sys.tool.structure.Pair;
 import com.zyj.disk.sys.tool.encryption.token.Token;
@@ -50,18 +51,24 @@ public final class UserService implements UserTemplate {
     }
 
     @Override
-    public Response<String> result(String username, String token) {
+    public Response<String> result(String username, String token, String identity) {
         Pair<String, String> pair = new HashPair<>();
         pair.put("access", username);
         pair.put("token", token);
+        pair.put("identity", identity);
         return Response.success(pair.toJSONString());
     }
 
     @Override
     public String getToken(User user) {
-        Token<String, Object> token = new Token<>();
-        token.put("user", Codec.codingObj(user, PrivateKey.OFFSET));
-        token.put("identity", Codec.codingObj(IdentitySet.USER, PrivateKey.OFFSET));
-        return token.generate();
+        Pair<String, String> pair = new HashPair<>();
+        pair.put("token", Codec.codingObj(user, PrivateKey.OFFSET));
+        pair.put("identity", Codec.codingObj(IdentitySet.USER, PrivateKey.OFFSET));
+        return Token.generate(pair.toJSONString());
+    }
+
+    @Override
+    public String getIdentity() {
+        return Token.generate(XOR.encrypt(IdentitySet.USER.toString()));
     }
 }

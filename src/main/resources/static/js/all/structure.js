@@ -198,7 +198,8 @@ class Ajax {
             data: formData,
             beforeSend: function (XMLHttpRequest) {
                 XMLHttpRequest.setRequestHeader('token', sessionStorage.getItem('token'));
-            }, success: success
+                XMLHttpRequest.setRequestHeader('identity', sessionStorage.getItem('identity'));
+            }, success: success//, error: error
         });
     }
 }

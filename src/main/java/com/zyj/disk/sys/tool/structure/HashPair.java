@@ -51,4 +51,19 @@ public final class HashPair<K, V> extends Pair<K, V> {
         }
         return sb.append("}").toString();
     }
+
+    public static Pair<String, String> fromPair(String str) {
+        Pair<String, String> pair = new HashPair<>();
+        int len = str.length();
+        for (int i = 0; i < len; ++i) {
+            if (str.charAt(i) == '"') {
+                int index = str.indexOf('"', i += 1);
+                String key = str.substring(i, index);
+                i = str.indexOf('"', index += 3);
+                String val = str.substring(index,i);
+                pair.put(key,val);
+            }
+        }
+        return pair;
+    }
 }

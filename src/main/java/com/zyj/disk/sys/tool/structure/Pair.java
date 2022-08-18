@@ -47,9 +47,10 @@ public abstract class Pair<K, V> {
     public abstract String toJSONString();
 
     /**
-     * @Author: ZYJ
-     * @Date: 2022/04/28
-     * @Remark: hash计算
+     * hash计算
+     *
+     * @param key key
+     * @return hash
      */
     protected int hash(K key) {
         if (key == null) return 0;
