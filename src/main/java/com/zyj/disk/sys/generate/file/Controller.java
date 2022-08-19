@@ -18,6 +18,7 @@ public class Controller extends FileType {
         String oneToUpName = oneStrToUp(sourceName);
         bos.write(packages(packageName + "controller." + lowName));
         bos.write(imports(packageName + "service." + lowName + "." + oneToUpName + "Service;"));
+        bos.write(imports(packageName + "sys.entity.BaseController;"));
         bos.write(imports("lombok.RequiredArgsConstructor;"));
         bos.write(imports("org.springframework.web.bind.annotation.RequestMapping;"));
         bos.write(imports("org.springframework.web.bind.annotation.RestController;"));
@@ -32,7 +33,7 @@ public class Controller extends FileType {
     void createBody(BufferedOutputStream bos) throws IOException {
         String oneToUpName = oneStrToUp(sourceName);
         String service = sourceName.toLowerCase() + "Service";
-        bos.write(("\npublic class " + className + "{").getBytes(StandardCharsets.UTF_8));
+        bos.write(("\npublic class " + className + " extends BaseController{").getBytes(StandardCharsets.UTF_8));
         bos.write(("\n\tprivate final " + oneToUpName + "Service " + service + ";").getBytes(StandardCharsets.UTF_8));
         bos.write("\n}".getBytes(StandardCharsets.UTF_8));
     }

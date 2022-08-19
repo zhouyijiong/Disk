@@ -12,7 +12,9 @@ import com.zyj.disk.sys.exception.client.ClientError;
 import com.zyj.disk.sys.exception.develop.DevelopError;
 import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.identity.Identity;
+import com.zyj.disk.sys.identity.IdentitySet;
 import com.zyj.disk.sys.tool.AOPTool;
+import com.zyj.disk.sys.tool.encryption.codec.Codec;
 import com.zyj.disk.sys.tool.encryption.token.Token;
 import com.zyj.disk.sys.tool.encryption.token.Tokens;
 import com.zyj.disk.sys.tool.encryption.xor.XOR;
@@ -39,12 +41,22 @@ public final class GlobalVerify {
 
     @Around("@annotation(access)")
     public Object global(ProceedingJoinPoint joinPoint, Access access) {
-        Cookie identityCookie = getCookie("identity");
+        Cookie[] cookies = aopTool.getRequest().getCookies();
+        if (cookies == null) return "login/login";
+        Cookie identityCookie = null;
+        for (Cookie item : cookies) {
+            if("identity".equals(item.getName())){
+                identityCookie = item;
+                break;
+            }
+        }
         if (identityCookie == null) return "login/login";
         String identity = identityCookie.getValue();
-        if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
-        if (!Identity.check(XOR.decrypt(identity), access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
         try {
+            if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
+            identity = XOR.decrypt(identity);
+            if (identity == null) throw ClientError.INFO_TAMPER;
+            if (!Identity.check(identity, access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             identityCookie.setPath("/");
@@ -56,24 +68,17 @@ public final class GlobalVerify {
 
     @Around("@annotation(level)")
     public Object global(ProceedingJoinPoint joinPoint, Level level) {
-        Cookie tokenCookie = getCookie("token");
-        if (tokenCookie == null) return "login/login";
-        String token = tokenCookie.getValue();
-        if ((token = Token.parse(token)) == null) throw ClientError.TOKEN_EXPIRED;
-        if (Tokens.token.get() == null) {
-            Tokens.token.set(token);
-            System.out.println(token);
-            Pair<String, String> pair = HashPair.fromPair(token);
-//        IdentitySet identitySet = Codec.decodingObj(jsonObject.get("identity").toString(), IdentitySet.class);
-//        if (!identitySet.identity.check(access.identity())) throw ClientError.IDENTITY_VERIFY_FAIL;
-//        current = Codec.decodingObj(jsonObject.get("user").toString(), User.class);
-        }
+        String token = aopTool.getRequest().getHeader("token");
         try {
+            if ((token = Token.parse(token)) == null) throw ClientError.TOKEN_EXPIRED;
+            Pair<String, String> pair = HashPair.fromPair(token);
+            if (pair == null) throw ClientError.INFO_TAMPER;
+            IdentitySet identitySet = Codec.decodingObj(pair.get("identity"), IdentitySet.class);
+            if (identitySet == null) throw ClientError.INFO_TAMPER;
+            if (!identitySet.identity.check(level.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
+            Tokens.token.set(pair.get("user"));
             return joinPoint.proceed();
         } catch (Throwable throwable) {
-            tokenCookie.setPath("/");
-            tokenCookie.setMaxAge(0);
-            aopTool.getResponse().addCookie(tokenCookie);
             throw new ServerException(throwable);
         }
     }
@@ -108,15 +113,5 @@ public final class GlobalVerify {
         } catch (Throwable throwable) {
             throw new ServerException(throwable);
         }
-    }
-
-    private Cookie getCookie(String key) {
-        Cookie[] cookies = aopTool.getRequest().getCookies();
-        if (cookies == null) return null;
-        for (Cookie item : cookies) {
-            if (!key.equals(item.getName())) continue;
-            return item;
-        }
-        return null;
     }
 }

@@ -62,8 +62,8 @@ public final class UserService implements UserTemplate {
     @Override
     public String getToken(User user) {
         Pair<String, String> pair = new HashPair<>();
-        pair.put("token", Codec.codingObj(user, PrivateKey.OFFSET));
-        pair.put("identity", Codec.codingObj(IdentitySet.USER, PrivateKey.OFFSET));
+        pair.put("user", Codec.codingObj(user));
+        pair.put("identity", Codec.codingObj(IdentitySet.USER));
         return Token.generate(pair.toJSONString());
     }
 

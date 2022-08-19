@@ -1,18 +1,26 @@
 package com.zyj.disk.sys.tool.encryption.xor;
 
+import com.zyj.disk.sys.entity.Record;
 import com.zyj.disk.sys.tool.encryption.md5.MD5;
 
 /**
  * 异或加解密(对称加密)
  */
 public final class XOR {
+    private static final Record recordr = new Record(XOR.class);
+
     public static String encrypt(String str) {
         String head = getRandomFactor();
         return getHead(head) + "-" + getBody(str, hash(head)) + "-" + getCode(hash(str));
     }
 
     public static String decrypt(String str) {
-        return decryptCore(str.split("-"));
+        try {
+            return decryptCore(str.split("-"));
+        }catch (RuntimeException e){
+            recordr.error(e);
+            return null;
+        }
     }
 
     public static String encrypt(String str, String privateKey) {
@@ -94,7 +102,7 @@ public final class XOR {
         return sb.toString();
     }
 
-    static String decryptCore(String[] ciphers){
+    static String decryptCore(String[] ciphers) {
         String str = ciphers[0];
         int hash = hash(decrypt(str, str.length() >> 1));
         str = decrypt(ciphers[1], hash);
@@ -121,7 +129,7 @@ public final class XOR {
         return new String(chars, 0, offsetLen);
     }
 
-    static String privateKeyGarble(String privateKey){
+    static String privateKeyGarble(String privateKey) {
         return MD5.encrypt(privateKey);
     }
 }

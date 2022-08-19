@@ -180,26 +180,35 @@ class Ajax {
     constructor() {
     }
 
-    get(url, formData, success) {
-        return this.send('GET', url, 'json', formData, success);
+    get(url, formData, business) {
+        return this.send('GET', url, 'json', formData, business);
     }
 
-    post(url, formData, success) {
-        return this.send('POST', url, 'json', formData, success);
+    post(url, formData, business) {
+        return this.send('POST', url, 'json', formData, business);
     };
 
-    send(type, url, dataType, formData, success) {
+    send(type, url, dataType, formData, business) {
         $.ajax({
             type: type,
             url: url,
             dataType: dataType,
-            // contentType: false,
-            // processData: false,
+            // contentType: false, processData: false,
             data: formData,
             beforeSend: function (XMLHttpRequest) {
                 XMLHttpRequest.setRequestHeader('token', sessionStorage.getItem('token'));
                 XMLHttpRequest.setRequestHeader('identity', sessionStorage.getItem('identity'));
-            }, success: success//, error: error
+            }, success: function (response) {
+                business(response);
+                if (response.message != null) {
+                    alert(response.message);
+                    if (response.message === '身份信息过期' || response.message === '信息篡改') {
+                        delCookie('identity');
+                        window.location.href = '/';
+                    }
+                }
+            }
+            //, error: error
         });
     }
 }

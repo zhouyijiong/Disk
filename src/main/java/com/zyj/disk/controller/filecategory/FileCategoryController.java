@@ -4,6 +4,7 @@ import com.zyj.disk.entity.filecategory.FileCategory;
 import com.zyj.disk.service.filecategory.FileCategoryService;
 import com.zyj.disk.sys.annotation.verify.Level;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
+import com.zyj.disk.sys.entity.BaseController;
 import com.zyj.disk.sys.entity.Response;
 import com.zyj.disk.sys.identity.IdentitySet;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/fileCategory")
 @RequiredArgsConstructor
-public class FileCategoryController {
+public class FileCategoryController extends BaseController {
     private final FileCategoryService filecategoryService;
 
     /**
@@ -29,14 +30,14 @@ public class FileCategoryController {
     @PostMapping("/addFileCategory")
     @ParamsCheck(@ParamsCheck.Param(name = "category"))
     public Response<String> addFileCategory(String category) {
-        filecategoryService.addFileCategory(-1, category);//GlobalVerify.current.getId()
+        filecategoryService.addFileCategory(super.init().getId(), category);
         return Response.success(null);
     }
 
     @Level(IdentitySet.USER)
     @GetMapping("/getFileCategoryList")
     public Response<List<FileCategory>> getFileCategoryList() {
-        List<FileCategory> fileCategoryList = filecategoryService.getFileCategoryList(-1);//GlobalVerify.current.getId()
+        List<FileCategory> fileCategoryList = filecategoryService.getFileCategoryList(super.init().getId());
         filecategoryService.decodingFileCategory(fileCategoryList);
         return Response.success(fileCategoryList);
     }

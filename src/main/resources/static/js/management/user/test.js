@@ -17,16 +17,8 @@ function operateCategory() {
         ajax.post(
             '/fileCategory/addFileCategory',
             {'category': category},
-            function (response) {
-                if (response.message != null) {
-                    alert(response.message);
-                    if (response.message === '身份信息过期') {
-                        delCookie('token');
-                        delCookie('identity');
-                        window.location.href = '/';
-                    }
-                }
-            });
+            () => {}
+        );
     }
 }
 
@@ -34,7 +26,6 @@ function getFileCategoryList() {
     ajax.get(
         '/fileCategory/getFileCategoryList',
         null,
-        function (response) {
-            console.log(response);
-        })
+        () => {}
+    );
 }

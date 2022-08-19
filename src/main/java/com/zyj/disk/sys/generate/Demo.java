@@ -1,7 +1,5 @@
 package com.zyj.disk.sys.generate;
 
-import java.io.IOException;
-
 import com.zyj.disk.sys.annotation.GenerateParam;
 import lombok.Getter;
 
@@ -16,7 +14,7 @@ public final class Demo {
     @GenerateParam(length = "(40)")
     String categoryCode;
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException, IOException {
-        new Generate(Demo.class, "fileCategory").start(FileTypeSet.sql());
+    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+        new Generate(Demo.class, "fileBategory").start(FileTypeSet.controller());
     }
 }
