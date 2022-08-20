@@ -54,8 +54,7 @@ public final class GlobalVerify {
         String identity = identityCookie.getValue();
         try {
             if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
-            identity = XOR.decrypt(identity);
-            if (identity == null) throw ClientError.INFO_TAMPER;
+            if ((identity = XOR.decrypt(identity)) == null) throw ClientError.INFO_TAMPER;
             if (!Identity.check(identity, access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
             return joinPoint.proceed();
         } catch (Throwable throwable) {
@@ -70,6 +69,7 @@ public final class GlobalVerify {
     public Object global(ProceedingJoinPoint joinPoint, Level level) {
         String token = aopTool.getRequest().getHeader("token");
         try {
+            if(token == null) throw ClientError.TOKEN_NOT_EXISTS;
             if ((token = Token.parse(token)) == null) throw ClientError.TOKEN_EXPIRED;
             Pair<String, String> pair = HashPair.fromPair(token);
             if (pair == null) throw ClientError.INFO_TAMPER;

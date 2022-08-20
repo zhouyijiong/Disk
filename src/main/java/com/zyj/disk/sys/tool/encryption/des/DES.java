@@ -2,7 +2,6 @@ package com.zyj.disk.sys.tool.encryption.des;
 
 import com.zyj.disk.sys.entity.Record;
 import com.zyj.disk.sys.exception.server.ServerError;
-import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.tool.encryption.PrivateKey;
 import com.zyj.disk.sys.tool.encryption.rsa.RsaSet;
 
@@ -25,6 +24,7 @@ public final class DES {
     private static final Cipher ENCRYPT_MODE;
     private static final Cipher DECRYPT_MODE;
     private static final Record record = new Record(DES.class);
+
     static {
         try {
             KeyGenerator generator = KeyGenerator.getInstance("DES");
@@ -37,7 +37,7 @@ public final class DES {
             DECRYPT_MODE.init(Cipher.DECRYPT_MODE, key);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
             record.error(e);
-            throw new ServerException(e.toString());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -61,7 +61,7 @@ public final class DES {
      */
     public static String decrypt(String cipher) {
         byte[] bytes = decrypt(new BigInteger(cipher, 32).toByteArray());
-        return bytes == null ? null : new String(bytes);
+        return bytes == null ? null : new String(bytes, 0, bytes.length, StandardCharsets.UTF_8);
     }
 
     /**

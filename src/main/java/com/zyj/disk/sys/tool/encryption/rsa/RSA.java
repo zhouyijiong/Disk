@@ -25,13 +25,13 @@ public class RSA {
         public String encrypt(String info) {
             BigInteger bigNum = new BigInteger(info.getBytes(StandardCharsets.UTF_8)).modPow(num, product);
             byte[] bytes = bigNum.toByteArray();
-            return new String(Codec.simple(bytes, PrivateKey.OFFSET), 0, bytes.length);
+            return new String(Codec.simple(bytes, PrivateKey.OFFSET), 0, bytes.length, StandardCharsets.UTF_8);
         }
 
         public String decrypt(String info) {
             byte[] bytes = Codec.simple(info.getBytes(StandardCharsets.UTF_8), PrivateKey.OFFSET);
             BigInteger bigNum = new BigInteger(bytes).modPow(num, product);
-            return new String(bigNum.toByteArray());
+            return new String(bigNum.toByteArray(), StandardCharsets.UTF_8);
         }
     }
 

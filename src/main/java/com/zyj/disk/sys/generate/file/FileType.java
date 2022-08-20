@@ -2,26 +2,41 @@ package com.zyj.disk.sys.generate.file;
 
 import com.zyj.disk.sys.generate.FieldInfo;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public abstract class FileType{
 	protected final String type;
 	protected final String className;
-	protected static String sourceName;
-	protected static List<FieldInfo> fieldInfos;
+	static String sourceName;
+	static List<FieldInfo> fieldInfos;
 
 	protected FileType(String type){
 		this.type = type;
 		this.className = oneStrToUp(sourceName) + ("Entity".equals(type) ? "" : type);
 	}
 
-	public static void init(String name,List<FieldInfo> fieldInfos){
+	public static void init(String name,List<FieldInfo> fieldInfos) throws IOException, ClassNotFoundException {
 		FileType.sourceName = name;
-		FileType.fieldInfos = fieldInfos;
+		FileType.fieldInfos = deepCopy(fieldInfos);
+	}
+
+	public static <T> List<T> deepCopy(List<T> src) throws IOException, ClassNotFoundException {
+		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+		ObjectOutputStream out = new ObjectOutputStream(byteOut);
+		out.writeObject(src);
+		ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
+		ObjectInputStream in = new ObjectInputStream(byteIn);
+		@SuppressWarnings("unchecked")
+		List<T> dest = (List<T>) in.readObject();
+		return dest;
 	}
 
 	public void create(String path){

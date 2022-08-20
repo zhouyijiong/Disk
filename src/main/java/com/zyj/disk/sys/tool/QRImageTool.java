@@ -103,15 +103,8 @@ public final class QRImageTool {
         BufferedImage bufferedImage = graphicsConfiguration.createCompatibleImage(
                 image.getWidth(null),
                 image.getHeight(null),
-                Transparency.OPAQUE
+                BufferedImage.TYPE_INT_RGB
         );
-        if (bufferedImage == null) {
-            bufferedImage = new BufferedImage(
-                    image.getWidth(null),
-                    image.getHeight(null),
-                    BufferedImage.TYPE_INT_RGB
-            );
-        }
         Graphics graphics = bufferedImage.createGraphics();
         graphics.drawImage(image, 0, 0, null);
         graphics.dispose();

@@ -7,6 +7,6 @@ import java.nio.charset.StandardCharsets;
  */
 public class StringBase64 extends AbstractBase64 {
     public static String encodeToString(String str) {
-        return new String(encode(str.getBytes(StandardCharsets.UTF_8)));
+        return new String(encode(str.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
     }
 }

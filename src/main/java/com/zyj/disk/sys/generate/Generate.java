@@ -1,5 +1,6 @@
 package com.zyj.disk.sys.generate;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public final class Generate {
     private final String path;
     private static final List<FieldInfo> fieldInfos = new ArrayList<>();
 
-    public Generate(Class<?> clazz, String name) throws InstantiationException, IllegalAccessException {
+    public Generate(Class<?> clazz, String name) throws InstantiationException, IllegalAccessException, IOException, ClassNotFoundException {
         this.path = init(clazz);
         FileType.init(FileType.oneStrToUp(name), fieldInfos);
     }

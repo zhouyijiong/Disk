@@ -202,7 +202,7 @@ class Ajax {
                 business(response);
                 if (response.message != null) {
                     alert(response.message);
-                    if (response.message === '身份信息过期' || response.message === '信息篡改') {
+                    if (response.code > 10000) {
                         delCookie('identity');
                         window.location.href = '/';
                     }
@@ -210,49 +210,5 @@ class Ajax {
             }
             //, error: error
         });
-    }
-}
-
-/**
- * K-Value
- * @Date: 2022/04/25
- */
-class Pair extends Parent {
-    constructor(key, val) {
-        super();
-        this.key = new Item(key);
-        this.val = new Item(val);
-    }
-
-    toString() {
-        return '{' + this.key.toString() + ':' + this.val.toString() + '}';
-    }
-
-    hashcode() {
-        return super.hashcode(this.toString());
-    }
-}
-
-class Item extends Parent {
-    constructor(item) {
-        super(item);
-        this.item = item;
-    }
-
-    set(item) {
-        super.param_check(item);
-        this.item = item;
-    }
-
-    get() {
-        return this.item;
-    }
-
-    setType(type) {
-        super.type = type;
-    }
-
-    toString() {
-        return String(this.item);
     }
 }

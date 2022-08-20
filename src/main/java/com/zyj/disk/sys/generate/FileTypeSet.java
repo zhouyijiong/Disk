@@ -6,12 +6,6 @@ import com.zyj.disk.sys.generate.file.*;
  * fileType 模型
  */
 public final class FileTypeSet {
-    public FileType fileType;
-
-    private FileTypeSet(FileType fileType) {
-        this.fileType = fileType;
-    }
-
     public static FileType entity() {
         return new Entity();
     }

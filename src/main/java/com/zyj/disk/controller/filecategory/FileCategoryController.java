@@ -1,6 +1,5 @@
 package com.zyj.disk.controller.filecategory;
 
-import com.zyj.disk.entity.filecategory.FileCategory;
 import com.zyj.disk.service.filecategory.FileCategoryService;
 import com.zyj.disk.sys.annotation.verify.Level;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
@@ -36,9 +35,11 @@ public class FileCategoryController extends BaseController {
 
     @Level(IdentitySet.USER)
     @GetMapping("/getFileCategoryList")
-    public Response<List<FileCategory>> getFileCategoryList() {
-        List<FileCategory> fileCategoryList = filecategoryService.getFileCategoryList(super.init().getId());
-        filecategoryService.decodingFileCategory(fileCategoryList);
-        return Response.success(fileCategoryList);
+    public Response<List<String>> getFileCategoryList() {
+        return Response.success(
+                filecategoryService.decodingFileCategory(
+                        filecategoryService.getFileCategoryList(super.init().getId())
+                )
+        );
     }
 }

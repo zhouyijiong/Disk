@@ -3,6 +3,7 @@ package com.zyj.disk.service.filecategory;
 import com.zyj.disk.entity.filecategory.FileCategory;
 import com.zyj.disk.sys.exception.server.ServerError;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +19,10 @@ public interface FileCategoryTemplate {
         return getFileCategoryList(FileCategory.noArgs().userHash(codingUserId(userId)));
     }
 
-    default void decodingFileCategory(List<FileCategory> fileCategoryList) {
-        fileCategoryList.forEach(item -> item.categoryCode(codingCategory(item.getCategoryCode())));
+    default List<String> decodingFileCategory(List<FileCategory> fileCategoryList) {
+        List<String> categoryList = new ArrayList<>(fileCategoryList.size());
+        fileCategoryList.forEach(item -> categoryList.add(codingCategory(item.getCategoryCode())));
+        return categoryList;
     }
 
     String codingUserId(Integer userId);

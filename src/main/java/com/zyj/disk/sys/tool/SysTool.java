@@ -31,7 +31,7 @@ public final class SysTool {
      * @param str 转换内容
      * @return 转换结果
      */
-    public static String LineToHump(String str) {
+    public static String lineToHump(String str) {
         Matcher matcher = linePattern.matcher(str);
         StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
