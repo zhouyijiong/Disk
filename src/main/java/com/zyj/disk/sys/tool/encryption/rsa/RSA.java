@@ -1,7 +1,6 @@
 package com.zyj.disk.sys.tool.encryption.rsa;
 
-import com.zyj.disk.sys.tool.encryption.PrivateKey;
-import com.zyj.disk.sys.tool.encryption.codec.Codec;
+import com.zyj.disk.sys.tool.encryption.codec.ByteArrayBase64;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -23,15 +22,15 @@ public class RSA {
         private final BigInteger product;
 
         public String encrypt(String info) {
-            BigInteger bigNum = new BigInteger(info.getBytes(StandardCharsets.UTF_8)).modPow(num, product);
-            byte[] bytes = bigNum.toByteArray();
-            return new String(Codec.simple(bytes, PrivateKey.OFFSET), 0, bytes.length, StandardCharsets.UTF_8);
+            byte[] bytes = info.getBytes(StandardCharsets.UTF_8);
+            bytes = new BigInteger(bytes).modPow(num, product).toByteArray();
+            return ByteArrayBase64.encodeToString(bytes);
         }
 
         public String decrypt(String info) {
-            byte[] bytes = Codec.simple(info.getBytes(StandardCharsets.UTF_8), PrivateKey.OFFSET);
-            BigInteger bigNum = new BigInteger(bytes).modPow(num, product);
-            return new String(bigNum.toByteArray(), StandardCharsets.UTF_8);
+            byte[] bytes = info.getBytes(StandardCharsets.UTF_8);
+            bytes = new BigInteger(ByteArrayBase64.decode(bytes)).modPow(num, product).toByteArray();
+            return new String(bytes, StandardCharsets.UTF_8);
         }
     }
 
@@ -56,7 +55,7 @@ public class RSA {
     }
 
     @AllArgsConstructor
-    static class Result {
+    static final class Result {
         public final BigInteger R;
         public final BigInteger N1;
         public final BigInteger N2;
