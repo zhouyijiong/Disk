@@ -17,8 +17,8 @@ function operateCategory() {
         ajax.post(
             '/fileCategory/addFileCategory',
             {'category': category},
-            () => {
-                getFileCategoryList();
+            (response) => {
+                if(response.message == null) getFileCategoryList();
             }
         );
     }

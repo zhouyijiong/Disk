@@ -56,10 +56,10 @@ public final class GlobalVerify {
         }
         if (identityCookie == null) return "login/login";
         String identity = identityCookie.getValue();
-        if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
-        if ((identity = XOR.decrypt(identity)) == null) throw ClientError.INFO_TAMPER;
-        if (!Identity.check(identity, access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
         try {
+            if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
+            if ((identity = XOR.decrypt(identity)) == null) throw ClientError.INFO_TAMPER;
+            if (!Identity.check(identity, access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             identityCookie.setPath("/");
@@ -72,9 +72,9 @@ public final class GlobalVerify {
     @Around("@annotation(level)")
     public Object global(ProceedingJoinPoint joinPoint, Level level) {
         String token = aopTool.getRequest().getHeader("token");
+        if (token == null) throw ClientError.TOKEN_NOT_EXISTS;
+        if ((token = Token.parse(token)) == null) throw ClientError.TOKEN_EXPIRED;
         try {
-            if (token == null) throw ClientError.TOKEN_NOT_EXISTS;
-            if ((token = Token.parse(token)) == null) throw ClientError.TOKEN_EXPIRED;
             Pair<String, String> pair = Pair.fromPair(token);
             if (pair == null) throw ClientError.INFO_TAMPER;
             IdentitySet identitySet = Codec.decodingObj(pair.get("identity"), IdentitySet.class);
@@ -104,14 +104,14 @@ public final class GlobalVerify {
             record.info(params);
             throw ClientError.TOKEN_EXPIRED;
         }
-        joinPoint.getArgs()[1] = "password";
         Pair<String, String> pair = Pair.fromPair(Base64.decodeToString(params));
         if (pair == null) throw ClientError.INFO_TAMPER;
+        int index = -1;
         for (Parameter parameter : method.getParameters()) {
             String name = parameter.getName();
             Param param = methodParamsCheck.get(name);
             String value = pair.get(name);
-            joinPoint.getArgs()[0] = value;
+            joinPoint.getArgs()[++index] = value;
             if (param == null) continue;
             if (param.required() && value == null)
                 throw DevelopError.PARAM_REQUIRED.addArgs(name);
