@@ -20,4 +20,8 @@ public final class Record {
     public void error(Exception e) {
         logger.error("method:{},error:{}", Thread.currentThread().getStackTrace()[2].getMethodName(), e.toString());
     }
+
+    public void info(String info) {
+        logger.info(info);
+    }
 }

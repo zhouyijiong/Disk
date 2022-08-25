@@ -181,11 +181,15 @@ class Ajax {
     }
 
     get(url, formData, business) {
-        return this.send('GET', url, 'json', formData, business);
+        return this.send('GET', url, 'json', {'params': rsa(base64_encode_obj(formData))}, business);
     }
 
     post(url, formData, business) {
-        return this.send('POST', url, 'json', formData, business);
+        return this.send('POST', url, 'json', {'params': rsa(base64_encode_obj(formData))}, business);
+    };
+
+    base(type, url, formData, business) {
+        return this.send(type, url, 'json', formData, business);
     };
 
     send(type, url, dataType, formData, business) {
@@ -203,6 +207,7 @@ class Ajax {
                 if (response.message != null) {
                     alert(response.message);
                     if (response.code > 10000) {
+                        sessionStorage.clear();
                         delCookie('identity');
                         window.location.href = '/';
                     }

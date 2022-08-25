@@ -1,11 +1,14 @@
 package com.zyj.disk.sys.tool.structure;
 
+import com.zyj.disk.sys.entity.Record;
+
 /**
  * 链表键值对抽象类
  */
 public abstract class Pair<K, V> {
     protected Node<K, V> node;
-    protected transient int size;
+    public transient int size;
+    private static final Record record = new Record(HashPair.class);
 
     /**
      * 链表键值对
@@ -56,5 +59,25 @@ public abstract class Pair<K, V> {
         if (key == null) return 0;
         int hash = key.hashCode();
         return hash ^ (hash >>> 16);
+    }
+
+    public static Pair<String, String> fromPair(String str) {
+        Pair<String, String> pair = new HashPair<>();
+        int len = str.length();
+        try {
+            for (int i = 0; i < len; ++i) {
+                if (str.charAt(i) == '"') {
+                    int index = str.indexOf('"', i += 1);
+                    String key = str.substring(i, index);
+                    i = str.indexOf('"', index += 3);
+                    String val = str.substring(index, i);
+                    pair.put(key, val);
+                }
+            }
+            return pair;
+        } catch (RuntimeException e) {
+            record.error(e);
+            return null;
+        }
     }
 }

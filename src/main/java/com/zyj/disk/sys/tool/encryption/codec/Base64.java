@@ -1,13 +1,13 @@
 package com.zyj.disk.sys.tool.encryption.codec;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
  * base64
  */
-public class AbstractBase64 {
+public class Base64 {
     static final int[] INV = new int[256];
-
     static final char[] CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/".toCharArray();
 
     static {
@@ -66,5 +66,19 @@ public class AbstractBase64 {
             for (int r = 16; d < len; r -= 8) dest[d++] = (byte) (i >> r);
         }
         return dest;
+    }
+
+    public static String decodeToString(String str) {
+        return new String(decode(str.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+    }
+
+    public static String encodeToString(char[] chars) {
+        return new String(encode(toBytes(chars)), StandardCharsets.UTF_8);
+    }
+
+    private static byte[] toBytes(char[] chars) {
+        byte[] temp = new byte[chars.length];
+        for (int i = 0; i < temp.length; ++i) temp[i] = (byte) chars[i];
+        return temp;
     }
 }

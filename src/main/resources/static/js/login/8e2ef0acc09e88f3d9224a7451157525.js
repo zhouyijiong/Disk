@@ -1,6 +1,16 @@
 let login_status = 0;
 let login_url = '/user/login';
 window.onload = function () {
+    if (!sessionStorage.product) {
+        ajax.base(
+            'GET',
+            '/config/getPublicKey',
+            null,
+            (response) => {
+                sessionStorage.product = response.data;
+            }
+        );
+    }
     document.getElementById('usm').focus();
 }
 

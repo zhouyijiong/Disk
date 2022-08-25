@@ -24,15 +24,27 @@ function getBytes(str){
     }
     return new Int8Array(bytes);
 }
-function byteToBigInt(bytes){
+function byteToInt(bytes){
     bytes = bytes.reverse();
     let result = 0n;
-    for(let i=0,len=bytes.length;i<len;++i){
-        result |= BigInt(bytes[i] & 0xff) << BigInt(i*8);
-    }
+    for(let i=0,len=bytes.length;i<len;++i) result|=BigInt(bytes[i]&0xff)<<BigInt(i*8);
     return result;
 }
-function fastModPow(g,x,p){
+function intToByte_Small(num){
+    let b=1,c=-1,bytes=[];
+    while(b>0){
+        b=num>>BigInt(++c*8)&255n;
+        if(b===0n) break;
+        bytes.push(Number(b));
+    }
+    return new Int8Array(bytes.reverse());
+}
+function intToByte_Big(num,len){
+    let bytes=[];
+    for(let i=len-1;i>=0;--i) bytes.push(Number(num>>BigInt(i*8)&255n));
+    return new Int8Array(bytes);
+}
+function modPow(g,x,p){
     let r=1n,c=g%p;
     while(x>0){
         if(x%2n===1n) r=r*c%p;
@@ -42,13 +54,7 @@ function fastModPow(g,x,p){
     return r;
 }
 function rsa(str){
-    let bytes = getBytes(str);
-    let num = byteToBigInt(bytes);
-    return fastModPow(num,65537n,BigInt(sessionStorage.product)).toString();
-    // sessionStorage.only
-    // BigInteger bigNum = new BigInteger(info.getBytes(StandardCharsets.UTF_8)).modPow(num, product);
-    // byte[] bytes = bigNum.toByteArray();
-    // return new String(Codec.simple(bytes, PrivateKey.OFFSET), 0, bytes.length, StandardCharsets.UTF_8);
+    return base64_encode(intToByte_Big(modPow(byteToInt(getBytes(str)),65537n,BigInt(sessionStorage.product)),257));
 }
 const CHARS='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 function base64_encode(bytes){
@@ -74,10 +80,11 @@ function base64_encode(bytes){
         dest[cnt-1]=tag;
     }
     let result = [];
-    dest.forEach(item=>{
-        result.push(String.fromCharCode(item));
-    });
+    dest.forEach(item=>result.push(String.fromCharCode(item)));
     return result.join('');
+}
+function base64_encode_obj(obj){
+    return base64_encode(getBytes(JSON.stringify(obj)))
 }
 // function getBytesCore(chars,index,len){
 //     let var6 = 0;

@@ -48,6 +48,8 @@ public class UseController {
 			@Param(name = "password", regex = Rules.NUM_CHAR_LOW_32)
 	})
 	public Response<String> login(String username, String password) {
+		System.out.println("username: " + username);
+		System.out.println("password: " + password);
 		User user = userService.login(username, password);
 		return userService.result(user);
 	}

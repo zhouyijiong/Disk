@@ -1,6 +1,6 @@
 package com.zyj.disk.sys.tool.encryption.rsa;
 
-import com.zyj.disk.sys.tool.encryption.codec.ByteArrayBase64;
+import com.zyj.disk.sys.tool.encryption.codec.Base64;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -24,12 +24,12 @@ public class RSA {
         public String encrypt(String info) {
             byte[] bytes = info.getBytes(StandardCharsets.UTF_8);
             bytes = new BigInteger(bytes).modPow(num, product).toByteArray();
-            return ByteArrayBase64.encodeToString(bytes);
+            return new String(Base64.encode(bytes), StandardCharsets.UTF_8);
         }
 
         public String decrypt(String info) {
             byte[] bytes = info.getBytes(StandardCharsets.UTF_8);
-            bytes = new BigInteger(ByteArrayBase64.decode(bytes)).modPow(num, product).toByteArray();
+            bytes = new BigInteger(Base64.decode(bytes)).modPow(num, product).toByteArray();
             return new String(bytes, StandardCharsets.UTF_8);
         }
     }

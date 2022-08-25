@@ -7,6 +7,7 @@ import com.zyj.disk.sys.annotation.verify.Level;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
 import com.zyj.disk.sys.annotation.verify.Access;
+import com.zyj.disk.sys.entity.Record;
 import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.client.ClientError;
 import com.zyj.disk.sys.exception.develop.DevelopError;
@@ -14,7 +15,9 @@ import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.identity.Identity;
 import com.zyj.disk.sys.identity.IdentitySet;
 import com.zyj.disk.sys.tool.AOPTool;
+import com.zyj.disk.sys.tool.encryption.codec.Base64;
 import com.zyj.disk.sys.tool.encryption.codec.Codec;
+import com.zyj.disk.sys.tool.encryption.rsa.RsaSet;
 import com.zyj.disk.sys.tool.encryption.token.Token;
 import com.zyj.disk.sys.tool.encryption.token.Tokens;
 import com.zyj.disk.sys.tool.encryption.xor.XOR;
@@ -35,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public final class GlobalVerify {
     private final AOPTool aopTool;
+    private static final Record record = new Record(GlobalVerify.class);
 
     private static final ResponsiveCache<String, Pair<String, Param>> paramCache =
             new ResponsiveCache<>(2048, 60 * 60 * 24);
@@ -45,17 +49,17 @@ public final class GlobalVerify {
         if (cookies == null) return "login/login";
         Cookie identityCookie = null;
         for (Cookie item : cookies) {
-            if("identity".equals(item.getName())){
+            if ("identity".equals(item.getName())) {
                 identityCookie = item;
                 break;
             }
         }
         if (identityCookie == null) return "login/login";
         String identity = identityCookie.getValue();
+        if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
+        if ((identity = XOR.decrypt(identity)) == null) throw ClientError.INFO_TAMPER;
+        if (!Identity.check(identity, access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
         try {
-            if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
-            if ((identity = XOR.decrypt(identity)) == null) throw ClientError.INFO_TAMPER;
-            if (!Identity.check(identity, access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
             return joinPoint.proceed();
         } catch (Throwable throwable) {
             identityCookie.setPath("/");
@@ -69,9 +73,9 @@ public final class GlobalVerify {
     public Object global(ProceedingJoinPoint joinPoint, Level level) {
         String token = aopTool.getRequest().getHeader("token");
         try {
-            if(token == null) throw ClientError.TOKEN_NOT_EXISTS;
+            if (token == null) throw ClientError.TOKEN_NOT_EXISTS;
             if ((token = Token.parse(token)) == null) throw ClientError.TOKEN_EXPIRED;
-            Pair<String, String> pair = HashPair.fromPair(token);
+            Pair<String, String> pair = Pair.fromPair(token);
             if (pair == null) throw ClientError.INFO_TAMPER;
             IdentitySet identitySet = Codec.decodingObj(pair.get("identity"), IdentitySet.class);
             if (identitySet == null) throw ClientError.INFO_TAMPER;
@@ -95,11 +99,20 @@ public final class GlobalVerify {
             paramCache.put(key, methodParamsCheck, 129600);
         }
         HttpServletRequest request = aopTool.getRequest();
+        String params = RsaSet.REQUEST.RSA.SK.decrypt(request.getParameter("params"));
+        if (!Rules.BASE64.rules.matcher(params).matches()) {
+            record.info(params);
+            throw ClientError.TOKEN_EXPIRED;
+        }
+        joinPoint.getArgs()[1] = "password";
+        Pair<String, String> pair = Pair.fromPair(Base64.decodeToString(params));
+        if (pair == null) throw ClientError.INFO_TAMPER;
         for (Parameter parameter : method.getParameters()) {
             String name = parameter.getName();
             Param param = methodParamsCheck.get(name);
+            String value = pair.get(name);
+            joinPoint.getArgs()[0] = value;
             if (param == null) continue;
-            String value = request.getParameter(name);
             if (param.required() && value == null)
                 throw DevelopError.PARAM_REQUIRED.addArgs(name);
             if (param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
@@ -109,7 +122,7 @@ public final class GlobalVerify {
                 throw DevelopError.PARAM_LENGTH_ERROR.addArgs(name, value);
         }
         try {
-            return joinPoint.proceed();
+            return joinPoint.proceed(joinPoint.getArgs());
         } catch (Throwable throwable) {
             throw new ServerException(throwable);
         }
