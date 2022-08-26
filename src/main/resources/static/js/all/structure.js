@@ -201,7 +201,6 @@ class Ajax {
             data: formData,
             beforeSend: function (XMLHttpRequest) {
                 XMLHttpRequest.setRequestHeader('token', sessionStorage.getItem('token'));
-                XMLHttpRequest.setRequestHeader('identity', sessionStorage.getItem('identity'));
             }, success: function (response) {
                 business(response);
                 if (response.message != null) {

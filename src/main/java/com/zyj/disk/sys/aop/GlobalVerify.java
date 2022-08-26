@@ -44,7 +44,7 @@ public final class GlobalVerify {
             new ResponsiveCache<>(2048, 60 * 60 * 24);
 
     @Around("@annotation(access)")
-    public Object global(ProceedingJoinPoint joinPoint, Access access) {
+    public Object global(ProceedingJoinPoint pjp, Access access) {
         Cookie[] cookies = aopTool.getRequest().getCookies();
         if (cookies == null) return "login/login";
         Cookie identityCookie = null;
@@ -60,7 +60,7 @@ public final class GlobalVerify {
             if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
             if ((identity = XOR.decrypt(identity)) == null) throw ClientError.INFO_TAMPER;
             if (!Identity.check(identity, access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
-            return joinPoint.proceed();
+            return access.path();
         } catch (Throwable throwable) {
             identityCookie.setPath("/");
             identityCookie.setMaxAge(0);
@@ -70,7 +70,7 @@ public final class GlobalVerify {
     }
 
     @Around("@annotation(level)")
-    public Object global(ProceedingJoinPoint joinPoint, Level level) {
+    public Object global(ProceedingJoinPoint pjp, Level level) {
         String token = aopTool.getRequest().getHeader("token");
         if (token == null) throw ClientError.TOKEN_NOT_EXISTS;
         if ((token = Token.parse(token)) == null) throw ClientError.TOKEN_EXPIRED;
@@ -81,7 +81,7 @@ public final class GlobalVerify {
             if (identitySet == null) throw ClientError.INFO_TAMPER;
             if (!identitySet.identity.check(level.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
             Tokens.token.set(pair.get("user"));
-            return joinPoint.proceed();
+            return pjp.proceed();
         } catch (Throwable throwable) {
             throw new ServerException(throwable);
         }
@@ -107,14 +107,14 @@ public final class GlobalVerify {
         Pair<String, String> pair = Pair.fromPair(Base64.decodeToString(params));
         if (pair == null) throw ClientError.INFO_TAMPER;
         int index = -1;
+        Object[] args = joinPoint.getArgs();
         for (Parameter parameter : method.getParameters()) {
             String name = parameter.getName();
-            Param param = methodParamsCheck.get(name);
             String value = pair.get(name);
-            joinPoint.getArgs()[++index] = value;
+            args[++index] = value;
+            Param param = methodParamsCheck.get(name);
             if (param == null) continue;
-            if (param.required() && value == null)
-                throw DevelopError.PARAM_REQUIRED.addArgs(name);
+            if (param.required() && value == null) throw DevelopError.PARAM_REQUIRED.addArgs(name);
             if (param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
                 throw DevelopError.PARAM_REGEX_VERIFY_FAIL.addArgs(name, value);
             int length = param.length();
@@ -122,7 +122,7 @@ public final class GlobalVerify {
                 throw DevelopError.PARAM_LENGTH_ERROR.addArgs(name, value);
         }
         try {
-            return joinPoint.proceed(joinPoint.getArgs());
+            return joinPoint.proceed(args);
         } catch (Throwable throwable) {
             throw new ServerException(throwable);
         }

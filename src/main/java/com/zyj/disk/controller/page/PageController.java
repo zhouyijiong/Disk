@@ -2,31 +2,31 @@ package com.zyj.disk.controller.page;
 
 import com.zyj.disk.sys.annotation.verify.Access;
 import com.zyj.disk.sys.identity.IdentitySet;
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * 页面控制器
  */
+@Mapper
 @Controller
-public class PageController {
-	private static final String USER = "management/user/test";//b78ba6e0a8460310bc11b9daaa826a2c
+public interface PageController {
+    /**
+     * 访问首页
+     */
+    @GetMapping
+    default String index() {
+        return "index/index";
+    }
 
-	/**
-	 * 访问首页
-	 */
-	@GetMapping
-	public String index() {
-		return "index/index";
-	}
-
-	/**
-	 * 访问用户后台
-	 */
-	@Access(IdentitySet.USER)
-	@GetMapping("/management")
-	public String management() {
-		//TODO 取消方法内容，切面解耦动态访问，附加：置换成接口
-		return USER;
-	}
+    /**
+     * 访问用户后台
+     */
+    @GetMapping("/management")
+    @Access(
+            value = IdentitySet.USER,
+            path = "management/user/test"
+    )
+    String management();
 }

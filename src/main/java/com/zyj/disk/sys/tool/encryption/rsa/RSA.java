@@ -11,7 +11,7 @@ import java.util.Random;
 /**
  * RSA 非对称加密
  */
-public class RSA {
+public final class RSA {
     public final Key PK;
     public final Key SK;
 
