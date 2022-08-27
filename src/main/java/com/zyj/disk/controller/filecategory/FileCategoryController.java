@@ -5,7 +5,7 @@ import com.zyj.disk.sys.annotation.verify.Level;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.entity.BaseController;
 import com.zyj.disk.sys.entity.Response;
-import com.zyj.disk.sys.identity.IdentitySet;
+import com.zyj.disk.sys.entity.IdentitySet;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +28,9 @@ public class FileCategoryController extends BaseController {
     @Level(IdentitySet.USER)
     @PostMapping("/addFileCategory")
     @ParamsCheck(@ParamsCheck.Param(name = "category"))
-    public Response<String> addFileCategory(String category) {
+    public Response<Void> addFileCategory(String category) {
         filecategoryService.addFileCategory(super.init().getId(), category);
-        return Response.success(null);
+        return SUCCESS;
     }
 
     @Level(IdentitySet.USER)

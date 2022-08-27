@@ -12,8 +12,7 @@ import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.client.ClientError;
 import com.zyj.disk.sys.exception.develop.DevelopError;
 import com.zyj.disk.sys.exception.server.ServerException;
-import com.zyj.disk.sys.identity.Identity;
-import com.zyj.disk.sys.identity.IdentitySet;
+import com.zyj.disk.sys.entity.IdentitySet;
 import com.zyj.disk.sys.tool.AOPTool;
 import com.zyj.disk.sys.tool.encryption.codec.Base64;
 import com.zyj.disk.sys.tool.encryption.codec.Codec;
@@ -45,6 +44,7 @@ public final class GlobalVerify {
 
     @Around("@annotation(access)")
     public Object global(ProceedingJoinPoint pjp, Access access) {
+        if (IdentitySet.VISITOR.checkOnly(access.identity())) return access.path();
         Cookie[] cookies = aopTool.getRequest().getCookies();
         if (cookies == null) return "login/login";
         Cookie identityCookie = null;
@@ -59,7 +59,7 @@ public final class GlobalVerify {
         try {
             if ((identity = Token.parse(identity)) == null) throw ClientError.TOKEN_EXPIRED;
             if ((identity = XOR.decrypt(identity)) == null) throw ClientError.INFO_TAMPER;
-            if (!Identity.check(identity, access.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
+            if (!IdentitySet.check(identity, access.identity())) throw ClientError.IDENTITY_VERIFY_FAIL;
             return access.path();
         } catch (Throwable throwable) {
             identityCookie.setPath("/");
@@ -79,7 +79,7 @@ public final class GlobalVerify {
             if (pair == null) throw ClientError.INFO_TAMPER;
             IdentitySet identitySet = Codec.decodingObj(pair.get("identity"), IdentitySet.class);
             if (identitySet == null) throw ClientError.INFO_TAMPER;
-            if (!identitySet.identity.check(level.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
+            if (!identitySet.check(level.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
             Tokens.token.set(pair.get("user"));
             return pjp.proceed();
         } catch (Throwable throwable) {
@@ -88,9 +88,9 @@ public final class GlobalVerify {
     }
 
     @Around("@annotation(paramsCheck)")
-    public Object global(ProceedingJoinPoint joinPoint, ParamsCheck paramsCheck) {
-        Method method = aopTool.getMethod(joinPoint);
-        String key = joinPoint.getThis() + method.getName() + paramsCheck;
+    public Object global(ProceedingJoinPoint pjp, ParamsCheck paramsCheck) {
+        Method method = aopTool.getMethod(pjp);
+        String key = pjp.getThis() + method.getName() + paramsCheck;
         Pair<String, Param> methodParamsCheck = paramCache.get(key);
         if (methodParamsCheck == null) {
             methodParamsCheck = new HashPair<>();
@@ -107,7 +107,7 @@ public final class GlobalVerify {
         Pair<String, String> pair = Pair.fromPair(Base64.decodeToString(params));
         if (pair == null) throw ClientError.INFO_TAMPER;
         int index = -1;
-        Object[] args = joinPoint.getArgs();
+        Object[] args = pjp.getArgs();
         for (Parameter parameter : method.getParameters()) {
             String name = parameter.getName();
             String value = pair.get(name);
@@ -122,7 +122,7 @@ public final class GlobalVerify {
                 throw DevelopError.PARAM_LENGTH_ERROR.addArgs(name, value);
         }
         try {
-            return joinPoint.proceed(args);
+            return pjp.proceed(args);
         } catch (Throwable throwable) {
             throw new ServerException(throwable);
         }

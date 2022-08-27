@@ -1,6 +1,6 @@
 package com.zyj.disk.sys.annotation.verify;
 
-import com.zyj.disk.sys.identity.IdentitySet;
+import com.zyj.disk.sys.entity.IdentitySet;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -15,5 +15,5 @@ import java.lang.annotation.Target;
 public @interface Access {
     String path();
 
-    IdentitySet[] value();
+    IdentitySet[] identity();
 }

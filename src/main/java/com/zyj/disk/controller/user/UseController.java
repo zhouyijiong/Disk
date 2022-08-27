@@ -1,6 +1,5 @@
 package com.zyj.disk.controller.user;
 
-import com.zyj.disk.entity.user.User;
 import com.zyj.disk.service.user.UserService;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
@@ -32,8 +31,7 @@ public class UseController {
             @Param(name = "password", regex = Rules.NUM_CHAR_LOW_32)
     })
     public Response<String> registered(String username, String password) {
-        User user = userService.registered(username, password);
-        return userService.result(user);
+        return userService.result(userService.registered(username, password));
     }
 
     /**
@@ -48,7 +46,6 @@ public class UseController {
             @Param(name = "password", regex = Rules.NUM_CHAR_LOW_32)
     })
     public Response<String> login(String password, String username) {
-        User user = userService.login(username, password);
-        return userService.result(user);
+        return userService.result(userService.login(username, password));
     }
 }

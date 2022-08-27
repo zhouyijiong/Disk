@@ -84,17 +84,18 @@ public interface UserTemplate {
      *
      * @param username 用户名
      * @param token    token
-     * @return Response<String>
      */
     Response<String> result(String username, String token, String identity);
 
     /**
-     * 获取 Token
+     * 获取信息凭证
      *
      * @param user 用户
-     * @return String token
      */
     String getToken(User user);
 
+    /**
+     * 获取身份凭证
+     */
     String getIdentity();
 }

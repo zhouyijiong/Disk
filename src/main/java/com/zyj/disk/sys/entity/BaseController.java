@@ -7,6 +7,8 @@ import com.zyj.disk.sys.tool.encryption.codec.Codec;
 import com.zyj.disk.sys.tool.encryption.token.Tokens;
 
 public class BaseController {
+    protected transient static final Response<Void> SUCCESS = new Response<>();
+
     protected User init() {
         String token = Tokens.token.get();
         if(token == null) throw ServerError.TOKEN_LOST;
