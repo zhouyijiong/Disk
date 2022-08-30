@@ -39,7 +39,7 @@ public final class GlobalVerify {
     private final AOPTool aopTool;
     private static final Record record = new Record(GlobalVerify.class);
 
-    private static final ResponsiveCache<String, Pair<String, Param>> paramCache =
+    private static final ResponsiveCache<String, Pair<String, Param>> PARAM_CACHE =
             new ResponsiveCache<>(2048, 60 * 60 * 24);
 
     @Around("@annotation(access)")
@@ -91,18 +91,18 @@ public final class GlobalVerify {
     public Object global(ProceedingJoinPoint pjp, ParamsCheck paramsCheck) {
         Method method = aopTool.getMethod(pjp);
         String key = pjp.getThis() + method.getName() + paramsCheck;
-        Pair<String, Param> methodParamsCheck = paramCache.get(key);
+        Pair<String, Param> methodParamsCheck = PARAM_CACHE.get(key);
         if (methodParamsCheck == null) {
             methodParamsCheck = new HashPair<>();
             Param[] params = paramsCheck.value();
             for (Param param : params) methodParamsCheck.put(param.name(), param);
-            paramCache.put(key, methodParamsCheck, 129600);
+            PARAM_CACHE.put(key, methodParamsCheck, 129600);
         }
         HttpServletRequest request = aopTool.getRequest();
         String params = RsaSet.REQUEST.RSA.SK.decrypt(request.getParameter("params"));
         if (!Rules.BASE64.rules.matcher(params).matches()) {
             record.info(params);
-            throw ClientError.TOKEN_EXPIRED;
+            throw ClientError.KEY_EXPIRED;
         }
         Pair<String, String> pair = Pair.fromPair(Base64.decodeToString(params));
         if (pair == null) throw ClientError.INFO_TAMPER;

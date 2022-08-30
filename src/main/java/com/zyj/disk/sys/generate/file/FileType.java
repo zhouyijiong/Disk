@@ -25,18 +25,7 @@ public abstract class FileType{
 
 	public static void init(String name,List<FieldInfo> fieldInfos) throws IOException, ClassNotFoundException {
 		FileType.sourceName = name;
-		FileType.fieldInfos = deepCopy(fieldInfos);
-	}
-
-	public static <T> List<T> deepCopy(List<T> src) throws IOException, ClassNotFoundException {
-		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-		ObjectOutputStream out = new ObjectOutputStream(byteOut);
-		out.writeObject(src);
-		ByteArrayInputStream byteIn = new ByteArrayInputStream(byteOut.toByteArray());
-		ObjectInputStream in = new ObjectInputStream(byteIn);
-		@SuppressWarnings("unchecked")
-		List<T> dest = (List<T>) in.readObject();
-		return dest;
+		FileType.fieldInfos = fieldInfos;
 	}
 
 	public void create(String path){

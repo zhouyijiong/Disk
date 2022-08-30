@@ -23,7 +23,7 @@ public enum IdentitySet {
     }
 
     public boolean checkOnly(IdentitySet[] identitySets) {
-        return check(identitySets) && identitySets.length==1;
+        return identitySets.length == 1 && check(identitySets);
     }
 
     public static boolean check(String identity, IdentitySet[] identitySets) {

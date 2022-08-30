@@ -32,6 +32,9 @@
                     <td>购买</td>
                 </tr>
                 <tr>
+                    <td>我的</td>
+                </tr>
+                <tr>
                     <td>收藏</td>
                 </tr>
                 <tr>
@@ -39,9 +42,6 @@
                 </tr>
                 <tr>
                     <td>站内</td>
-                </tr>
-                <tr>
-                    <td>回收站</td>
                 </tr>
                 </thead>
                 <thead id="fileCategoryThead"></thead>
@@ -67,8 +67,8 @@
             </div>
             <div id="fileUploadDiv" class="container">
                 <div class="upload">
-                    <input type="file" name="myfile" multiple="multiple" onchange="fileUpload(this)"/>
-                    <div>上传文件</div>
+                    <input id="fileUploadBut" type="file" name="files" multiple="multiple" onchange="fileUpload(this)"/>
+                    <div id = "fileUploadInfo">上传文件</div>
                 </div>
             </div>
             <div id="filePageDiv" class="container">
