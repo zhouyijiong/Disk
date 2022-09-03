@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 限制被标记的方法访问状态必须为登录
+ * 限制特定的身份访问特定的页面
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -26,6 +26,10 @@ public @interface ParamsCheck {
 
         boolean required() default true;
     }
-
     Param[] value();
+
+    /**
+     * 请求参数是否为参数集
+     */
+    boolean isSet() default false;
 }

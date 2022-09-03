@@ -25,4 +25,8 @@ public final class FileTypeSet {
     public static FileType sql() {
         return new SQL();
     }
+
+    public static FileType[] all() {
+        return new FileType[]{entity(), mapper(), service(), controller(), sql()};
+    }
 }

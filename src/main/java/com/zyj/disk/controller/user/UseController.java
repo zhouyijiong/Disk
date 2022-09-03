@@ -1,5 +1,6 @@
 package com.zyj.disk.controller.user;
 
+import com.zyj.disk.entity.request.user.UserWhole;
 import com.zyj.disk.service.user.UserService;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck.Param;
@@ -22,16 +23,15 @@ public class UseController {
     /**
      * 注册 API
      *
-     * @param username 要注册的用户名
-     * @param password 要注册的密码
+     * @param userWhole 用户完整信息
      */
     @PostMapping("/registered")
-    @ParamsCheck({
+    @ParamsCheck(value = {
             @Param(name = "username", regex = Rules.NUM_CHAR_LOW),
             @Param(name = "password", regex = Rules.NUM_CHAR_LOW_32)
-    })
-    public Response<String> registered(String username, String password) {
-        return userService.result(userService.registered(username, password));
+    }, isSet = true)
+    public Response<String> registered(UserWhole userWhole) {
+        return Response.success(userService.result(userService.registered(userWhole)));
     }
 
     /**
@@ -46,6 +46,6 @@ public class UseController {
             @Param(name = "password", regex = Rules.NUM_CHAR_LOW_32)
     })
     public Response<String> login(String password, String username) {
-        return userService.result(userService.login(username, password));
+        return Response.success(userService.result(userService.login(username, password)));
     }
 }

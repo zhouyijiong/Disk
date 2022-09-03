@@ -8,7 +8,7 @@ public enum IdentitySet {
     /**
      * 限制为游客身份
      */
-    VISITOR(),
+    UNLIMITED(),
 
     /**
      * 限制为用户身份

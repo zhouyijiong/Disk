@@ -17,7 +17,7 @@ public interface PageController {
      */
     @GetMapping
     @Access(
-            identity = IdentitySet.VISITOR,
+            identity = IdentitySet.UNLIMITED,
             path = "index/index"
     )
     String index();

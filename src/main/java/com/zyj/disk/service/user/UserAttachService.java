@@ -1,11 +1,16 @@
 package com.zyj.disk.service.user;
 
+import com.zyj.disk.entity.user.UserAttach;
+import com.zyj.disk.mapper.user.UserAttachMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.zyj.disk.mapper.user.UserAttachMapper;
 
 @Service
 @RequiredArgsConstructor
 public final class UserAttachService {
-    private final UserAttachMapper userattachMapper;
+    private final UserAttachMapper userAttachMapper;
+
+    public int saveUserAttach(UserAttach userAttach) {
+        return userAttachMapper.insert(userAttach);
+    }
 }

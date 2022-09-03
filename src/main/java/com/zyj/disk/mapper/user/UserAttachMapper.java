@@ -5,5 +5,4 @@ import com.zyj.disk.entity.user.UserAttach;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface UserAttachMapper extends BaseMapper<UserAttach> {
-}
+public interface UserAttachMapper extends BaseMapper<UserAttach>{}

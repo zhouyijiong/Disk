@@ -46,7 +46,7 @@ public final class SQL extends FileType {
         boolean primary = fieldInfo.isPrimary();
         table.append("\n\t").append(key).append(" ").append(type);
         if (primary) table.append(" primary key auto_increment");
-        if (value != null) table.append(" DEFAULT ").append(value);
+        if (value != null) table.append(" DEFAULT ").append(value instanceof String ? "'" + value + "'" : value);
         if (required) table.append(" NOT NULL");
         table.append(unique ? " UNIQUE," : ",");
     }

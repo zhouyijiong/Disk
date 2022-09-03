@@ -1,6 +1,8 @@
 package com.zyj.disk.service.user;
 
+import com.zyj.disk.entity.request.user.UserWhole;
 import com.zyj.disk.entity.user.User;
+import com.zyj.disk.entity.user.UserAttach;
 import com.zyj.disk.sys.entity.Response;
 import com.zyj.disk.sys.exception.client.ClientError;
 import com.zyj.disk.sys.exception.server.ServerError;
@@ -12,13 +14,12 @@ public interface UserTemplate {
     /**
      * 注册账户
      *
-     * @param username 用户名
-     * @param password 密码
+     * @param userWhole 用户完整信息
      */
-    default User registered(String username, String password) {
-        if (queryUserByName(username) != null) throw ClientError.USER_EXIST;
-        User user = initUser(username, password);
-        if (saveUser(user) == 0) throw ServerError.SQL_RESULT_FAIL;
+    default User registered(UserWhole userWhole) {
+        if (queryUserByName(userWhole.getUsername()) != null) throw ClientError.USER_EXIST;
+        User user = initUser(userWhole);
+        if (saveUser(user, initUserAttach(userWhole)) != 2) throw ServerError.SQL_RESULT_FAIL;
         return user;
     }
 
@@ -30,8 +31,7 @@ public interface UserTemplate {
      */
     default User login(String username, String password) {
         User user = queryUserByName(username);
-        if (user == null || userVerify(user.getPassword(), password))
-            throw ClientError.ACCOUNT_VERIFY_FAIL;
+        if (user == null || userVerify(user.getPassword(), password)) throw ClientError.ACCOUNT_VERIFY_FAIL;
         return user;
     }
 
@@ -41,7 +41,7 @@ public interface UserTemplate {
      * @param user 用户
      * @return Response<String>
      */
-    default Response<String> result(User user) {
+    default String result(User user) {
         return result(user.getUsername(), getToken(user), getIdentity());
     }
 
@@ -49,18 +49,19 @@ public interface UserTemplate {
      * 根据用户名查询用户
      *
      * @param username 用户名
-     * @return User
+     * @return Userb
      */
     User queryUserByName(String username);
 
     /**
      * 初始化用户实体类
      *
-     * @param username 用户名
-     * @param password 密码
-     * @return User
+     * @param userWhole 用户完整信息
+     * @return Userb
      */
-    User initUser(String username, String password);
+    User initUser(UserWhole userWhole);
+
+    UserAttach initUserAttach(UserWhole userWhole);
 
     /**
      * 新增用户
@@ -68,7 +69,7 @@ public interface UserTemplate {
      * @param userEntity 用户实体类
      * @return int SQL影响行数
      */
-    int saveUser(User userEntity);
+    int saveUser(User userEntity, UserAttach userAttach);
 
     /**
      * 用户登录校验
@@ -85,7 +86,7 @@ public interface UserTemplate {
      * @param username 用户名
      * @param token    token
      */
-    Response<String> result(String username, String token, String identity);
+    String result(String username, String token, String identity);
 
     /**
      * 获取信息凭证

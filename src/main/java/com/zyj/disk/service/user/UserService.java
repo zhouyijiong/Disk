@@ -1,7 +1,9 @@
 package com.zyj.disk.service.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.zyj.disk.entity.request.user.UserWhole;
 import com.zyj.disk.entity.user.User;
+import com.zyj.disk.entity.user.UserAttach;
 import com.zyj.disk.mapper.user.UserMapper;
 import com.zyj.disk.sys.entity.Response;
 import com.zyj.disk.sys.exception.server.ServerError;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public final class UserService implements UserTemplate {
     private final UserMapper userMapper;
+    private final UserAttachService userAttachService;
 
     @Override
     public User queryUserByName(String username) {
@@ -32,16 +35,25 @@ public final class UserService implements UserTemplate {
     }
 
     @Override
-    public User initUser(String username, String password) {
+    public User initUser(UserWhole userWhole) {
         return User.defaultArgs()
-                .username(username)
-                .password(MD5.encrypt(password))
-                .path(MD5.encrypt(username));
+                .username(userWhole.getUsername())
+                .password(MD5.encrypt(userWhole.getPassword()));
+    }
+
+    public UserAttach initUserAttach(UserWhole userWhole) {
+        return UserAttach.defaultArgs()
+                .path(MD5.encrypt(userWhole.getUsername()))
+                .platform(userWhole.getPlatform())
+                .language(userWhole.getLanguage())
+                .cores(userWhole.getCores())
+                .thread(userWhole.getThread())
+                .network(userWhole.getNetwork());
     }
 
     @Override
-    public int saveUser(User userEntity) {
-        return userMapper.insert(userEntity);
+    public int saveUser(User user, UserAttach userAttach) {
+        return userMapper.insert(user) + userAttachService.saveUserAttach(userAttach.userId(user.getId()));
     }
 
     @Override
@@ -50,12 +62,12 @@ public final class UserService implements UserTemplate {
     }
 
     @Override
-    public Response<String> result(String username, String token, String identity) {
+    public String result(String username, String token, String identity) {
         Pair<String, String> pair = new HashPair<>();
         pair.put("access", username);
         pair.put("token", token);
         pair.put("identity", identity);
-        return Response.success(pair.toJSONString());
+        return pair.toJSONString();
     }
 
     @Override

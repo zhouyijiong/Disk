@@ -49,20 +49,23 @@ function judgment() {
         pwd.focus();
         return
     }
-    pwd.value = md5(pwd.value);
-
-    let data = new FormData();
-    data.set('username', usm.value);
-    data.set('password', pwd.value);
-
+    let requestParam = {};
+    let temp;
+    requestParam.username = usm.value;
+    requestParam.password = md5(pwd.value);
+    requestParam.platform = (temp = navigator.platform) ? temp : '';
+    requestParam.language = (temp = navigator.language) ? temp : '';
+    requestParam.cores = (temp = navigator.deviceMemory) ? temp : 0;
+    requestParam.thread = (temp = navigator.hardwareConcurrency) ? temp : 0;
+    requestParam.network = (temp = navigator.connection) ? (temp = temp.downlink) ? temp : 0 : 0;
     ajax.post(login_url,
-        {'username': usm.value, 'password': pwd.value},
+        requestParam,
         (response) => {
             if (response.message) {
                 pwd.value = '';
                 usm.focus();
             } else {
-                data = JSON.parse(response.data);
+                let data = JSON.parse(response.data);
                 sessionStorage.token = data.token;
                 sessionStorage.access = data.access;
                 setCookie('identity', data.identity, 7);

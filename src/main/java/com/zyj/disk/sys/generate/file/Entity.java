@@ -88,10 +88,12 @@ public final class Entity extends FileType {
         switch (type.hashCode()) {
             case 2086184:
             case 79860828:
-            case 2374300:
-                return val + "L";
             case -672261858:
                 return val.toString();
+            case -1808118735:
+                return "\"" + val + "\"";
+            case 2374300:
+                return val + "L";
             case 67973692:
                 return val + "F";
             case 2052876273:

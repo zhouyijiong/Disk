@@ -2,6 +2,7 @@ package com.zyj.disk.sys.aop;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.util.Map;
 
 import com.zyj.disk.sys.annotation.verify.Level;
 import com.zyj.disk.sys.annotation.verify.ParamsCheck;
@@ -14,15 +15,14 @@ import com.zyj.disk.sys.exception.develop.DevelopError;
 import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.entity.IdentitySet;
 import com.zyj.disk.sys.tool.AOPTool;
+import com.zyj.disk.sys.tool.GsonTool;
 import com.zyj.disk.sys.tool.encryption.codec.Base64;
 import com.zyj.disk.sys.tool.encryption.codec.Codec;
 import com.zyj.disk.sys.tool.encryption.rsa.RsaSet;
 import com.zyj.disk.sys.tool.encryption.token.Token;
 import com.zyj.disk.sys.tool.encryption.token.Tokens;
 import com.zyj.disk.sys.tool.encryption.xor.XOR;
-import com.zyj.disk.sys.tool.structure.HashPair;
 import com.zyj.disk.sys.tool.structure.Pair;
-import com.zyj.disk.sys.tool.structure.ResponsiveCache;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -30,7 +30,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 
 @Aspect
 @Component
@@ -39,12 +38,9 @@ public final class GlobalVerify {
     private final AOPTool aopTool;
     private static final Record record = new Record(GlobalVerify.class);
 
-    private static final ResponsiveCache<String, Pair<String, Param>> PARAM_CACHE =
-            new ResponsiveCache<>(2048, 60 * 60 * 24);
-
     @Around("@annotation(access)")
     public Object global(ProceedingJoinPoint pjp, Access access) {
-        if (IdentitySet.VISITOR.checkOnly(access.identity())) return access.path();
+        if (IdentitySet.UNLIMITED.checkOnly(access.identity())) return access.path();
         Cookie[] cookies = aopTool.getRequest().getCookies();
         if (cookies == null) return "login/login";
         Cookie identityCookie = null;
@@ -89,37 +85,34 @@ public final class GlobalVerify {
 
     @Around("@annotation(paramsCheck)")
     public Object global(ProceedingJoinPoint pjp, ParamsCheck paramsCheck) {
-        Method method = aopTool.getMethod(pjp);
-        String key = pjp.getThis() + method.getName() + paramsCheck;
-        Pair<String, Param> methodParamsCheck = PARAM_CACHE.get(key);
-        if (methodParamsCheck == null) {
-            methodParamsCheck = new HashPair<>();
-            Param[] params = paramsCheck.value();
-            for (Param param : params) methodParamsCheck.put(param.name(), param);
-            PARAM_CACHE.put(key, methodParamsCheck, 129600);
-        }
-        HttpServletRequest request = aopTool.getRequest();
-        String params = RsaSet.REQUEST.RSA.SK.decrypt(request.getParameter("params"));
+        String params = RsaSet.REQUEST.RSA.SK.decrypt(aopTool.getRequest().getParameter("params"));
         if (!Rules.BASE64.rules.matcher(params).matches()) {
             record.info(params);
             throw ClientError.KEY_EXPIRED;
         }
-        Pair<String, String> pair = Pair.fromPair(Base64.decodeToString(params));
-        if (pair == null) throw ClientError.INFO_TAMPER;
-        int index = -1;
-        Object[] args = pjp.getArgs();
-        for (Parameter parameter : method.getParameters()) {
-            String name = parameter.getName();
-            String value = pair.get(name);
-            args[++index] = value;
-            Param param = methodParamsCheck.get(name);
-            if (param == null) continue;
-            if (param.required() && value == null) throw DevelopError.PARAM_REQUIRED.addArgs(name);
-            if (param.regex() != Rules.NULL && !param.regex().rules.matcher(value).matches())
+        params = Base64.decodeToString(params);
+        Map<String, Object> map = GsonTool.toMap(params);
+        if (map == null) throw ClientError.INFO_TAMPER;
+        for (Param check : paramsCheck.value()) {
+            String name = check.name();
+            Object value = map.get(name);
+            if (check.required() && value == null) throw DevelopError.PARAM_REQUIRED.addArgs(name);
+            String valStr = value.toString();
+            if (check.regex() != Rules.NULL && !check.regex().rules.matcher(valStr).matches())
                 throw DevelopError.PARAM_REGEX_VERIFY_FAIL.addArgs(name, value);
-            int length = param.length();
-            if (length != -1 && value.trim().length() != length)
+            int length = check.length();
+            if (length != -1 && valStr.trim().length() != length)
                 throw DevelopError.PARAM_LENGTH_ERROR.addArgs(name, value);
+        }
+        Object[] args = pjp.getArgs();
+        Method method = aopTool.getMethod(pjp);
+        if (paramsCheck.isSet()) {
+            args[0] = GsonTool.fromJson(params, method.getParameterTypes()[0]);
+        } else {
+            int index = -1;
+            for (Parameter parameter : method.getParameters()) {
+                args[++index] = map.get(parameter.getName());
+            }
         }
         try {
             return pjp.proceed(args);
