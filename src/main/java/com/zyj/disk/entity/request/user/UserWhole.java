@@ -12,5 +12,5 @@ public final class UserWhole{
     private final String language;
     private final Integer cores;
     private final Integer thread;
-    private final Integer network;
+    private final Double network;
 }

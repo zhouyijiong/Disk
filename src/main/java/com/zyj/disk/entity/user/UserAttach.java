@@ -17,7 +17,7 @@ public final class UserAttach{
 	private String language;
 	private Integer cores;
 	private Integer thread;
-	private Integer network;
+	private Double network;
 
 	public static UserAttach noArgs(){
 		return new UserAttach();
@@ -33,7 +33,7 @@ public final class UserAttach{
 			.language("zh-CN")
 			.cores(0)
 			.thread(0)
-			.network(0);
+			.network(0d);
 	}
 
 	public UserAttach id(Integer val){
@@ -91,7 +91,7 @@ public final class UserAttach{
 		return this;
 	}
 
-	public UserAttach network(Integer val){
+	public UserAttach network(Double val){
 		network = val;
 		return this;
 	}

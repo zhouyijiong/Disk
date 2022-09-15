@@ -20,14 +20,13 @@ import java.util.Hashtable;
 
 /**
  * 二维码
- * 文献地址：https://blog.csdn.net/s735819795/article/details/80255400
+ * 文献地址：<a href="https://blog.csdn.net/s735819795/article/details/80255400"></a>
  */
 public final class QRImageTool {
     @AllArgsConstructor
     public enum FileFormat {
         PNG("PNG"),
         JPG("JPG");
-
         public final String format;
     }
 

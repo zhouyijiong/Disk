@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.zyj.disk.sys.annotation.GenerateParam;
+import com.zyj.disk.sys.annotation.generate.GenerateParam;
 import com.zyj.disk.sys.generate.file.*;
 
 public final class Generate {
@@ -43,23 +43,24 @@ public final class Generate {
     }
 
     private String getType(int status, Field field, String length) {
+        boolean customize = status == 1 && !"".equals(length = length.trim()) && length.charAt(0) != '(';
         switch (field.getType().getSimpleName().hashCode()) {
             case 2086184:
-                return status == 0 ? "Byte" : "tinyint" + length;
+                return status == 0 ? "Byte" : customize ? length : "tinyint" + length;
             case 79860828:
-                return status == 0 ? "Short" : "smallint" + length;
+                return status == 0 ? "Short" : customize ? length : "smallint" + length;
             case -672261858:
-                return status == 0 ? "Integer" : "int" + length;
+                return status == 0 ? "Integer" : customize ? length : "int" + length;
             case 2374300:
-                return status == 0 ? "Long" : "bigint" + length;
+                return status == 0 ? "Long" : customize ? length : "bigint" + length;
             case 67973692:
-                return status == 0 ? "Float" : "float" + length;
+                return status == 0 ? "Float" : customize ? length : "float" + length;
             case 2052876273:
-                return status == 0 ? "Double" : "double" + length;
+                return status == 0 ? "Double" : customize ? length : "double" + length;
             case -1808118735:
-                return status == 0 ? "String" : "varchar" + length;
+                return status == 0 ? "String" : customize ? length : "varchar" + length;
             case 1438607953:
-                return status == 0 ? "BigDecimal" : "BigDecimal" + length;
+                return status == 0 ? "BigDecimal" : customize ? length : "BigDecimal" + length;
             default:
                 return null;
         }

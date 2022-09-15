@@ -28,7 +28,7 @@ public final class AOPTool {
         return getHttpServletContext().getResponse();
     }
 
-    private ServletRequestAttributes getHttpServletContext() {
+    public ServletRequestAttributes getHttpServletContext() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) throw ServerError.REQUEST_PARAM_LOOS;
         return attributes;

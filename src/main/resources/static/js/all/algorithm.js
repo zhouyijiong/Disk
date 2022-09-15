@@ -25,11 +25,16 @@ function getBytes(str){
     return new Int8Array(bytes);
 }
 function byteToInt(bytes){
-    bytes = bytes.reverse();
-    let result = 0n;
-    for(let i=0,len=bytes.length;i<len;++i) result|=BigInt(bytes[i]&0xff)<<BigInt(i*8);
+    let result=0n,c=-1;
+    for(let i=bytes.length-1;i>-1;--i) result|=BigInt(bytes[i]&0xff)<<BigInt(++c*8);
     return result;
 }
+// function byteToInt(bytes){
+//     bytes = bytes.reverse();
+//     let result = 0n;
+//     for(let i=0,len=bytes.length;i<len;++i) result|=BigInt(bytes[i]&0xff)<<BigInt(i*8);
+//     return result;
+// }
 function intToByte_Small(num){
     let b=1,c=-1,bytes=[];
     while(b>0){

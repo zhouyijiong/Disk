@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public enum RsaSet {
-    PUBLIC(new RSA(2048, 65537)),
+    PRIVATE(new RSA(2048, 65537)),
     REQUEST(new RSA(2048, 65537));
 
     public final RSA RSA;

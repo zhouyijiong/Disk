@@ -2,13 +2,9 @@ package com.zyj.disk.sys.generate.file;
 
 import com.zyj.disk.sys.generate.FieldInfo;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -58,8 +54,6 @@ public abstract class FileType{
 	}
 
 	public static String oneStrToUp(String str){
-//		String temp = str.toLowerCase();
-//		return temp.substring(0,1).toUpperCase() + temp.substring(1);
 		return str.substring(0,1).toUpperCase() + str.substring(1);
 	}
 

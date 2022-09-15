@@ -28,7 +28,7 @@ public final class DES {
     static {
         try {
             KeyGenerator generator = KeyGenerator.getInstance("DES");
-            byte[] privateKey = RsaSet.PUBLIC.RSA.SK.encrypt(PrivateKey.PK).getBytes(StandardCharsets.UTF_8);
+            byte[] privateKey = RsaSet.PRIVATE.RSA.SK.encrypt(PrivateKey.PK).getBytes(StandardCharsets.UTF_8);
             generator.init(new SecureRandom(privateKey));
             Key key = generator.generateKey();
             ENCRYPT_MODE = Cipher.getInstance("DES");

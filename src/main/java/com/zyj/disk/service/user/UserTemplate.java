@@ -3,7 +3,6 @@ package com.zyj.disk.service.user;
 import com.zyj.disk.entity.request.user.UserWhole;
 import com.zyj.disk.entity.user.User;
 import com.zyj.disk.entity.user.UserAttach;
-import com.zyj.disk.sys.entity.Response;
 import com.zyj.disk.sys.exception.client.ClientError;
 import com.zyj.disk.sys.exception.server.ServerError;
 
@@ -46,25 +45,31 @@ public interface UserTemplate {
     }
 
     /**
-     * 根据用户名查询用户
+     * query user by name
      *
      * @param username 用户名
-     * @return Userb
+     * @return User
      */
     User queryUserByName(String username);
 
     /**
-     * 初始化用户实体类
+     * init user entity
      *
      * @param userWhole 用户完整信息
-     * @return Userb
+     * @return User
      */
     User initUser(UserWhole userWhole);
 
+    /**
+     * init user attach entity
+     *
+     * @param userWhole 用户完整信息
+     * @return UserAttach
+     */
     UserAttach initUserAttach(UserWhole userWhole);
 
     /**
-     * 新增用户
+     * add user
      *
      * @param userEntity 用户实体类
      * @return int SQL影响行数
@@ -72,7 +77,7 @@ public interface UserTemplate {
     int saveUser(User userEntity, UserAttach userAttach);
 
     /**
-     * 用户登录校验
+     * user login verify
      *
      * @param sourcePwd  用户密码
      * @param requestPwd 请求密码
@@ -92,11 +97,14 @@ public interface UserTemplate {
      * 获取信息凭证
      *
      * @param user 用户
+     * @return token
      */
     String getToken(User user);
 
     /**
      * 获取身份凭证
+     *
+     * @return identity
      */
     String getIdentity();
 }

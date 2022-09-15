@@ -6,7 +6,7 @@ package com.zyj.disk.sys.entity;
  */
 public enum IdentitySet {
     /**
-     * 限制为游客身份
+     * 无限制
      */
     UNLIMITED(),
 

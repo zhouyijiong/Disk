@@ -35,10 +35,9 @@ public final class RSA {
     }
 
     public RSA(int len, int e) {
-        int factorLen = len >> 1;
         Random random = new Random();
-        BigInteger p = BigInteger.probablePrime(factorLen, random);
-        BigInteger q = BigInteger.probablePrime(factorLen, random);
+        BigInteger p = BigInteger.probablePrime(len >>= 1, random);
+        BigInteger q = BigInteger.probablePrime(len, random);
         BigInteger N = p.multiply(q);
         BigInteger f = N.subtract(p).subtract(q).add(BigInteger.ONE);
         BigInteger E = BigInteger.valueOf(e);

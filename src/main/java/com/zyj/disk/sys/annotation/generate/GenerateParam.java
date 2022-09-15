@@ -1,4 +1,4 @@
-package com.zyj.disk.sys.annotation;
+package com.zyj.disk.sys.annotation.generate;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

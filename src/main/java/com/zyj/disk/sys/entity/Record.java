@@ -14,7 +14,7 @@ public final class Record {
     }
 
     public void error(RuntimeException e) {
-        logger.error("错误信息:{}", e.getMessage());
+        logger.error("错误信息:{}", e.toString());
     }
 
     public void error(Exception e) {

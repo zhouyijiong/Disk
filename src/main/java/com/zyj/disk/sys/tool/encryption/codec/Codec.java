@@ -1,7 +1,7 @@
 package com.zyj.disk.sys.tool.encryption.codec;
 
 import com.zyj.disk.sys.entity.Record;
-import com.zyj.disk.sys.tool.GsonTool;
+import com.zyj.disk.sys.tool.JsonTool;
 import com.zyj.disk.sys.tool.encryption.PrivateKey;
 import org.springframework.stereotype.Component;
 
@@ -29,13 +29,13 @@ public final class Codec {
     }
 
     public static String codingObj(Object o) {
-        return complex(GsonTool.toJson(o), PrivateKey.OFFSET);
+        return complex(JsonTool.toJson(o), PrivateKey.OFFSET);
     }
 
     public static <T> T decodingObj(String json, Class<T> tClass) {
         String str = Codec.complex(json, PrivateKey.OFFSET);
         try {
-            return GsonTool.fromJson(str, tClass);
+            return JsonTool.fromJson(str, tClass);
         }catch (RuntimeException e){
             record.error(e);
             return null;

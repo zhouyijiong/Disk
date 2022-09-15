@@ -13,6 +13,6 @@ public final class ServerException extends GlobalException {
     }
 
     public ServerException(Throwable throwable) {
-        super((throwable instanceof GlobalException) ? ((GlobalException) throwable).getCode() : 1000, throwable.getLocalizedMessage());
+        super((throwable instanceof GlobalException) ? ((GlobalException) throwable).getCode() : 1000, throwable.toString());
     }
 }

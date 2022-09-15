@@ -6,10 +6,10 @@ import com.google.gson.Gson;
 import com.zyj.disk.sys.entity.Record;
 import java.util.Map;
 
-public final class GsonTool {
+public final class JsonTool {
     public static final Gson GSON = new Gson();
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    public static final Record RECORD = new Record(GsonTool.class);
+    public static final Record RECORD = new Record(JsonTool.class);
 
     public static String toJson(Object obj) {
         return GSON.toJson(obj);
