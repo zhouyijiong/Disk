@@ -25,7 +25,7 @@ public interface LevelParse {
             IdentitySet identitySet = Codec.decodingObj(pair.get("identity"), IdentitySet.class);
             if (identitySet == null) throw ClientError.INFO_TAMPER;
             if (!identitySet.check(level.value())) throw ClientError.IDENTITY_VERIFY_FAIL;
-            Tokens.token.set(pair.get("user"));
+            Tokens.TOKEN.set(pair.get("user"));
             return pjp.proceed();
         } catch (Throwable throwable) {
             throw new ServerException(throwable);

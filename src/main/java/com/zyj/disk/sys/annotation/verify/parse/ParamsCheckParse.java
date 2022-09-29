@@ -5,6 +5,7 @@ import com.zyj.disk.sys.entity.Record;
 import com.zyj.disk.sys.entity.Rules;
 import com.zyj.disk.sys.exception.client.ClientError;
 import com.zyj.disk.sys.exception.develop.DevelopError;
+import com.zyj.disk.sys.exception.server.ServerError;
 import com.zyj.disk.sys.exception.server.ServerException;
 import com.zyj.disk.sys.tool.AOPTool;
 import com.zyj.disk.sys.tool.JsonTool;
@@ -16,18 +17,17 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Map;
 
 public interface ParamsCheckParse {
-    Record record = new Record(ParamsCheckParse.class);
+    Record RECORD = new Record(ParamsCheckParse.class);
 
     static Object parse(Annotation annotation, ProceedingJoinPoint pjp, AOPTool aopTool) {
         ParamsCheck paramsCheck = (ParamsCheck) annotation;
         ServletRequestAttributes servletRequestAttributes = aopTool.getHttpServletContext();
         String params = RsaSet.REQUEST.RSA.SK.decrypt(servletRequestAttributes.getRequest().getParameter("params"));
         if (!Rules.BASE64.rules.matcher(params).matches()) {
-            record.info(params);
+            RECORD.info(params);
             throw ClientError.KEY_EXPIRED;
         }
         params = Base64.decodeToString(params);
@@ -49,22 +49,11 @@ public interface ParamsCheckParse {
         if (paramsCheck.isSet()) {
             args[0] = JsonTool.fromJson(params, method.getParameterTypes()[0]);
         } else {
-            int index = -1;
-            //new LocalVariableTableParameterNameDiscoverer()
             String[] paramNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(method);
-            assert paramNames != null;
-            System.out.println(Arrays.toString(paramNames));
-            System.out.println(map);
-            for (String name : paramNames) {
-//                if("javax.servlet.http.HttpServletRequest".equals(name)){
-//                    //args[++index] = servletRequestAttributes.getRequest();
-//                    continue;
-//                }
-//                if("javax.servlet.http.HttpServletResponse".equals(name)){
-//                    //args[++index] = servletRequestAttributes.getResponse();
-//                    continue;
-//                }
-                args[++index] = map.get(name);
+            if (paramNames == null) throw ServerError.LOCAL_PARAM_LOOS;
+            for (int i = 0; i < paramNames.length; ++i) {
+                String name = paramNames[i];
+                if (map.get(name) != null) args[i] = map.get(name);
             }
         }
         try {

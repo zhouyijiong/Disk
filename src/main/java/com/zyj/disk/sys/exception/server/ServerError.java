@@ -9,4 +9,5 @@ public interface ServerError {
     ServerException SQL_RESULT_FAIL = new ServerException(5002, "SQL返回异常");
     ServerException SQL_BUILD_FAIL = new ServerException(5003, "SQL构造异常");
     ServerException DES_ENCRYPT_FAIL = new ServerException(5004, "DES 加密失败");
+    ServerException LOCAL_PARAM_LOOS = new ServerException(5005, "局部变量丢失");
 }

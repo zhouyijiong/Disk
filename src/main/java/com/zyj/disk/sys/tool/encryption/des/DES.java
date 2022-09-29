@@ -23,7 +23,7 @@ import java.security.SecureRandom;
 public final class DES {
     private static final Cipher ENCRYPT_MODE;
     private static final Cipher DECRYPT_MODE;
-    private static final Record record = new Record(DES.class);
+    private static final Record RECORD = new Record(DES.class);
 
     static {
         try {
@@ -36,7 +36,7 @@ public final class DES {
             ENCRYPT_MODE.init(Cipher.ENCRYPT_MODE, key);
             DECRYPT_MODE.init(Cipher.DECRYPT_MODE, key);
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException e) {
-            record.error(e);
+            RECORD.error(e);
             throw new RuntimeException(e.getMessage());
         }
     }

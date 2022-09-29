@@ -1,9 +1,5 @@
 package com.zyj.disk.sys.tool.structure;
 
-/**
- * 链表键值对
- * 当作羽量级返回模型 size 最好不超过 100
- */
 public final class HashPair<K, V> extends Pair<K, V> {
     @Override
     public synchronized void put(K key, V val) {
@@ -41,7 +37,7 @@ public final class HashPair<K, V> extends Pair<K, V> {
     }
 
     @Override
-    public synchronized String toJSONString() {
+    public synchronized String toString() {
         if (super.node == null) return "{}";
         Node<K, V> node = super.node;
         StringBuilder sb = new StringBuilder(size << 5);

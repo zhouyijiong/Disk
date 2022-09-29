@@ -11,13 +11,13 @@ import java.security.NoSuchAlgorithmException;
  */
 public final class MD5 {
     private static MessageDigest md5;
-    private static final Record record = new Record(MD5.class);
+    private static final Record RECORD = new Record(MD5.class);
 
     static {
         try {
             md5 = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e) {
-            record.error(e);
+            RECORD.error(e);
         }
     }
 

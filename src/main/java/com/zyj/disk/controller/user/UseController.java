@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * 用户控制器
  */
@@ -48,10 +45,7 @@ public class UseController {
             @Param(name = "username", regex = Rules.NUM_CHAR_LOW),
             @Param(name = "password", regex = Rules.NUM_CHAR_LOW_32)
     })
-    public Response<String> login(String password, String username, HttpServletRequest request, HttpServletResponse response) {//
-        System.out.println(request);
-        System.out.println(request == null);
-        System.out.println(request.getParameter("params"));
+    public Response<String> login(String password, String username) {
         return Response.success(userService.result(userService.login(username, password)));
     }
 }

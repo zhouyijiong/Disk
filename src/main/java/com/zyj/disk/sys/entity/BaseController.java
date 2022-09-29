@@ -10,7 +10,8 @@ public class BaseController {
     protected static final Response<Void> SUCCESS = new Response<>();
 
     protected User init() {
-        String token = Tokens.token.get();
+        String token = Tokens.TOKEN.get();
+        Tokens.TOKEN.remove();
         if(token == null) throw ServerError.TOKEN_LOST;
         User user = Codec.decodingObj(token, User.class);
         if(user == null) throw ClientError.INFO_TAMPER;

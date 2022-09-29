@@ -10,11 +10,11 @@ import com.zyj.disk.sys.generate.file.*;
 
 public final class Generate {
     private final String path;
-    private static final List<FieldInfo> fieldInfos = new ArrayList<>();
+    private static final List<FieldInfo> FIELD_INFOS = new ArrayList<>();
 
     public Generate(Class<?> clazz, String name) throws InstantiationException, IllegalAccessException, IOException, ClassNotFoundException {
         this.path = init(clazz);
-        FileType.init(FileType.oneStrToUp(name), fieldInfos);
+        FileType.init(FileType.oneStrToUp(name), FIELD_INFOS);
     }
 
     public void start(FileType... fileType) {
@@ -36,7 +36,7 @@ public final class Generate {
                         annotation.unique(),
                         annotation.required(),
                         getType(1, field, annotation.length()));
-                fieldInfos.add(fieldInfo);
+                FIELD_INFOS.add(fieldInfo);
             }
         }
         return className.substring(0, className.indexOf("sys")).replace(".", "/");

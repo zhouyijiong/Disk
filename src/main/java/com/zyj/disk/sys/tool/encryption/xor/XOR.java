@@ -7,7 +7,7 @@ import com.zyj.disk.sys.tool.encryption.md5.MD5;
  * 异或加解密(对称加密)
  */
 public final class XOR {
-    private static final Record record = new Record(XOR.class);
+    private static final Record RECORD = new Record(XOR.class);
 
     public static String encrypt(String str) {
         String head = getRandomFactor();
@@ -18,7 +18,7 @@ public final class XOR {
         try {
             return decryptCore(str.split("-"));
         }catch (RuntimeException e){
-            record.error(e);
+            RECORD.error(e);
             return null;
         }
     }
@@ -124,7 +124,8 @@ public final class XOR {
         for (int i = 0, k = 0; i < len; ++k) {
             int a = Integer.parseInt(info.substring(i, i += 2), 0x10);
             int b = (offset + k) & 0x20;
-            chars[k] = (char) (0xff - a + b);//(~a & 0xff) + b
+            //(~a & 0xff) + b
+            chars[k] = (char) (0xff - a + b);
         }
         return new String(chars, 0, offsetLen);
     }

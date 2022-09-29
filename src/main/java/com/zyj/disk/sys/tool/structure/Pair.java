@@ -3,31 +3,16 @@ package com.zyj.disk.sys.tool.structure;
 import com.zyj.disk.sys.entity.Record;
 
 /**
- * 链表键值对抽象类
+ * 链表键值对
+ * 当作羽量级返回模型 size 最好不超过 100
  */
 public abstract class Pair<K, V> {
     protected Node<K, V> node;
     public transient int size;
-    private static final Record record = new Record(HashPair.class);
+    private static final Record RECORD = new Record(Pair.class);
 
     /**
-     * 链表键值对
-     */
-    static final class Node<K, V> {
-        public K key;
-        public V val;
-        public transient int hash;
-        public transient Node<K, V> next;
-
-        public Node(K key, V val, int hash) {
-            this.key = key;
-            this.val = val;
-            this.hash = hash;
-        }
-    }
-
-    /**
-     * 添加元素
+     * put element
      *
      * @param key key
      * @param val val
@@ -35,7 +20,7 @@ public abstract class Pair<K, V> {
     public abstract void put(K key, V val);
 
     /**
-     * 获取元素
+     * get element
      *
      * @param key key
      * @return val
@@ -43,14 +28,7 @@ public abstract class Pair<K, V> {
     public abstract V get(K key);
 
     /**
-     * 转换成 json 字符串
-     *
-     * @return json 字符串
-     */
-    public abstract String toJSONString();
-
-    /**
-     * hash计算
+     * calc hash
      *
      * @param key key
      * @return hash
@@ -76,7 +54,7 @@ public abstract class Pair<K, V> {
             }
             return pair;
         } catch (RuntimeException e) {
-            record.error(e);
+            RECORD.error(e);
             return null;
         }
     }

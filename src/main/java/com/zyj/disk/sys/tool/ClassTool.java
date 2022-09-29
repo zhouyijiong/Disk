@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * Class Tool
  */
 public final class ClassTool {
-    private static final Record record = new Record(ClassTool.class);
+    private static final Record RECORD = new Record(ClassTool.class);
 
     public static <Entity, Vo> QueryWrapper<Entity> queryBuild(Vo entity) {
         Object val;
@@ -28,7 +28,7 @@ public final class ClassTool {
             }
             return wrapper;
         } catch (IllegalAccessException e) {
-            record.error(e);
+            RECORD.error(e);
             throw ServerError.SQL_BUILD_FAIL;
         }
     }
@@ -38,7 +38,7 @@ public final class ClassTool {
             new ObjectOutputStream(out).writeObject(obj);
             return out.toByteArray();
         } catch (IOException e) {
-            record.error(e);
+            RECORD.error(e);
             return null;
         }
     }
@@ -47,7 +47,7 @@ public final class ClassTool {
         try (ByteArrayInputStream in = new ByteArrayInputStream(data)) {
             return new ObjectInputStream(in).readObject();
         } catch (IOException | ClassNotFoundException e) {
-            record.error(e);
+            RECORD.error(e);
             return null;
         }
     }

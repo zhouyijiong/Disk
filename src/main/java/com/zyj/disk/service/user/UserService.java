@@ -66,7 +66,7 @@ public final class UserService implements UserTemplate {
         pair.put("access", username);
         pair.put("token", token);
         pair.put("identity", identity);
-        return pair.toJSONString();
+        return pair.toString();
     }
 
     @Override
@@ -74,7 +74,7 @@ public final class UserService implements UserTemplate {
         Pair<String, String> pair = new HashPair<>();
         pair.put("user", Codec.codingObj(user));
         pair.put("identity", Codec.codingObj(IdentitySet.USER));
-        return Token.generate(pair.toJSONString());
+        return Token.generate(pair.toString());
     }
 
     @Override

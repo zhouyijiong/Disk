@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public final class Codec {
-    private static final Record record = new Record(Codec.class);
+    private static final Record RECORD = new Record(Codec.class);
 
     public static String complex(String str, int offset) {
         char[] chars = str.toCharArray();
@@ -37,7 +37,7 @@ public final class Codec {
         try {
             return JsonTool.fromJson(str, tClass);
         }catch (RuntimeException e){
-            record.error(e);
+            RECORD.error(e);
             return null;
         }
     }

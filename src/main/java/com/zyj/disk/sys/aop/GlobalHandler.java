@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 @ResponseBody
 public class GlobalHandler {
-    private final Record record = new Record(this.getClass());
+    private static final Record RECORD = new Record(GlobalHandler.class);
 
     @ExceptionHandler(GlobalException.class)
     public Response<?> batteryException(GlobalException exception) {
-        record.error(exception);
+        RECORD.error(exception);
         return Response.error(exception);
     }
 }
