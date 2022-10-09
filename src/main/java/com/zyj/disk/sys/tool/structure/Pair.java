@@ -5,6 +5,7 @@ import com.zyj.disk.sys.entity.Record;
 /**
  * 链表键值对
  * 当作羽量级返回模型 size 最好不超过 100
+ * (考虑替换为Map)
  */
 public abstract class Pair<K, V> {
     protected Node<K, V> node;

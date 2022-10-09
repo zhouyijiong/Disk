@@ -1,7 +1,7 @@
 package com.zyj.disk.mapper.filecategory;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.zyj.disk.entity.filecategory.FileCategory;
+import com.zyj.disk.sys.entity.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
